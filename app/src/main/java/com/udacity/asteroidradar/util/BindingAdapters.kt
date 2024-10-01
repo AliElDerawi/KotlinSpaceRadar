@@ -13,6 +13,7 @@ import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.features.main.AsteroidItemAdapter
+import java.lang.Exception
 
 @BindingAdapter("statusIcon")
 fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
@@ -77,13 +78,13 @@ fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: P
             imageOfTodayModel.title
         )
         progress.visibility = View.VISIBLE
-        Picasso.with(this.context).load(imageOfTodayModel.url)
+        Picasso.get().load(imageOfTodayModel.url)
             .into(this, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {
                     progress.visibility = View.GONE
                 }
 
-                override fun onError() {
+                override fun onError(e: Exception?) {
                     progress.visibility = View.GONE
                 }
             })
