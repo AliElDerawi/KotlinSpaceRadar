@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="asteroid"
+            type="com.udacity.asteroidradar.api.models.AsteroidModel" />
+
+        <variable
+            name="clickListener"
+            type="com.udacity.asteroidradar.features.main.AsteroidItemAdapter.AsteroidClickListener" />
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(asteroid)}"
+        android:padding="@dimen/dim_default_margin"
+        tools:background="@android:color/background_dark">
+
+
+        <TextView
+            android:id="@+id/codeName_textView"
+            style="@style/SubtitleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dim_small_margin"
+            android:textAlignment="viewStart"
+            app:text="@{asteroid.codename}"
+            app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/app_name" />
+
+
+        <TextView
+            android:id="@+id/close_approach_date_textView"
+            style="@style/InfoStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dim_4dp"
+            android:layout_marginEnd="@dimen/dim_small_margin"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_grey"
+            app:text="@{asteroid.closeApproachDate}"
+            app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/codeName_textView"
+            tools:text="2024-04-27" />
+
+
+        <ImageView
+            android:id="@+id/hazardous_status_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:statusIcon="@{asteroid.potentiallyHazardous}"
+            tools:src="@drawable/ic_status_normal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
