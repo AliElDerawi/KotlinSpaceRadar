@@ -14,13 +14,17 @@ import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.database.AsteroidDatabase
-import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import com.udacity.shoestore.data.BaseFragment
+import com.udacity.shoestore.data.BaseViewModel
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentMainBinding
+    override val mViewModel: BaseViewModel
+        get() = TODO("Not yet implemented")
 
     private lateinit var mActivity: Activity
 
@@ -52,12 +56,12 @@ class MainFragment : Fragment() {
     }
 
 
-    private val mMainViewModel: MainViewModel by lazy {
-        ViewModelProvider(
-            this,
-            MainViewModel.Factory(mActivity.application, viewLifecycleOwner)
-        ).get(MainViewModel::class.java)
-    }
+//    private val mMainViewModel: MainViewModel by lazy {
+//        ViewModelProvider(
+//            this,
+//            MainViewModel.Factory(mActivity.application, viewLifecycleOwner)
+//        ).get(MainViewModel::class.java)
+//    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -17,15 +17,16 @@ import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.api.parseImageOfTodayJsonResult
-import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidRepository
+import com.udacity.shoestore.data.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-class MainViewModel(application: Application, lifecycleOwner: LifecycleOwner) :
-    AndroidViewModel(application) {
+class MainViewModel(application: Application) :
+    BaseViewModel(application) {
 
     private val TAG = MainViewModel::class.java.simpleName
 
@@ -35,7 +36,7 @@ class MainViewModel(application: Application, lifecycleOwner: LifecycleOwner) :
     private val _endDate = MutableLiveData<String>(getEndDate())
 
     private val database = getDatabase(application)
-    private val asteroidRepository = AsteroidRepository(database, lifecycleOwner)
+    private val asteroidRepository = AsteroidRepository(database, null)
 
 
 //    val imageOfTodayModel: LiveData<ImageOfTodayModel> =
@@ -94,15 +95,15 @@ class MainViewModel(application: Application, lifecycleOwner: LifecycleOwner) :
         viewModelScope.launch { asteroidRepository.refreshAsteroids(filter) }
     }
 
-    class Factory(val app: Application, val mLifecycleOwner: LifecycleOwner) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST") return MainViewModel(app, mLifecycleOwner) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
-    }
+//    class Factory(val app: Application, val mLifecycleOwner: LifecycleOwner) :
+//        ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+//                @Suppress("UNCHECKED_CAST") return MainViewModel(app, mLifecycleOwner) as T
+//            }
+//            throw IllegalArgumentException("Unable to construct viewmodel")
+//        }
+//    }
 
     fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value

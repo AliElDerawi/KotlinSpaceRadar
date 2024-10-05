@@ -11,8 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
+import com.udacity.shoestore.data.BaseFragment
+import com.udacity.shoestore.data.BaseViewModel
 
-class DetailFragment : Fragment() {
+class DetailFragment : BaseFragment() {
+    override val mViewModel: BaseViewModel
+        get() = TODO("Not yet implemented")
 
 
     private lateinit var mActivity: Activity
