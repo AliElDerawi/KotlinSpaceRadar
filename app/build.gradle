@@ -110,5 +110,15 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$versionJunitTest"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versionEspresso"
 
+    // Koin
+    implementation "io.insert-koin:koin-android:$versionKoin"
+    implementation "io.insert-koin:koin-core:$versionKoin"
+
+    implementation "io.insert-koin:koin-android-compat:$versionKoin"
+    // Jetpack WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:$versionKoin"
+    // Navigation Graph
+    implementation "io.insert-koin:koin-androidx-navigation:$versionKoin"
+
 
 }

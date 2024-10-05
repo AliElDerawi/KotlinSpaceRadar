@@ -20,6 +20,7 @@ buildscript {
         versionJunit = '4.13.2'
         versionEspresso = '3.6.1'
         versionJunitTest = '1.2.1'
+        versionKoin = '3.4.0'
 
     }
 
