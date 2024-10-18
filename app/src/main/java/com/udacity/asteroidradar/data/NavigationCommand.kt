@@ -1,4 +1,4 @@
-package com.udacity.shoestore.data
+package com.udacity.asteroidradar.data
 
 import androidx.navigation.NavDirections
 
