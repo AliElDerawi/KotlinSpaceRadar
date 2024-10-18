@@ -1,8 +1,8 @@
-package com.udacity.shoestore.data
+package com.udacity.asteroidradar.data
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.udacity.shoestore.utils.SingleLiveEvent
+import com.udacity.asteroidradar.util.SingleLiveEvent
 
 /**
  * Base class for View Models to declare the common LiveData objects in one place
