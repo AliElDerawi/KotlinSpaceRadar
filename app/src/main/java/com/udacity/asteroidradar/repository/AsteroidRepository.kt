@@ -14,15 +14,15 @@ import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.api.parseImageOfTodayJsonResult
-import com.udacity.asteroidradar.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import timber.log.Timber
 
 class AsteroidRepository(
-    private val database: AsteroidDatabase,
-    private val mLifecycleOwner: LifecycleOwner?
+    private val database: AsteroidDatabase, private val mLifecycleOwner: LifecycleOwner?
 ) {
 
 

@@ -1,10 +1,10 @@
-package com.udacity.shoestore.data
+package com.udacity.asteroidradar.data
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
-import com.udacity.shoestore.utils.AppSharedMethods.showToast
+import com.udacity.asteroidradar.util.AppSharedMethods.showToast
 
 /**
  * Base Fragment to observe on the common LiveData objects

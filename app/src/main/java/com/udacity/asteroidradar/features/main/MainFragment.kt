@@ -2,29 +2,19 @@ package com.udacity.asteroidradar.features.main
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
-import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.data.database.AsteroidDatabase
-import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
-import com.udacity.shoestore.data.BaseFragment
-import com.udacity.shoestore.data.BaseViewModel
+import com.udacity.asteroidradar.data.BaseFragment
+import org.koin.android.ext.android.inject
 
 class MainFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentMainBinding
-    override val mViewModel: BaseViewModel
-        get() = TODO("Not yet implemented")
+    override val mViewModel: MainViewModel by inject()
 
     private lateinit var mActivity: Activity
 
@@ -39,14 +29,13 @@ class MainFragment : BaseFragment() {
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentMainBinding.inflate(inflater)
         mBinding.lifecycleOwner = this
 
-        mBinding.viewModel = mMainViewModel
+        mBinding.viewModel = mViewModel
 
 
         setHasOptionsMenu(true)
@@ -79,7 +68,7 @@ class MainFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        mMainViewModel.updateFilter(
+        mViewModel.updateFilter(
             when (item.itemId) {
                 R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
                 R.id.show_today_menu -> AsteroidApiFilter.SHOW_TODAY

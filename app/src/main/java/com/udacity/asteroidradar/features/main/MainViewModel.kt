@@ -1,31 +1,17 @@
 package com.udacity.asteroidradar.features.main
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.util.Constants
-import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.api.parseImageOfTodayJsonResult
-import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidRepository
-import com.udacity.shoestore.data.BaseViewModel
-import kotlinx.coroutines.Dispatchers
+import com.udacity.asteroidradar.data.BaseViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
-class MainViewModel(application: Application) :
+class MainViewModel(private val asteroidRepository: AsteroidRepository, application: Application) :
     BaseViewModel(application) {
 
     private val TAG = MainViewModel::class.java.simpleName
@@ -35,15 +21,11 @@ class MainViewModel(application: Application) :
 
     private val _endDate = MutableLiveData<String>(getEndDate())
 
-    private val database = getDatabase(application)
-    private val asteroidRepository = AsteroidRepository(database, null)
-
 
 //    val imageOfTodayModel: LiveData<ImageOfTodayModel> =
 //        database.imageOfTodayDao.getImageOfToday(getTodayDate())
 //
 //    val imageOfTheDayLiveData = imageOfTodayModel
-
 
 
     init {

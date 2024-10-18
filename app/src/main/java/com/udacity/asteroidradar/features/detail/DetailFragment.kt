@@ -8,11 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
-import com.udacity.shoestore.data.BaseFragment
-import com.udacity.shoestore.data.BaseViewModel
+import com.udacity.asteroidradar.data.BaseFragment
+import com.udacity.asteroidradar.data.BaseViewModel
 
 class DetailFragment : BaseFragment() {
     override val mViewModel: BaseViewModel

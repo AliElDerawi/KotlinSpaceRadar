@@ -99,7 +99,7 @@ fun getEndDate(): String {
 
 fun isNetworkConnected(): Boolean {
     val connectivityManager =
-        (AsteroidStoreApp.getInstance()!!.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        (AsteroidStoreApp.getApp()!!.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
     return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
         .isConnected
 }
