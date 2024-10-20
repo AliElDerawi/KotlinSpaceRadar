@@ -15,12 +15,13 @@ buildscript {
         versionGradleTools = '8.6.1'
         versionRetrofit = "2.9.0"
         versionRetrofitLoggin = "4.12.0"
-        versionMoshi = "1.9.3"
+        versionMoshi = "1.15.1"
         versionTimber = "5.0.1"
         versionJunit = '4.13.2'
         versionEspresso = '3.6.1'
         versionJunitTest = '1.2.1'
         versionKoin = '3.4.0'
+        versionPicasso = '2.8'
 
     }
 
