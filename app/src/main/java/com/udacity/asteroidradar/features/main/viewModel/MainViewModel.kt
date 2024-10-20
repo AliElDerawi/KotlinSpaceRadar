@@ -19,9 +19,10 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     private val _endDate = MutableStateFlow<String>(getEndDate())
 
-
     var asteroidListMutableStateFlow = MutableStateFlow<List<AsteroidModel>>(arrayListOf())
+
     val statusLiveData = asteroidRepository.statusLiveData
+
     var imageOfTheDayMutableStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
 
     init {

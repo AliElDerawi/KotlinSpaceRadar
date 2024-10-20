@@ -8,22 +8,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentActivity
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
 import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.data.BaseViewModel
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import org.koin.android.ext.android.inject
 
 class DetailFragment : BaseFragment() {
-    override val mViewModel: BaseViewModel
-        get() = TODO("Not yet implemented")
+    override val mViewModel: MainViewModel by inject()
 
 
-    private lateinit var mActivity: Activity
+    private lateinit var mActivity: FragmentActivity
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is Activity) {
+        if (context is FragmentActivity) {
             mActivity = context
         }
     }
@@ -32,9 +34,9 @@ class DetailFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = this
 
+        val binding = FragmentDetailBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         if (arguments != null) {
             val asteroid = DetailFragmentArgs.fromBundle(
