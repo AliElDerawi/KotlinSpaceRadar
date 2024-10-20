@@ -38,13 +38,12 @@ class DetailFragment : BaseFragment() {
         mBinding = FragmentDetailBinding.inflate(inflater)
         mBinding.lifecycleOwner = viewLifecycleOwner
 
-        if (arguments != null) {
+        arguments.let {
             val asteroid = DetailFragmentArgs.fromBundle(
                 requireArguments()
             ).selectedAsteroid
             mBinding.asteroid = asteroid
         }
-
 
         mBinding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
