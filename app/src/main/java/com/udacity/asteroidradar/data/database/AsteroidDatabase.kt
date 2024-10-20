@@ -13,6 +13,8 @@ import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import kotlinx.coroutines.flow.Flow
+
 
 
 @Dao
@@ -22,11 +24,11 @@ interface AsteroidDao {
     fun getAsteroidsList(
         startDate: String = getTodayDate(),
         endData: String = getEndDate()
-    ): LiveData<List<AsteroidModel>>
+    ): Flow<List<AsteroidModel>>
 
     @Query("select * from asteroid_data")
     fun getAllAsteroid(
-    ): LiveData<List<AsteroidModel>>
+    ): Flow<List<AsteroidModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg asteroidList: AsteroidModel)
@@ -36,7 +38,7 @@ interface AsteroidDao {
 @Dao
 interface ImageOfTodayDao {
     @Query("select * from image_of_day_data where :currentDate = date")
-    fun getImageOfToday(currentDate: String): LiveData<ImageOfTodayModel>
+    fun getImageOfToday(currentDate: String): Flow<ImageOfTodayModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImageOfToday(imageOfTodayModel: ImageOfTodayModel)

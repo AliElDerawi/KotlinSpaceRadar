@@ -8,7 +8,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.features.main.MainViewModel
-import com.udacity.asteroidradar.repository.AsteroidRepository
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,7 +59,7 @@ class AsteroidStoreApp : Application() {
                 RefreshDataWorker(get(), get(), get())
             }
 
-            single { AsteroidRepository(get(), null) }
+            single { AsteroidRepository(get()) }
 
         }
 
