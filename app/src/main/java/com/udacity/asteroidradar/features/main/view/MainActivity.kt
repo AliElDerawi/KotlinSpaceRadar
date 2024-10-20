@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModelObserver() {
-        mViewModel.navigationCommand.observe(this) { command ->
+
+        mViewModel.navigationCommandSingleLiveEvent.observe(this) { command ->
 
             Timber.d("initViewModelObserver:command: " + command.toString())
 

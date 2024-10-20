@@ -30,26 +30,26 @@ abstract class BaseFragment : Fragment() {
         super.onStart()
 
         with(mViewModel) {
-            showErrorMessage.observe(viewLifecycleOwner) {
+            showErrorMessageSingleLiveEvent.observe(viewLifecycleOwner) {
                 showToast(it)
             }
-            showToast.observe(viewLifecycleOwner) {
+            showToastSingleLiveEvent.observe(viewLifecycleOwner) {
                 showToast(it)
             }
-            showSnackBar.observe(viewLifecycleOwner) {
+            showSnackBarSingleLiveEvent.observe(viewLifecycleOwner) {
                 Snackbar.make(this@BaseFragment.requireView(), it, Snackbar.LENGTH_LONG).show()
             }
-            showSnackBarInt.observe(viewLifecycleOwner) {
+            showSnackBarIntSingleLiveEvent.observe(viewLifecycleOwner) {
                 Snackbar.make(
                     this@BaseFragment.requireView(), mActivity.getString(it), Snackbar.LENGTH_LONG
                 ).show()
             }
 
-            showToastInt.observe(viewLifecycleOwner) {
+            showToastIntSingleLiveEvent.observe(viewLifecycleOwner) {
                 showToast(mActivity.getString(it))
             }
 
-            showLoading.observe(viewLifecycleOwner) {
+            showLoadingSingleLiveEvent.observe(viewLifecycleOwner) {
                 if (it) {
                     showWaiteDialog()
                 } else {

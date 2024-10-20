@@ -73,7 +73,7 @@ class MainFragment : BaseFragment() {
 
         mBinding.asteroidRecycler.adapter =
             AsteroidItemAdapter(AsteroidItemAdapter.AsteroidClickListener {
-                mViewModel.navigationCommand.value =
+                mViewModel.navigationCommandSingleLiveEvent.value =
                     NavigationCommand.To(MainFragmentDirections.actionShowDetail(it))
             })
 
