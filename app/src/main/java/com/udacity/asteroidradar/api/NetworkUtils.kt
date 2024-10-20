@@ -57,17 +57,6 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidModel> {
     return asteroidModelList
 }
 
-fun parseImageOfTodayJsonResult(jsonResult: JSONObject): ImageOfTodayModel {
-
-    val imageOfTodayModel = ImageOfTodayModel(
-        jsonResult.optString("media_type"),
-        jsonResult.optString("title"),
-        jsonResult.optString("url"),
-        jsonResult.optString("date")
-    )
-    return imageOfTodayModel
-}
-
 private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     val formattedDateList = ArrayList<String>()
 
@@ -99,7 +88,6 @@ fun getEndDate(): String {
 
 fun isNetworkConnected(): Boolean {
     val connectivityManager =
-        (AsteroidStoreApp.getApp()!!.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-    return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
-        .isConnected
+        (AsteroidStoreApp.getApp().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+    return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
 }

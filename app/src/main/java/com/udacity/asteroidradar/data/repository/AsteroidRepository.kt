@@ -1,10 +1,5 @@
 package com.udacity.asteroidradar.data.repository
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.udacity.asteroidradar.BuildConfig
-import com.udacity.asteroidradar.util.Constants
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.AsteroidApiStatus
@@ -14,11 +9,12 @@ import com.udacity.asteroidradar.api.isNetworkConnected
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.api.parseImageOfTodayJsonResult
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -28,13 +24,11 @@ class AsteroidRepository(
     private val database: AsteroidDatabase
 ) {
 
-
     val statusLiveData = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
 
     suspend fun refreshAsteroids(
         filter: AsteroidApiFilter
     ): Result<Flow<List<AsteroidModel>>> {
-
 
         statusLiveData.value = AsteroidApiStatus.LOADING
 
@@ -95,6 +89,7 @@ class AsteroidRepository(
     }
 
     private suspend fun getAsteroidListFromDataBase(filter: AsteroidApiFilter): Result<Flow<List<AsteroidModel>>> {
+
         when (filter) {
             AsteroidApiFilter.SHOW_WEEK -> {
 
@@ -124,14 +119,11 @@ class AsteroidRepository(
 
     suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel>> {
 
-
         if (isNetworkConnected()) {
             try {
-                val response = AsteroidApi.retrofitService.getImageOfTheDay()
-                val imageOfToday = parseImageOfTodayJsonResult(JSONObject(response))
-                val flow = flowOf(imageOfToday)
+                val flow = getImageOfTheDayFlow()
                 withContext(Dispatchers.IO) {
-                    database.imageOfTodayDao.insertImageOfToday(imageOfToday)
+                    database.imageOfTodayDao.insertImageOfToday(flow.first())
                 }
                 return Result.success(flow)
             } catch (e: Exception) {
@@ -143,9 +135,17 @@ class AsteroidRepository(
         }
     }
 
+    private fun getImageOfTheDayFlow(): Flow<ImageOfTodayModel> = flow {
+        val response =
+            AsteroidApi.retrofitService.getImageOfTheDay()
+        emit(response)
+    }
+
     private suspend fun getImageOfTodayFromDataBase(): Result<Flow<ImageOfTodayModel>> {
+
         val result = database.imageOfTodayDao.getImageOfToday(getTodayDate())
         return Result.success(result)
+
     }
 
 }
