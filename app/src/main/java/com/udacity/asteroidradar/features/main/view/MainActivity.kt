@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.features.main
+package com.udacity.asteroidradar.features.main.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.NavigationCommand
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 

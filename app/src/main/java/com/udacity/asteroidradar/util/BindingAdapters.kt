@@ -1,6 +1,5 @@
 package com.udacity.asteroidradar.util
 
-import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -12,7 +11,7 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.features.main.AsteroidItemAdapter
+import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import java.lang.Exception
 
 @BindingAdapter("statusIcon")

@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="com.udacity.asteroidradar.features.main.AsteroidItemAdapter.AsteroidClickListener" />
+            type="com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter.AsteroidClickListener" />
 
     </data>
 
@@ -31,10 +31,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dim_small_margin"
             android:textAlignment="viewStart"
-            app:text="@{asteroid.codename}"
             app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:text="@{asteroid.codename}"
             tools:text="@string/app_name" />
 
 
@@ -47,10 +47,10 @@
             android:layout_marginEnd="@dimen/dim_small_margin"
             android:textAlignment="viewStart"
             android:textColor="@color/text_grey"
-            app:text="@{asteroid.closeApproachDate}"
             app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/codeName_textView"
+            app:text="@{asteroid.closeApproachDate}"
             tools:text="2024-04-27" />
 
 

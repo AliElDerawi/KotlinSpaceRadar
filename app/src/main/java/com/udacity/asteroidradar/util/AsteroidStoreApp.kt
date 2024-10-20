@@ -7,7 +7,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.data.database.getDatabase
-import com.udacity.asteroidradar.features.main.MainViewModel
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope

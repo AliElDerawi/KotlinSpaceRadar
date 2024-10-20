@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.features.main
+package com.udacity.asteroidradar.features.main.view
 
 import android.app.Activity
 import android.content.Context
@@ -9,6 +9,8 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.data.BaseFragment
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import org.koin.android.ext.android.inject
 
 class MainFragment : BaseFragment() {
