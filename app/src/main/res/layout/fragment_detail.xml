@@ -8,6 +8,11 @@
         <variable
             name="asteroid"
             type="com.udacity.asteroidradar.api.models.AsteroidModel" />
+
+        <variable
+            name="detailFragment"
+            type="com.udacity.asteroidradar.features.detail.DetailFragment" />
+
     </data>
 
     <ScrollView
@@ -107,6 +112,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/astronomical_unit_explanation_button"
+                            android:onClick="@{() -> detailFragment.displayAstronomicalUnitExplanationDialog()}"
                             android:padding="@dimen/dim_default_margin"
                             app:srcCompat="@drawable/ic_help_circle" />
 
@@ -116,9 +122,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dim_default_margin"
+                        android:contentDescription="@string/estimated_diameter_title"
                         android:text="@string/estimated_diameter_title"
                         android:textAlignment="viewStart"
-                        android:contentDescription="@string/estimated_diameter_title"
                         android:textColor="@color/default_text_color" />
 
                     <TextView
@@ -135,8 +141,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dim_default_margin"
-                        android:text="@string/relative_velocity_title"
                         android:contentDescription="@string/relative_velocity_title"
+                        android:text="@string/relative_velocity_title"
                         android:textAlignment="viewStart"
                         android:textColor="@color/default_text_color" />
 
@@ -154,9 +160,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dim_default_margin"
+                        android:contentDescription="@string/distance_from_earth_title"
                         android:text="@string/distance_from_earth_title"
                         android:textAlignment="viewStart"
-                        android:contentDescription="@string/distance_from_earth_title"
                         android:textColor="@color/default_text_color" />
 
                     <TextView

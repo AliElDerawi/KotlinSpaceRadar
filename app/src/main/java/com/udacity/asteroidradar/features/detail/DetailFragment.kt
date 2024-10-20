@@ -37,6 +37,7 @@ class DetailFragment : BaseFragment() {
 
         mBinding = FragmentDetailBinding.inflate(inflater)
         mBinding.lifecycleOwner = viewLifecycleOwner
+        mBinding.detailFragment = this
 
         arguments.let {
             val asteroid = DetailFragmentArgs.fromBundle(
@@ -45,15 +46,11 @@ class DetailFragment : BaseFragment() {
             mBinding.asteroid = asteroid
         }
 
-        mBinding.helpButton.setOnClickListener {
-            displayAstronomicalUnitExplanationDialog()
-        }
-
         return mBinding.root
 
     }
 
-    private fun displayAstronomicalUnitExplanationDialog() {
+    fun displayAstronomicalUnitExplanationDialog() {
 
         val builder = AlertDialog.Builder(mActivity)
             .setMessage(mActivity.getString(R.string.astronomica_unit_explanation))
