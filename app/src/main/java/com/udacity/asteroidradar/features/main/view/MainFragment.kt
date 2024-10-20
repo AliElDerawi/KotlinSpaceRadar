@@ -1,11 +1,9 @@
 package com.udacity.asteroidradar.features.main.view
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
@@ -34,6 +32,7 @@ class MainFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+
         mBinding = FragmentMainBinding.inflate(inflater)
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.viewModel = mViewModel
@@ -51,11 +50,14 @@ class MainFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
         inflater.inflate(R.menu.main_overflow_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         mViewModel.updateFilter(
             when (item.itemId) {
                 R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
@@ -64,6 +66,7 @@ class MainFragment : BaseFragment() {
             }
         )
         return true
+
     }
 
     private fun initAsteroidRecyclerView() {

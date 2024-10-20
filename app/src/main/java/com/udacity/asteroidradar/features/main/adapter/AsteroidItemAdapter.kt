@@ -18,30 +18,36 @@ class AsteroidItemAdapter(val clickListener: AsteroidClickListener) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         return ViewHolder.from(parent)
 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val item = getItem(position)
         holder.bind(clickListener, item)
+
     }
 
 
     class ViewHolder(val mBinding: ItemAsteroidBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(clickListener: AsteroidClickListener, item: AsteroidModel) {
+
             mBinding.asteroid = item
             mBinding.clickListener = clickListener
             mBinding.executePendingBindings()
+
         }
 
 
         companion object {
+
             fun from(parent: ViewGroup): ViewHolder {
+
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemAsteroidBinding.inflate(layoutInflater, parent, false)
-
                 return ViewHolder(binding)
 
             }

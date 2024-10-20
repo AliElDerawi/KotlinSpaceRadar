@@ -21,6 +21,7 @@ class DetailFragment : BaseFragment() {
 
 
     private lateinit var mActivity: FragmentActivity
+    private lateinit var mBinding: FragmentDetailBinding
 
 
     override fun onAttach(context: Context) {
@@ -31,32 +32,34 @@ class DetailFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner
+        mBinding = FragmentDetailBinding.inflate(inflater)
+        mBinding.lifecycleOwner = viewLifecycleOwner
 
         if (arguments != null) {
             val asteroid = DetailFragmentArgs.fromBundle(
                 requireArguments()
             ).selectedAsteroid
-            binding.asteroid = asteroid
+            mBinding.asteroid = asteroid
         }
 
 
-        binding.helpButton.setOnClickListener {
+        mBinding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }
 
-        return binding.root
+        return mBinding.root
+
     }
 
     private fun displayAstronomicalUnitExplanationDialog() {
+
         val builder = AlertDialog.Builder(mActivity)
             .setMessage(mActivity.getString(R.string.astronomica_unit_explanation))
             .setPositiveButton(android.R.string.ok, null)
         builder.create().show()
+
     }
 }

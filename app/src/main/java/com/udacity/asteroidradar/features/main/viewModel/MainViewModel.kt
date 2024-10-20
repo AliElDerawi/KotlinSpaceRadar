@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val asteroidRepository: AsteroidRepository, application: Application) :
     BaseViewModel(application) {
 
-    private val _startDate = MutableStateFlow<String>(getTodayDate())
+    private val _startDateMutableStateFlow = MutableStateFlow<String>(getTodayDate())
 
-    private val _endDate = MutableStateFlow<String>(getEndDate())
+    private val _endDateMutableStateFlow = MutableStateFlow<String>(getEndDate())
 
     var asteroidListMutableStateFlow = MutableStateFlow<List<AsteroidModel>>(arrayListOf())
 
@@ -32,8 +32,8 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
         viewModelScope.launch {
             getImageOfToday()
         }
-        _startDate.value = getTodayDate()
-        _endDate.value = getEndDate()
+        _startDateMutableStateFlow.value = getTodayDate()
+        _endDateMutableStateFlow.value = getEndDate()
     }
 
 
