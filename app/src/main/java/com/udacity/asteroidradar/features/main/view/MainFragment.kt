@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.FragmentActivity
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
+import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.data.NavigationCommand
@@ -72,12 +73,12 @@ class MainFragment : BaseFragment() {
     private fun initAsteroidRecyclerView() {
 
         mBinding.asteroidRecycler.adapter =
-            AsteroidItemAdapter(AsteroidItemAdapter.AsteroidClickListener {
+            AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) {
                 mViewModel.navigationCommandSingleLiveEvent.value =
                     NavigationCommand.To(MainFragmentDirections.actionShowDetail(it))
-            })
-
+            }
     }
+
 
     private fun initViewModelObserver() {
     }

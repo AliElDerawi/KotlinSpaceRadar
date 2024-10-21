@@ -11,6 +11,7 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.data.BaseRecyclerViewAdapter
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import java.lang.Exception
 
@@ -32,9 +33,13 @@ fun TextView.setContext(text: String) {
 }
 
 @BindingAdapter("listData")
-fun RecyclerView.bindRecyclerView(data: List<AsteroidModel>?) {
-    val adapter = adapter as AsteroidItemAdapter
-    adapter.submitList(data)
+fun <T : Any> RecyclerView.bindRecyclerView(list: List<T>?) {
+    if (adapter == null) {
+
+        adapter as? BaseRecyclerViewAdapter<T>
+        this.adapter = adapter
+    }
+    (adapter as? BaseRecyclerViewAdapter<T>)?.submitList(list)
 }
 
 @BindingAdapter("asteroidStatusImage")
