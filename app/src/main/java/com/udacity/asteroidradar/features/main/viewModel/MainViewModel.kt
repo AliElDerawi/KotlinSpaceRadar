@@ -27,7 +27,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     init {
         viewModelScope.launch {
-            refreshList(AsteroidApiFilter.SHOW_WEEK)
+            refreshList(AsteroidApiFilter.SHOW_TODAY)
         }
         viewModelScope.launch {
             getImageOfToday()
