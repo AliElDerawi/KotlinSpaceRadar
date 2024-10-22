@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
@@ -44,6 +45,11 @@ class DetailFragment : BaseFragment() {
                 requireArguments()
             ).selectedAsteroid
             mBinding.asteroid = asteroid
+        }
+
+        (mActivity as AppCompatActivity).supportActionBar?.apply {
+            title =  mBinding.asteroid?.codename
+            setDisplayHomeAsUpEnabled(true)
         }
 
         return mBinding.root

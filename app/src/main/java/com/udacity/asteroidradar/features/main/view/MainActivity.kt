@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.databinding.ActivityMainBinding
@@ -17,12 +20,14 @@ class MainActivity : AppCompatActivity() {
     private val mViewModel: MainViewModel by inject()
     private lateinit var navController: NavController
     private lateinit var mBinding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        supportActionBar?.title = getString(R.string.app_name)
         initListener()
         initViewModelObserver()
 
@@ -33,6 +38,9 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+
+        NavigationUI.setupActionBarWithNavController(this, navController)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
 
     }
 
@@ -50,5 +58,10 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    //
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 }

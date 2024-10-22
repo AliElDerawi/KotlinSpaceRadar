@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.main.view
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
@@ -40,6 +41,10 @@ class MainFragment : BaseFragment() {
         mBinding = FragmentMainBinding.inflate(inflater)
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.viewModel = mViewModel
+        (mActivity as AppCompatActivity).supportActionBar?.apply {
+            title = mActivity.getString(R.string.app_name)
+            setDisplayHomeAsUpEnabled(false)
+        }
         return mBinding.root
 
     }
