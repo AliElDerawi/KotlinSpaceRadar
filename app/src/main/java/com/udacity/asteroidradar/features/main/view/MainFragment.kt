@@ -38,14 +38,17 @@ class MainFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
+
         mBinding = FragmentMainBinding.inflate(inflater)
-        mBinding.lifecycleOwner = viewLifecycleOwner
-        mBinding.viewModel = mViewModel
-        (mActivity as AppCompatActivity).supportActionBar?.apply {
-            title = mActivity.getString(R.string.app_name)
-            setDisplayHomeAsUpEnabled(false)
+        with(mBinding) {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = mViewModel
+            (mActivity as AppCompatActivity).supportActionBar?.apply {
+                title = mActivity.getString(R.string.app_name)
+                setDisplayHomeAsUpEnabled(false)
+            }
+            return root
         }
-        return mBinding.root
 
     }
 

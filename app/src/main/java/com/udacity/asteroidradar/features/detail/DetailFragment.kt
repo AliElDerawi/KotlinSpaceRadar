@@ -40,7 +40,7 @@ class DetailFragment : BaseFragment() {
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.detailFragment = this
 
-        arguments.let {
+        arguments?.let {
             val asteroid = DetailFragmentArgs.fromBundle(
                 requireArguments()
             ).selectedAsteroid
@@ -48,7 +48,7 @@ class DetailFragment : BaseFragment() {
         }
 
         (mActivity as AppCompatActivity).supportActionBar?.apply {
-            title =  mBinding.asteroid?.codename
+            title = mBinding.asteroid?.codename
             setDisplayHomeAsUpEnabled(true)
         }
 
