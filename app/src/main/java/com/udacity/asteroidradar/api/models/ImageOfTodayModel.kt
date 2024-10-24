@@ -15,8 +15,9 @@ data class ImageOfTodayModel(
 
     @Json(name = "url") var url: String = "",
 
-    @Json(name = "date") var date: String = ""
+    @Json(name = "date") var date: String = "",
 
-) {
-}
+    var creationDate: String = ""
+
+) {}
 

@@ -169,6 +169,7 @@ class AsteroidRepository(
 
     private fun getImageOfTheDayFlow(): Flow<ImageOfTodayModel> = flow {
         val response = AsteroidApi.retrofitService.getImageOfTheDay()
+        response.creationDate = getTodayDate()
         Timber.d("getImageOfTheDayFlow:response: $response")
         emit(response)
     }

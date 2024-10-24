@@ -31,12 +31,11 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     var imageOfTheDayMutableStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
 
     init {
-        viewModelScope.launch {
-            refreshList(AsteroidApiFilter.SHOW_TODAY)
-        }
-        viewModelScope.launch {
-            getImageOfToday()
-        }
+
+        refreshList(AsteroidApiFilter.SHOW_TODAY)
+
+        getImageOfToday()
+
         _startDateMutableStateFlow.value = getTodayDate()
         _endDateMutableStateFlow.value = getEndDate()
     }
