@@ -1,12 +1,13 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
-    id 'kotlin-parcelize'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-    id 'com.google.devtools.ksp' version '2.0.21-1.0.25'
 
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.safe.args)
+    alias(libs.plugins.gradle.plugin.secret)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -60,71 +61,72 @@ android {
 
 dependencies {
     // Design
-    implementation "androidx.appcompat:appcompat:$versionAppcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$versionConstraintLayout"
+    implementation libs.androidx.appcompat
+    implementation libs.constraintLayout
+    implementation libs.material
 
     // Core with Ktx
-    implementation "androidx.core:core-ktx:$versionCore"
+    implementation libs.androidx.core.ktx
 
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versionLifecycle"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$versionNavigation"
-    implementation "androidx.navigation:navigation-ui-ktx:$versionNavigation"
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
 
     // RecyclerView
-    implementation "androidx.recyclerview:recyclerview:$versionRecyclerview"
+    implementation libs.recyclerView
     // For control over item selection of both touch and mouse driven selection
-    implementation "androidx.recyclerview:recyclerview-selection:$versionRecyclerViewSelection"
+    implementation libs.recyclerView.selection
 
+    implementation libs.multidex
 
     // WorkManager
-    implementation "androidx.work:work-runtime-ktx:$versionWork"
+    implementation libs.andoidx.work
 
     // Room database
-    implementation "androidx.room:room-runtime:$versionRoom"
-    ksp "androidx.room:room-compiler:$versionRoom"
+    implementation libs.room.runtime
+    ksp libs.room.compiler
     // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$versionRoom"
-    implementation "androidx.room:room-paging:$versionRoom"
+    implementation libs.room.ktx
+    implementation libs.room.paging
 
     // Paging 3
-    implementation 'androidx.paging:paging-runtime-ktx:3.3.2'
+    implementation libs.paging.runtime
 
     // Retrofit with Moshi Converter
-    implementation "com.squareup.retrofit2:retrofit:$versionRetrofit"
-    implementation "com.squareup.retrofit2:converter-moshi:$versionRetrofit"
-    implementation "com.squareup.retrofit2:converter-scalars:$versionRetrofit"
-    implementation "com.squareup.okhttp3:logging-interceptor:$versionRetrofitLoggin"
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.moshi
+    implementation libs.retrofit.converter.scalar
+    implementation libs.okhttp3.logging.interceptor
 
     // Moshi
-    implementation "com.squareup.moshi:moshi-kotlin:$versionMoshi"
-    ksp "com.squareup.moshi:moshi-kotlin-codegen:$versionMoshi"
+    implementation libs.moshi.kotlin
+    ksp libs.moshi.codegen
 
 
     // Picasso
-    implementation "com.squareup.picasso:picasso:$versionPicasso"
+    implementation libs.picasso
 
     // Timber
-    implementation "com.jakewharton.timber:timber:$versionTimber"
+    implementation libs.timber
 
 
     // Tests
-    testImplementation "junit:junit:$versionJunit"
-    androidTestImplementation "androidx.test.ext:junit:$versionJunitTest"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versionEspresso"
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 
     // Koin
-    implementation "io.insert-koin:koin-android:$versionKoin"
-    implementation "io.insert-koin:koin-core:$versionKoin"
+    implementation libs.koin.android
+    implementation libs.koin.core
 
-    implementation "io.insert-koin:koin-android-compat:$versionKoin"
+    implementation libs.koin.compat
     // Jetpack WorkManager
-    implementation "io.insert-koin:koin-androidx-workmanager:$versionKoin"
+    implementation libs.koin.workmanager
     // Navigation Graph
-    implementation "io.insert-koin:koin-androidx-navigation:$versionKoin"
-
+    implementation libs.koin.navigation
 
 
 }
