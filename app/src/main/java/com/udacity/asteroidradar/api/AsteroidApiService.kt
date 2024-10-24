@@ -27,8 +27,9 @@ val client = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor {
 
 
 private val retrofit = Retrofit.Builder().client(client.build()).baseUrl(Constants.BASE_URL)
+    .addConverterFactory(ScalarsConverterFactory.create())
     .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .addConverterFactory(ScalarsConverterFactory.create()).build()
+    .build()
 
 
 interface AsteroidApiService {

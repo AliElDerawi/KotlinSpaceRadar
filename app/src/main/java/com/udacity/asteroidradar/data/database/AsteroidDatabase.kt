@@ -2,6 +2,8 @@ package com.udacity.asteroidradar.data.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Insert
@@ -24,7 +26,8 @@ interface AsteroidDao {
     fun getAsteroidsList(
         startDate: String = getTodayDate(),
         endData: String = getEndDate()
-    ): Flow<List<AsteroidModel>>
+    ): PagingSource<Int, AsteroidModel>
+
 
     @Query("select * from asteroid_data")
     fun getAllAsteroid(

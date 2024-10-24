@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
@@ -13,6 +14,9 @@ import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseRecyclerViewAdapter
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 @BindingAdapter("statusIcon")
@@ -27,19 +31,24 @@ fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
 }
 
 @BindingAdapter("text")
-fun TextView.setContext(text: String) {
+fun TextView.setContext(text: String?) {
     this.text = text
     contentDescription = text
 }
 
 @BindingAdapter("listData")
-fun <T : Any> RecyclerView.bindRecyclerView(list: List<T>?) {
-    if (adapter == null) {
-
-        adapter as? BaseRecyclerViewAdapter<T>
-        this.adapter = adapter
+fun <T : Any> RecyclerView.bindRecyclerView(list: PagingData<T>?) {
+    list?.let {
+        if (adapter == null) {
+            adapter as? BaseRecyclerViewAdapter<T>
+            this.adapter = adapter
+            setHasFixedSize(true)
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(list)
+        }
     }
-    (adapter as? BaseRecyclerViewAdapter<T>)?.submitList(list)
+
 }
 
 @BindingAdapter("asteroidStatusImage")

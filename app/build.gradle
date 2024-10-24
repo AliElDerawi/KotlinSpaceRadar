@@ -87,6 +87,10 @@ dependencies {
     ksp "androidx.room:room-compiler:$versionRoom"
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$versionRoom"
+    implementation "androidx.room:room-paging:$versionRoom"
+
+    // Paging 3
+    implementation 'androidx.paging:paging-runtime-ktx:3.3.2'
 
     // Retrofit with Moshi Converter
     implementation "com.squareup.retrofit2:retrofit:$versionRetrofit"

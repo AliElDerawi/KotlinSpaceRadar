@@ -6,12 +6,12 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 
 abstract class BaseRecyclerViewAdapter<T : Any>(
     diffCallback: DiffUtil.ItemCallback<T>, private val callback: ((item: T) -> Unit)? = null
-) : ListAdapter<T, DataBindingViewHolder<T>>(
+) : PagingDataAdapter<T, DataBindingViewHolder<T>>(
     diffCallback
 ) {
 
@@ -26,7 +26,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     override fun onBindViewHolder(holder: DataBindingViewHolder<T>, position: Int) {
-        val item = getItem(position)
+        val item = getItem(position) ?: return
         holder.bind(item)
         holder.itemView.setOnClickListener {
             callback?.invoke(item)
