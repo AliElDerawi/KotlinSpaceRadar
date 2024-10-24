@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.util
 
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -19,7 +20,7 @@ import org.koin.dsl.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class AsteroidStoreApp : Application() {
+class AsteroidStoreApp : MultiDexApplication() {
 
     val applicationScope = CoroutineScope(Dispatchers.Default)
 
