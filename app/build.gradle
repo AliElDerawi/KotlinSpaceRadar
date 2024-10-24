@@ -1,11 +1,13 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs'
-    id 'kotlin-parcelize'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.safe.args)
+    alias(libs.plugins.gradle.plugin.secret)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -19,6 +21,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        setProperty("archivesBaseName", "Asteroid Radar" + "_v_" + defaultConfig.versionName)
+
     }
     buildTypes {
         release {
@@ -56,50 +61,72 @@ android {
 
 dependencies {
     // Design
-    implementation "androidx.appcompat:appcompat:$version_appcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
+    implementation libs.androidx.appcompat
+    implementation libs.constraintLayout
+    implementation libs.material
 
     // Core with Ktx
-    implementation "androidx.core:core-ktx:$version_core"
+    implementation libs.androidx.core.ktx
 
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle"
-
-    // Retrofit with Moshi Converter
-    implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
-    implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
-    implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
-    implementation "com.squareup.okhttp3:logging-interceptor:$version_retrofit_loggin"
-
-    // Moshi
-    implementation "com.squareup.moshi:moshi:$version_moshi"
-    implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$version_navigation"
-    implementation "androidx.navigation:navigation-ui-ktx:$version_navigation"
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
 
-    // Room database
-    implementation "androidx.room:room-runtime:$version_room"
-    kapt "androidx.room:room-compiler:$version_room"
-    // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$version_room"
+    // RecyclerView
+    implementation libs.recyclerView
+    // For control over item selection of both touch and mouse driven selection
+    implementation libs.recyclerView.selection
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$version_glide"
-    annotationProcessor "com.github.bumptech.glide:compiler:$version_glide"
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation libs.multidex
 
     // WorkManager
-    implementation "androidx.work:work-runtime-ktx:$version_work"
+    implementation libs.andoidx.work
+
+    // Room database
+    implementation libs.room.runtime
+    ksp libs.room.compiler
+    // Kotlin Extensions and Coroutines support for Room
+    implementation libs.room.ktx
+    implementation libs.room.paging
+
+    // Paging 3
+    implementation libs.paging.runtime
+
+    // Retrofit with Moshi Converter
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.moshi
+    implementation libs.retrofit.converter.scalar
+    implementation libs.okhttp3.logging.interceptor
+
+    // Moshi
+    implementation libs.moshi.kotlin
+    ksp libs.moshi.codegen
+
+
+    // Picasso
+    implementation libs.picasso
+
+    // Timber
+    implementation libs.timber
+
 
     // Tests
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 
-    implementation "com.jakewharton.timber:timber:$version_timber"
+    // Koin
+    implementation libs.koin.android
+    implementation libs.koin.core
 
+    implementation libs.koin.compat
+    // Jetpack WorkManager
+    implementation libs.koin.workmanager
+    // Navigation Graph
+    implementation libs.koin.navigation
 
 
 }

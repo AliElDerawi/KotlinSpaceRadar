@@ -1,20 +1,26 @@
 package com.udacity.asteroidradar.util
 
 import android.app.Application
-import android.os.Build
+import androidx.multidex.MultiDexApplication
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.udacity.asteroidradar.data.database.getDatabase
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class AsteroidStoreApp : Application() {
+class AsteroidStoreApp : MultiDexApplication() {
 
     val applicationScope = CoroutineScope(Dispatchers.Default)
 
@@ -22,13 +28,13 @@ class AsteroidStoreApp : Application() {
         @Volatile
         private var mAsteroidAppInstance: AsteroidStoreApp? = null
 
-        fun getInstance(): AsteroidStoreApp? {
+        fun getApp(): AsteroidStoreApp {
             if (mAsteroidAppInstance == null) {
                 synchronized(AsteroidStoreApp::class.java) {
                     if (mAsteroidAppInstance == null) mAsteroidAppInstance = AsteroidStoreApp()
                 }
             }
-            return mAsteroidAppInstance
+            return mAsteroidAppInstance!!
         }
     }
 
@@ -37,22 +43,46 @@ class AsteroidStoreApp : Application() {
         mAsteroidAppInstance = this
         Timber.plant(Timber.DebugTree())
         delayedInit()
+
+        val myModule = module {
+            //Declare a ViewModel - be later inject into Fragment with dedicated injector using by viewModel()
+
+
+            single {
+                MainViewModel(get(), get())
+            }
+
+            single {
+                getDatabase(get())
+            }
+
+            single {
+                RefreshDataWorker(get(), get(), get())
+            }
+
+            single { AsteroidRepository(get()) }
+
+        }
+
+        startKoin {
+            androidContext(this@AsteroidStoreApp)
+            modules(listOf(myModule))
+        }
+
     }
 
     private fun setupRecurringWork() {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true).setRequiresCharging(true).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    setRequiresDeviceIdle(true)
-                }
+                setRequiresDeviceIdle(true)
             }.build()
 
         val repeatingRequest =
             PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS).setConstraints(
-                    constraints
-                ).build()
+                constraints
+            ).build()
 
-        WorkManager.getInstance(AsteroidStoreApp.getInstance()!!.applicationContext).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(getApp().applicationContext).enqueueUniquePeriodicWork(
             RefreshDataWorker.WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, repeatingRequest
         )
     }

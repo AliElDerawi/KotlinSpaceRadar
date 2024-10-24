@@ -1,18 +1,23 @@
 package com.udacity.asteroidradar.util
 
-import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.features.main.AsteroidItemAdapter
+import com.udacity.asteroidradar.data.BaseRecyclerViewAdapter
+import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @BindingAdapter("statusIcon")
 fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
@@ -26,15 +31,24 @@ fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
 }
 
 @BindingAdapter("text")
-fun TextView.setContext(text: String) {
+fun TextView.setContext(text: String?) {
     this.text = text
     contentDescription = text
 }
 
 @BindingAdapter("listData")
-fun RecyclerView.bindRecyclerView(data: List<AsteroidModel>?) {
-    val adapter = adapter as AsteroidItemAdapter
-    adapter.submitList(data)
+fun <T : Any> RecyclerView.bindRecyclerView(list: PagingData<T>?) {
+    list?.let {
+        if (adapter == null) {
+            adapter as? BaseRecyclerViewAdapter<T>
+            this.adapter = adapter
+            setHasFixedSize(true)
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(list)
+        }
+    }
+
 }
 
 @BindingAdapter("asteroidStatusImage")
@@ -77,13 +91,13 @@ fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: P
             imageOfTodayModel.title
         )
         progress.visibility = View.VISIBLE
-        Picasso.with(this.context).load(imageOfTodayModel.url)
+        Picasso.get().load(imageOfTodayModel.url)
             .into(this, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {
                     progress.visibility = View.GONE
                 }
 
-                override fun onError() {
+                override fun onError(e: Exception?) {
                     progress.visibility = View.GONE
                 }
             })

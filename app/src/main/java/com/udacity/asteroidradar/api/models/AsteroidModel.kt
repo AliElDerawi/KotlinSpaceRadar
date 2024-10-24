@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.api.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.udacity.asteroidradar.data.GenericModelCallBack
 import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "asteroid_data")
@@ -13,4 +14,13 @@ data class AsteroidModel(
     val absoluteMagnitude: Double, val estimatedDiameter: Double,
     val relativeVelocity: Double, val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun getAsteroidModelCallback(): GenericModelCallBack<AsteroidModel> {
+            return GenericModelCallBack(
+                _areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+                _areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+            )
+        }
+    }
+}
