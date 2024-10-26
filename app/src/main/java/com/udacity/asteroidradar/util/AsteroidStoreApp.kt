@@ -22,19 +22,16 @@ import java.util.concurrent.TimeUnit
 
 class AsteroidStoreApp : MultiDexApplication() {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     companion object {
         @Volatile
         private var mAsteroidAppInstance: AsteroidStoreApp? = null
 
         fun getApp(): AsteroidStoreApp {
-            if (mAsteroidAppInstance == null) {
-                synchronized(AsteroidStoreApp::class.java) {
-                    if (mAsteroidAppInstance == null) mAsteroidAppInstance = AsteroidStoreApp()
-                }
+            return mAsteroidAppInstance ?: synchronized(this) {
+                mAsteroidAppInstance ?: AsteroidStoreApp().also { mAsteroidAppInstance = it }
             }
-            return mAsteroidAppInstance!!
         }
     }
 
@@ -72,19 +69,24 @@ class AsteroidStoreApp : MultiDexApplication() {
     }
 
     private fun setupRecurringWork() {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true).setRequiresCharging(true).apply {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresCharging(true).apply {
                 setRequiresDeviceIdle(true)
-            }.build()
+            }
+            .build()
 
-        val repeatingRequest =
-            PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS).setConstraints(
-                constraints
-            ).build()
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
 
-        WorkManager.getInstance(getApp().applicationContext).enqueueUniquePeriodicWork(
-            RefreshDataWorker.WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, repeatingRequest
-        )
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                RefreshDataWorker.WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                repeatingRequest
+            )
     }
 
     private fun delayedInit() {

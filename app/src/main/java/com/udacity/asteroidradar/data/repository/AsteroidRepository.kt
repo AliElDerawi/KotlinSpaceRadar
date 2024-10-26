@@ -34,138 +34,81 @@ class AsteroidRepository(
     val pagingConfig = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false)
 
 
-
     suspend fun refreshAsteroids(
         filter: AsteroidApiFilter
     ): Result<Flow<PagingData<AsteroidModel>>> {
 
         statusLiveData.value = AsteroidApiStatus.LOADING
 
-        if (isNetworkConnected()) {
-            if (filter.value == AsteroidApiFilter.SHOW_SAVED.value) {
+        if (!isNetworkConnected()) {
+            return getAsteroidListFromDataBase(filter)
+        }
 
-                val result = Pager(config = pagingConfig,
-                    pagingSourceFactory = {
-                        database.asteroidDao.getAsteroidsList(
-                            getTodayDate(), getEndDate()
-                        )
-                    }).flow
-
+        return try {
+            if (filter == AsteroidApiFilter.SHOW_SAVED) {
+                val result = Pager(pagingConfig) {
+                    database.asteroidDao.getAsteroidsList(getTodayDate(), getEndDate())
+                }.flow
                 statusLiveData.value = AsteroidApiStatus.DONE
-
-                return Result.success(
-                    result
-                )
-
+                Result.success(result)
             } else {
-
-                try {
-
-                    val startDate = getTodayDate()
-                    val endDate = when (filter) {
-                        AsteroidApiFilter.SHOW_WEEK -> getEndDate()
-                        AsteroidApiFilter.SHOW_TODAY -> getTodayDate()
-                        else -> getTodayDate()
-                    }
-
-                    val response = AsteroidApi.retrofitService.getAsteroid(
-                        startDate, endDate
-
-                    )
-                    Timber.d("getAsteroidList:response: $response")
-                    val jsonObject = JSONObject(response)
-                    val parseAsteroidsJsonResult = parseAsteroidsJsonResult(jsonObject)
-                    Timber.d("getAsteroidList:parseAsteroidsJsonResult: $parseAsteroidsJsonResult")
-                    statusLiveData.value = AsteroidApiStatus.DONE
-
-                    withContext(Dispatchers.IO) {
-                        val int =
-                            database.asteroidDao.insertAll(*parseAsteroidsJsonResult.toTypedArray())
-                        Timber.d("getAsteroidList:insertData: $int")
-                    }
-
-                    return Result.success(
-                        Pager(config = pagingConfig,
-                            pagingSourceFactory = { ApiPagingSource(parseAsteroidsJsonResult) }).flow
-                    )
-
-
-                } catch (e: Exception) {
-                    statusLiveData.value = AsteroidApiStatus.ERROR
-                    Timber.d("getAsteroidList:Exception: $e")
-                    return getAsteroidListFromDataBase(filter)
-
+                val (startDate, endDate) = when (filter) {
+                    AsteroidApiFilter.SHOW_WEEK -> getTodayDate() to getEndDate()
+                    AsteroidApiFilter.SHOW_TODAY -> getTodayDate() to getTodayDate()
+                    else -> getTodayDate() to getTodayDate()
                 }
 
+                val response = AsteroidApi.retrofitService.getAsteroid(startDate, endDate)
+                val jsonObject = JSONObject(response)
+                val asteroids = parseAsteroidsJsonResult(jsonObject)
+
+                withContext(Dispatchers.IO) {
+                    database.asteroidDao.insertAll(*asteroids.toTypedArray())
+                }
+
+                statusLiveData.value = AsteroidApiStatus.DONE
+                val result = Pager(pagingConfig) { ApiPagingSource(asteroids) }.flow
+                Result.success(result)
             }
-        } else {
-            return getAsteroidListFromDataBase(filter)
+        } catch (e: Exception) {
+            statusLiveData.value = AsteroidApiStatus.ERROR
+            Timber.d("Exception: $e")
+            getAsteroidListFromDataBase(filter)
         }
     }
 
+
     private suspend fun getAsteroidListFromDataBase(filter: AsteroidApiFilter): Result<Flow<PagingData<AsteroidModel>>> {
-
-        when (filter) {
-            AsteroidApiFilter.SHOW_WEEK -> {
-
-                val result = Pager(config = pagingConfig,
-                    pagingSourceFactory = {
-                        database.asteroidDao.getAsteroidsList(
-                            getTodayDate(), getEndDate()
-                        )
-                    }).flow
-
-                statusLiveData.value = AsteroidApiStatus.DONE
-                return Result.success(result)
-
-            }
-
-            AsteroidApiFilter.SHOW_TODAY -> {
-
-                val result = Pager(config = pagingConfig,
-                    pagingSourceFactory = {
-                        database.asteroidDao.getAsteroidsList(
-                            getTodayDate(), getTodayDate()
-                        )
-                    }).flow
-
-                statusLiveData.value = AsteroidApiStatus.DONE
-                return Result.success(result)
-
-            }
-
-            else -> {
-                val result = Pager(config = pagingConfig,
-                    pagingSourceFactory = {
-                        database.asteroidDao.getAsteroidsList(
-                            getTodayDate(), getEndDate()
-                        )
-                    }).flow
-                statusLiveData.value = AsteroidApiStatus.DONE
-                return Result.success(result)
-
-            }
+        val (startDate, endDate) = when (filter) {
+            AsteroidApiFilter.SHOW_TODAY -> getTodayDate() to getTodayDate()
+            else -> getTodayDate() to getEndDate()
         }
 
+        val result = Pager(config = pagingConfig) {
+            database.asteroidDao.getAsteroidsList(startDate, endDate)
+        }.flow
+
+        statusLiveData.value = AsteroidApiStatus.DONE
+        return Result.success(result)
     }
 
     suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel>> {
 
-        if (isNetworkConnected()) {
-            try {
-                val flow = getImageOfTheDayFlow()
-                withContext(Dispatchers.IO) {
-                    database.imageOfTodayDao.insertImageOfToday(flow.first())
-                }
-                return Result.success(flow)
-            } catch (e: Exception) {
-                Timber.d("getImageOfToday:Exception: $e")
-                return getImageOfTodayFromDataBase()
-            }
-        } else {
+        if (!isNetworkConnected()) {
             return getImageOfTodayFromDataBase()
         }
+        return try {
+            val flow = getImageOfTheDayFlow()
+            withContext(Dispatchers.IO) {
+                database.imageOfTodayDao.insertImageOfToday(flow.first())
+            }
+            Result.success(flow)
+        } catch (e: Exception) {
+            Timber.d("getImageOfToday:Exception: $e")
+            getImageOfTodayFromDataBase()
+        }
     }
+
 
     private fun getImageOfTheDayFlow(): Flow<ImageOfTodayModel> = flow {
         val response = AsteroidApi.retrofitService.getImageOfTheDay()

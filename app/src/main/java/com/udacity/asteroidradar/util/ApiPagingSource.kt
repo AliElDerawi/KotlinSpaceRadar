@@ -9,20 +9,18 @@ class ApiPagingSource(
 ) : PagingSource<Int, AsteroidModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AsteroidModel> {
+
         return try {
             val page = params.key ?: 1
             val pageSize = params.loadSize
 
             // Calculate start and end index for the current page
             val fromIndex = (page - 1) * pageSize
-            val toIndex = kotlin.math.min(fromIndex + pageSize, apiData.size)
+            val toIndex = (fromIndex + pageSize).coerceAtMost(apiData.size)
 
             // Return a paged subset of data
-            val pagedData = if (fromIndex < toIndex) {
-                apiData.subList(fromIndex, toIndex)
-            } else {
-                emptyList()
-            }
+            val pagedData =
+                apiData.subList(fromIndex, toIndex).takeIf { it.isNotEmpty() } ?: emptyList()
 
             // Check if there's more data
             val nextPage = if (toIndex < apiData.size) page + 1 else null

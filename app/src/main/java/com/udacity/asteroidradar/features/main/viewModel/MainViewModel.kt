@@ -19,10 +19,6 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val asteroidRepository: AsteroidRepository, application: Application) :
     BaseViewModel(application) {
 
-    private val _startDateMutableStateFlow = MutableStateFlow<String>(getTodayDate())
-
-    private val _endDateMutableStateFlow = MutableStateFlow<String>(getEndDate())
-
     var asteroidListMutableStateFlow =
         MutableStateFlow<PagingData<AsteroidModel>>(PagingData.empty())
 
@@ -36,8 +32,6 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
         getImageOfToday()
 
-        _startDateMutableStateFlow.value = getTodayDate()
-        _endDateMutableStateFlow.value = getEndDate()
     }
 
 
@@ -45,35 +39,21 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
         refreshList(filter)
     }
 
-    private fun refreshList(filter: AsteroidApiFilter) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = asteroidRepository.refreshAsteroids(filter)
-            result.let {
-                if (it.isSuccess) {
-                    it.getOrNull()!!.cachedIn(viewModelScope).collectLatest { list ->
-                        asteroidListMutableStateFlow.value = list
-                    }
-                } else {
-
-                }
-            }
+   private fun refreshList(filter: AsteroidApiFilter) {
+    viewModelScope.launch(Dispatchers.IO) {
+        asteroidRepository.refreshAsteroids(filter).getOrNull()?.cachedIn(viewModelScope)?.collectLatest { list ->
+            asteroidListMutableStateFlow.value = list
         }
     }
+}
 
-    private fun getImageOfToday() {
-        viewModelScope.launch {
-            val result = asteroidRepository.getImageOfToday()
-            result.let {
-                if (it.isSuccess) {
-                    it.getOrNull()!!.collect { imageOfToday ->
-                        imageOfTheDayMutableStateFlow.value = imageOfToday
-                    }
-                } else {
-
-                }
-            }
+   private fun getImageOfToday() {
+    viewModelScope.launch(Dispatchers.IO) {
+        asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
+            imageOfTheDayMutableStateFlow.value = imageOfToday
         }
     }
+}
 
 
 }
