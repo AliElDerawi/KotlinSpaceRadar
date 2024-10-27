@@ -118,10 +118,8 @@ class AsteroidRepository(
     }
 
     private suspend fun getImageOfTodayFromDataBase(): Result<Flow<ImageOfTodayModel>> {
-
         val result = database.imageOfTodayDao.getImageOfToday(getTodayDate())
         return Result.success(result)
-
     }
 
 }

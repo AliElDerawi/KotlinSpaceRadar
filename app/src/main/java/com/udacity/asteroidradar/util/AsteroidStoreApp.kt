@@ -42,23 +42,16 @@ class AsteroidStoreApp : MultiDexApplication() {
         delayedInit()
 
         val myModule = module {
-            //Declare a ViewModel - be later inject into Fragment with dedicated injector using by viewModel()
-
-
             single {
                 MainViewModel(get(), get())
             }
-
             single {
                 getDatabase(get())
             }
-
             single {
                 RefreshDataWorker(get(), get(), get())
             }
-
             single { AsteroidRepository(get()) }
-
         }
 
         startKoin {
