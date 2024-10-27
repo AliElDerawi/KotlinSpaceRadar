@@ -40,8 +40,7 @@ fun TextView.setContext(text: String?) {
 fun <T : Any> RecyclerView.bindRecyclerView(list: PagingData<T>?) {
     list?.let {
         if (adapter == null) {
-            adapter as? BaseRecyclerViewAdapter<T>
-            this.adapter = adapter
+            this.adapter = adapter as? BaseRecyclerViewAdapter<T>
             setHasFixedSize(true)
         }
         CoroutineScope(Dispatchers.Main).launch {

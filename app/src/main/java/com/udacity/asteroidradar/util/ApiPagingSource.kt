@@ -34,10 +34,10 @@ class ApiPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, AsteroidModel>): Int? {
-        // Return null to indicate that no specific key is needed to refresh
         return state.anchorPosition?.let { position ->
-            val page = state.closestPageToPosition(position)
-            page?.prevKey?.plus(1) ?: page?.nextKey?.minus(1)
+            state.closestPageToPosition(position)?.let { page ->
+                page.prevKey?.plus(1) ?: page.nextKey?.minus(1)
+            }
         }
     }
 }

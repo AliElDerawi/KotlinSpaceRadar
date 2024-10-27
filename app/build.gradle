@@ -105,13 +105,11 @@ dependencies {
     implementation libs.moshi.kotlin
     ksp libs.moshi.codegen
 
-
     // Picasso
     implementation libs.picasso
 
     // Timber
     implementation libs.timber
-
 
     // Tests
     testImplementation libs.junit

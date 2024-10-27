@@ -22,9 +22,7 @@ class MainFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentMainBinding
     override val mViewModel: MainViewModel by inject()
-
     private lateinit var mActivity: FragmentActivity
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -32,12 +30,10 @@ class MainFragment : BaseFragment() {
             mActivity = context
         }
     }
-
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
 
         mBinding = FragmentMainBinding.inflate(inflater)
         with(mBinding) {
@@ -49,7 +45,6 @@ class MainFragment : BaseFragment() {
             }
             return root
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +52,6 @@ class MainFragment : BaseFragment() {
 
         initMenu()
         initAsteroidRecyclerView()
-        initViewModelObserver()
 
     }
 
@@ -91,17 +85,13 @@ class MainFragment : BaseFragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-
     private fun initAsteroidRecyclerView() {
-
         mBinding.asteroidRecycler.adapter =
             AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) {
-                mViewModel.navigationCommandSingleLiveEvent.value =
-                    NavigationCommand.To(MainFragmentDirections.actionShowDetail(it))
+                mViewModel.navigationCommandSingleLiveEvent.value = NavigationCommand.To(
+                    MainFragmentDirections.actionShowDetail(it)
+                )
             }
     }
 
-
-    private fun initViewModelObserver() {
-    }
 }

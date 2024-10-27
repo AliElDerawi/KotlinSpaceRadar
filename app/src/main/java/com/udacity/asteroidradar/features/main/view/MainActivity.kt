@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,25 +33,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-
+        navController =
+            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
         NavigationUI.setupActionBarWithNavController(this, navController)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-
     }
 
     private fun initViewModelObserver() {
-
         mViewModel.navigationCommandSingleLiveEvent.observe(this) { command ->
-
-            Timber.d("initViewModelObserver:command: " + command.toString())
-
+            Timber.d("initViewModelObserver:command: $command")
             when (command) {
                 is NavigationCommand.To -> navController.navigate(command.directions)
-                is NavigationCommand.Back -> onBackPressed()
+                is NavigationCommand.Back -> navController.popBackStack()
                 is NavigationCommand.BackTo -> navController.popBackStack(
                     command.destinationId, false
                 )
@@ -60,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
