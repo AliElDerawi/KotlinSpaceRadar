@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.api
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.udacity.asteroidradar.util.AsteroidStoreApp
 import com.udacity.asteroidradar.util.Constants
 import com.udacity.asteroidradar.api.models.AsteroidModel
@@ -87,7 +88,8 @@ fun getEndDate(): String {
 }
 
 fun isNetworkConnected(): Boolean {
-    val connectivityManager =
-        (AsteroidStoreApp.getApp().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-    return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
+    val connectivityManager = AsteroidStoreApp.getApp().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork
+    val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+    return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
 }
