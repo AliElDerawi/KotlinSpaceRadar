@@ -1,9 +1,9 @@
 [versions]
 kotlinVersion = '2.0.21'
 koinVersion = '4.0.0'
-coreVersion = '1.13.1'
+coreVersion = '1.15.0'
 appCompatVersion = '1.7.0'
-constraintLayoutVersion = '2.1.4'
+constraintLayoutVersion = '2.2.0'
 materialVersion = '1.12.0'
 navigationVersion = '2.8.3'
 safeArgsVersion = '2.8.3'
@@ -17,7 +17,7 @@ espressoVersion = '3.6.1'
 junitTestVersion = '1.2.1'
 ksp = '2.0.21-1.0.25'
 gradlePluginSecretVersion = '2.0.1'
-versionLifecycle = "2.8.6"
+versionLifecycle = "2.8.7"
 workVersion = "2.10.0"
 roomVersion = "2.6.1"
 pagingVersion = "3.3.2"
