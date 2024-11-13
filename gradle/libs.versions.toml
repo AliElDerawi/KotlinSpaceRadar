@@ -1,6 +1,6 @@
 [versions]
 kotlinVersion = '2.0.21'
-koinVersion = '3.4.0'
+koinVersion = '4.0.0'
 coreVersion = '1.13.1'
 appCompatVersion = '1.7.0'
 constraintLayoutVersion = '2.1.4'
@@ -18,16 +18,13 @@ junitTestVersion = '1.2.1'
 ksp = '2.0.21-1.0.25'
 gradlePluginSecretVersion = '2.0.1'
 versionLifecycle = "2.8.6"
-workVersion = "2.9.1"
+workVersion = "2.10.0"
 roomVersion = "2.6.1"
 pagingVersion = "3.3.2"
 retrofitLogginVersion = "4.12.0"
 retrofitVersion = "2.9.0"
 moshiVersion = "1.15.1"
 picassoVersion = '2.8'
-
-
-
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreVersion" }
@@ -63,7 +60,6 @@ moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.re
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiVersion" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picassoVersion" }
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleToolsVersion" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
@@ -73,6 +69,3 @@ kotlin-android = { id = "kotlin-android" }
 kotlin-parcelize = { id = "kotlin-parcelize" }
 kotlin-kapt = { id = "kotlin-kapt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
-
-

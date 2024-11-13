@@ -1,6 +1,5 @@
 package com.udacity.asteroidradar.util
 
-import android.app.Application
 import androidx.multidex.MultiDexApplication
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -15,7 +14,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -42,16 +43,10 @@ class AsteroidStoreApp : MultiDexApplication() {
         delayedInit()
 
         val myModule = module {
-            single {
-                MainViewModel(get(), get())
-            }
-            single {
-                getDatabase(get())
-            }
-            single {
-                RefreshDataWorker(get(), get(), get())
-            }
-            single { AsteroidRepository(get()) }
+            singleOf(::MainViewModel)
+            singleOf(::getDatabase)
+            workerOf(::RefreshDataWorker)
+            singleOf(::AsteroidRepository)
         }
 
         startKoin {
@@ -87,6 +82,5 @@ class AsteroidStoreApp : MultiDexApplication() {
             setupRecurringWork()
         }
     }
-
 
 }
