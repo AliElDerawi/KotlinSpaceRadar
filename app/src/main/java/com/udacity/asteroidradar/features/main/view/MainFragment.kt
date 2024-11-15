@@ -16,6 +16,8 @@ import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
+import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
+import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
 import org.koin.android.ext.android.inject
 
 class MainFragment : BaseFragment() {
@@ -34,18 +36,14 @@ class MainFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
-        mBinding = FragmentMainBinding.inflate(inflater)
-        with(mBinding) {
+        mBinding = FragmentMainBinding.inflate(inflater).apply {
             lifecycleOwner = viewLifecycleOwner
             mLifecycleOwner = viewLifecycleOwner
             viewModel = mViewModel
-            (mActivity as AppCompatActivity).supportActionBar?.apply {
-                title = mActivity.getString(R.string.app_name)
-                setDisplayHomeAsUpEnabled(false)
-            }
-            return root
         }
+        setTitle(mActivity.getString(R.string.app_name))
+        setDisplayHomeAsUpEnabled(false)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,13 +65,10 @@ class MainFragment : BaseFragment() {
         // the menu should be visible
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-
                 menuInflater.inflate(R.menu.main_overflow_menu, menu)
-
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-
                 mViewModel.updateFilter(
                     when (menuItem.itemId) {
                         R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
@@ -82,7 +77,6 @@ class MainFragment : BaseFragment() {
                     }
                 )
                 return true
-
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -92,13 +86,15 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initAsteroidRecyclerView() {
-        mBinding.asteroidRecycler.adapter =
-            AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) { item, position ->
-                mViewModel.updateSelectedItem(position)
-                mViewModel.navigationCommandSingleLiveEvent.value = NavigationCommand.To(
-                    MainFragmentDirections.actionShowDetail(item)
-                )
-            }
+        with(mViewModel){
+            mBinding.asteroidRecycler.adapter =
+                AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) { item, position ->
+                    updateSelectedItem(position)
+                    navigationCommandSingleLiveEvent.value = NavigationCommand.To(
+                        MainFragmentDirections.actionShowDetail(item)
+                    )
+                }
+        }
     }
 
 }

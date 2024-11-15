@@ -73,7 +73,7 @@
                 app:lifecycleOwner="@{mLifecycleOwner}"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                app:currentScrolledPosition="@{viewModel.currentSelectedItem}"
+                app:currentScrolledPosition="@{viewModel.currentSelectedItemLiveData}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

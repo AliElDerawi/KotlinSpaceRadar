@@ -26,7 +26,6 @@ interface AsteroidDao {
         startDate: String = getTodayDate(), endData: String = getEndDate()
     ): PagingSource<Int, AsteroidModel>
 
-
     @Query("select * from asteroid_data")
     fun getAllAsteroid(
     ): Flow<List<AsteroidModel>>

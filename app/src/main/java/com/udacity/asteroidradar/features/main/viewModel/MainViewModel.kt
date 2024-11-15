@@ -27,9 +27,9 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     val statusLiveData = asteroidRepository.statusLiveData
 
-    private var _currentSelectedItem = MutableLiveData<Int>(0)
-    val currentSelectedItem: MutableLiveData<Int>
-        get() = _currentSelectedItem
+    private var _currentSelectedItemLiveData = MutableLiveData<Int>(0)
+    val currentSelectedItemLiveData: MutableLiveData<Int>
+        get() = _currentSelectedItemLiveData
 
     private var _imageOfTheDayMutableStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
     val imageOfTheDayMutableStateFlow: StateFlow<ImageOfTodayModel?>
@@ -42,7 +42,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
      fun updateSelectedItem(currentPosition : Int) {
          Timber.d("updateSelectedItem: $currentPosition")
-        _currentSelectedItem.value = currentPosition
+        _currentSelectedItemLiveData.value = currentPosition
     }
 
     fun updateFilter(filter: AsteroidApiFilter) {
