@@ -5,19 +5,20 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseRecyclerViewAdapter
-import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import timber.log.Timber
 
 @BindingAdapter("statusIcon")
 fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
@@ -36,18 +37,25 @@ fun TextView.setContext(text: String?) {
     contentDescription = text
 }
 
-@BindingAdapter("listData")
-fun <T : Any> RecyclerView.bindRecyclerView(list: PagingData<T>?) {
+@BindingAdapter("listData", "currentScrolledPosition", "lifecycleOwner")
+fun <T : Any> RecyclerView.bindRecyclerView(
+    list: PagingData<T>?,
+    currentScrolledPosition: Int, lifecycleOwner: LifecycleOwner
+) {
     list?.let {
+        Timber.d("bindRecyclerView:currentScrolledPosition $currentScrolledPosition")
         if (adapter == null) {
             this.adapter = adapter as? BaseRecyclerViewAdapter<T>
             setHasFixedSize(true)
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(list)
+        lifecycleOwner.lifecycleScope.launch {
+            (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(lifecycleOwner.lifecycle, list)
+        }
+        if (currentScrolledPosition != 0) {
+//                smoothScrollToPosition(currentScrolledPosition)
+            (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(currentScrolledPosition,0)
         }
     }
-
 }
 
 @BindingAdapter("asteroidStatusImage")

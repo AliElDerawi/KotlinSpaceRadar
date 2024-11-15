@@ -30,7 +30,7 @@ class MainFragment : BaseFragment() {
             mActivity = context
         }
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -38,6 +38,7 @@ class MainFragment : BaseFragment() {
         mBinding = FragmentMainBinding.inflate(inflater)
         with(mBinding) {
             lifecycleOwner = viewLifecycleOwner
+            mLifecycleOwner = viewLifecycleOwner
             viewModel = mViewModel
             (mActivity as AppCompatActivity).supportActionBar?.apply {
                 title = mActivity.getString(R.string.app_name)
@@ -52,6 +53,7 @@ class MainFragment : BaseFragment() {
 
         initMenu()
         initAsteroidRecyclerView()
+        initViewModelObserver()
 
     }
 
@@ -85,11 +87,16 @@ class MainFragment : BaseFragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun initViewModelObserver() {
+
+    }
+
     private fun initAsteroidRecyclerView() {
         mBinding.asteroidRecycler.adapter =
-            AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) {
+            AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) { item, position ->
+                mViewModel.updateSelectedItem(position)
                 mViewModel.navigationCommandSingleLiveEvent.value = NavigationCommand.To(
-                    MainFragmentDirections.actionShowDetail(it)
+                    MainFragmentDirections.actionShowDetail(item)
                 )
             }
     }

@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.features.main.viewModel
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MainViewModel(private val asteroidRepository: AsteroidRepository, application: Application) :
     BaseViewModel(application) {
@@ -25,17 +27,23 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     val statusLiveData = asteroidRepository.statusLiveData
 
+    private var _currentSelectedItem = MutableLiveData<Int>(0)
+    val currentSelectedItem: MutableLiveData<Int>
+        get() = _currentSelectedItem
+
     private var _imageOfTheDayMutableStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
     val imageOfTheDayMutableStateFlow: StateFlow<ImageOfTodayModel?>
         get() = _imageOfTheDayMutableStateFlow
 
     init {
-
         refreshList(AsteroidApiFilter.SHOW_TODAY)
         getImageOfToday()
-
     }
 
+     fun updateSelectedItem(currentPosition : Int) {
+         Timber.d("updateSelectedItem: $currentPosition")
+        _currentSelectedItem.value = currentPosition
+    }
 
     fun updateFilter(filter: AsteroidApiFilter) {
         refreshList(filter)
@@ -57,6 +65,5 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
             }
         }
     }
-
 
 }

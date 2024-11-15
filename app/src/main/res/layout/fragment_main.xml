@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.udacity.asteroidradar.features.main.viewModel.MainViewModel" />
 
+        <variable
+            name="mLifecycleOwner"
+            type="androidx.lifecycle.LifecycleOwner" />
     </data>
 
 
@@ -68,14 +70,15 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/asteroid_recycler"
                 android:layout_width="0dp"
+                app:lifecycleOwner="@{mLifecycleOwner}"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                app:currentScrolledPosition="@{viewModel.currentSelectedItem}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_image_of_today_frameLayout"
-                app:layout_constraintVertical_bias="0.0"
                 app:listData="@{viewModel.asteroidListStateFlow}"
                 tools:listitem="@layout/item_asteroid" />
 

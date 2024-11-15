@@ -31,7 +31,7 @@ class AsteroidRepository(
 
     val statusLiveData = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
 
-    val pagingConfig = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false)
+    val pagingConfig = PagingConfig(pageSize = 10, initialLoadSize = 10, prefetchDistance = 0, enablePlaceholders = true)
 
 
     suspend fun refreshAsteroids(

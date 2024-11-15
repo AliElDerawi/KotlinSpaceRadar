@@ -10,7 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 
 abstract class BaseRecyclerViewAdapter<T : Any>(
-    diffCallback: DiffUtil.ItemCallback<T>, private val callback: ((item: T) -> Unit)? = null
+    diffCallback: DiffUtil.ItemCallback<T>, private val callback: ((item: T,position : Int) -> Unit)? = null
 ) : PagingDataAdapter<T, DataBindingViewHolder<T>>(
     diffCallback
 ) {
@@ -29,7 +29,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         val item = getItem(position) ?: return
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            callback?.invoke(item)
+            callback?.invoke(item,position)
         }
     }
 

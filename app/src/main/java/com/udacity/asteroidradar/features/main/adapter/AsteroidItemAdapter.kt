@@ -12,7 +12,7 @@ import com.udacity.asteroidradar.databinding.ItemAsteroidBinding
 
 class AsteroidItemAdapter(
     diffCallback: DiffUtil.ItemCallback<AsteroidModel>,
-    callback: ((item: AsteroidModel) -> Unit)? = null
+    callback: ((item: AsteroidModel, position: Int) -> Unit)? = null
 ) : BaseRecyclerViewAdapter<AsteroidModel>(diffCallback, callback) {
     override fun getLayoutRes(viewType: Int) = R.layout.item_asteroid
 }
