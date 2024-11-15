@@ -18,19 +18,16 @@ enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-
 val client = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor { it ->
     val url =
         it.request().url.newBuilder().addQueryParameter("api_key", BuildConfig.NASA_API_KEY).build()
     it.proceed(it.request().newBuilder().url(url).build())
 }
 
-
 private val retrofit = Retrofit.Builder().client(client.build()).baseUrl(Constants.BASE_URL)
     .addConverterFactory(ScalarsConverterFactory.create())
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
-
 
 interface AsteroidApiService {
     /**
@@ -50,7 +47,6 @@ interface AsteroidApiService {
 object AsteroidApi {
     val retrofitService: AsteroidApiService by lazy { retrofit.create(AsteroidApiService::class.java) }
 }
-
 
 enum class AsteroidApiFilter(val value: String) {
     SHOW_WEEK("week"), SHOW_TODAY("today"), SHOW_SAVED(

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -18,34 +17,33 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     private val mViewModel: MainViewModel by inject()
-    private lateinit var navController: NavController
+    private lateinit var mNavController: NavController
     private lateinit var mBinding: ActivityMainBinding
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var mAppBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        supportActionBar?.title = getString(R.string.app_name)
+        setTitle(R.string.app_name)
         initListener()
         initViewModelObserver()
-
     }
 
     private fun initListener() {
-        navController =
+        mNavController =
             (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
-        NavigationUI.setupActionBarWithNavController(this, navController)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        NavigationUI.setupActionBarWithNavController(this, mNavController)
+        mAppBarConfiguration = AppBarConfiguration(mNavController.graph)
     }
 
     private fun initViewModelObserver() {
         mViewModel.navigationCommandSingleLiveEvent.observe(this) { command ->
             Timber.d("initViewModelObserver:command: $command")
             when (command) {
-                is NavigationCommand.To -> navController.navigate(command.directions)
-                is NavigationCommand.Back -> navController.popBackStack()
-                is NavigationCommand.BackTo -> navController.popBackStack(
+                is NavigationCommand.To -> mNavController.navigate(command.directions)
+                is NavigationCommand.Back -> mNavController.popBackStack()
+                is NavigationCommand.BackTo -> mNavController.popBackStack(
                     command.destinationId, false
                 )
             }
@@ -53,6 +51,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
+        return NavigationUI.navigateUp(mNavController, mAppBarConfiguration)
     }
 }

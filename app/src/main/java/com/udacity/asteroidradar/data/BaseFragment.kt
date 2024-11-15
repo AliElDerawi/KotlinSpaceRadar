@@ -33,12 +33,15 @@ abstract class BaseFragment : Fragment() {
             showErrorMessageSingleLiveEvent.observe(viewLifecycleOwner) {
                 showToast(it)
             }
+
             showToastSingleLiveEvent.observe(viewLifecycleOwner) {
                 showToast(it)
             }
+
             showSnackBarSingleLiveEvent.observe(viewLifecycleOwner) {
                 Snackbar.make(this@BaseFragment.requireView(), it, Snackbar.LENGTH_LONG).show()
             }
+
             showSnackBarIntSingleLiveEvent.observe(viewLifecycleOwner) {
                 Snackbar.make(
                     this@BaseFragment.requireView(), mActivity.getString(it), Snackbar.LENGTH_LONG
@@ -59,7 +62,6 @@ abstract class BaseFragment : Fragment() {
         }
 
     }
-
 
     private fun showWaiteDialog() {
 
