@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import timber.log.Timber
@@ -29,14 +28,14 @@ class AsteroidRepository(
     private val database: AsteroidDatabase
 ) {
 
-    val statusLiveData = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
+    val statusMutableStateFlow = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
     val pagingConfig = PagingConfig(pageSize = 10, initialLoadSize = 10, prefetchDistance = 0, enablePlaceholders = true)
 
     suspend fun refreshAsteroids(
         filter: AsteroidApiFilter
     ): Result<Flow<PagingData<AsteroidModel>>> {
 
-        statusLiveData.value = AsteroidApiStatus.LOADING
+        statusMutableStateFlow.value = AsteroidApiStatus.LOADING
 
         if (!isNetworkConnected()) {
             return getAsteroidListFromDataBase(filter)
@@ -47,7 +46,7 @@ class AsteroidRepository(
                 val result = Pager(pagingConfig) {
                     database.asteroidDao.getAsteroidsList(getTodayDate(), getEndDate())
                 }.flow
-                statusLiveData.value = AsteroidApiStatus.DONE
+                statusMutableStateFlow.value = AsteroidApiStatus.DONE
                 Result.success(result)
             } else {
                 val (startDate, endDate) = when (filter) {
@@ -64,12 +63,12 @@ class AsteroidRepository(
                     database.asteroidDao.insertAll(*asteroids.toTypedArray())
                 }
 
-                statusLiveData.value = AsteroidApiStatus.DONE
+                statusMutableStateFlow.value = AsteroidApiStatus.DONE
                 val result = Pager(pagingConfig) { ApiPagingSource(asteroids) }.flow
                 Result.success(result)
             }
         } catch (e: Exception) {
-            statusLiveData.value = AsteroidApiStatus.ERROR
+            statusMutableStateFlow.value = AsteroidApiStatus.ERROR
             Timber.d("Exception: $e")
             getAsteroidListFromDataBase(filter)
         }
@@ -86,12 +85,11 @@ class AsteroidRepository(
             database.asteroidDao.getAsteroidsList(startDate, endDate)
         }.flow
 
-        statusLiveData.value = AsteroidApiStatus.DONE
+        statusMutableStateFlow.value = AsteroidApiStatus.DONE
         return Result.success(result)
     }
 
     suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel>> {
-
         if (!isNetworkConnected()) {
             return getImageOfTodayFromDataBase()
         }

@@ -21,7 +21,7 @@ class RefreshDataWorker(
             asteroidRepository.refreshAsteroids(AsteroidApiFilter.SHOW_WEEK)
             Result.success()
         } catch (e: HttpException) {
-            Timber.d("RefreshDataWorker:e " + e.toString())
+            Timber.d(e.toString())
             Result.retry()
         }
     }

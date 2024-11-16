@@ -20,7 +20,6 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +36,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/asteroid_safe" />
-
 
             <TextView
                 android:id="@+id/close_approach_date_label_textView"
@@ -105,7 +103,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/close_approach_date_label_textView"
                 app:layout_constraintTop_toTopOf="@+id/absolute_magnitude_title_textView"
                 app:srcCompat="@drawable/ic_help_circle" />
-
 
             <TextView
                 android:id="@+id/estimated_diameter_title_textView"
@@ -185,9 +182,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/distance_from_earth_title_textView"
                 tools:text="0.0924 au" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </ScrollView>
 

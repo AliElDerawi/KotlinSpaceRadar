@@ -5,21 +5,17 @@
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorDark1C</item>
 
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorAccent</item>
         <item name="colorSecondaryVariant">@color/colorAccent</item>
         <item name="colorOnSecondary">@color/colorWhite</item>
-
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowDisablePreview">true</item>
 
-
     </style>
-
 
     <style name="TitleStyle">
         <item name="android:textColor">@color/colorWhite</item>
@@ -38,6 +34,5 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-
 
 </resources>

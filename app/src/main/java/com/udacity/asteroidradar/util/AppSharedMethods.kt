@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 
 object AppSharedMethods {
 
@@ -31,16 +32,12 @@ object AppSharedMethods {
         mToast!!.show()
     }
 
-    fun Activity.getCompatColor(color: Int): Int {
-        return ResourcesCompat.getColor(resources, color, null)
+    fun Activity.showSnackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(findViewById(android.R.id.content), message, duration).show()
     }
 
-    fun Activity.getCompatColorStateList(color: Int): ColorStateList {
-        return ColorStateList.valueOf(
-            ResourcesCompat.getColor(
-                resources, color, null
-            )
-        )
+    fun Activity.showSnackBar(message: Int, duration: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(findViewById(android.R.id.content), getString(message), duration).show()
     }
 
     fun Fragment.setTitle(title: String) {

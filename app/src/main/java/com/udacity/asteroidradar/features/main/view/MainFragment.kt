@@ -52,7 +52,6 @@ class MainFragment : BaseFragment() {
         initMenu()
         initAsteroidRecyclerView()
         initViewModelObserver()
-
     }
 
     private fun initMenu() {

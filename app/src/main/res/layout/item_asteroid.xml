@@ -17,7 +17,6 @@
         android:padding="@dimen/dim_default_margin"
         tools:background="@android:color/background_dark">
 
-
         <TextView
             android:id="@+id/codeName_textView"
             style="@style/SubtitleStyle"
@@ -30,7 +29,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:text="@{asteroid.codename}"
             tools:text="@string/app_name" />
-
 
         <TextView
             android:id="@+id/close_approach_date_textView"
@@ -46,7 +44,6 @@
             app:layout_constraintTop_toBottomOf="@+id/codeName_textView"
             app:text="@{asteroid.closeApproachDate}"
             tools:text="2024-04-27" />
-
 
         <ImageView
             android:id="@+id/hazardous_status_imageView"
