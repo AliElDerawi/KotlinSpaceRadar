@@ -1,19 +1,16 @@
 package com.udacity.asteroidradar.features.detail
 
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
 import com.udacity.asteroidradar.data.BaseFragment
-import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
 import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
@@ -53,7 +50,7 @@ class DetailFragment : BaseFragment() {
 
     fun displayAstronomicalUnitExplanationDialog() {
         val builder = AlertDialog.Builder(mActivity)
-            .setMessage(mActivity.getString(R.string.astronomica_unit_explanation))
+            .setMessage(mActivity.getString(R.string.text_astronomical_unit_explanation))
             .setPositiveButton(android.R.string.ok, null)
         builder.create().show()
     }
