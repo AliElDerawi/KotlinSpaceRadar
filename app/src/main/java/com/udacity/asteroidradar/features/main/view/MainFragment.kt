@@ -68,6 +68,7 @@ class MainFragment : BaseFragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                mViewModel.updateSelectedItem(0)
                 mViewModel.updateFilter(
                     when (menuItem.itemId) {
                         R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
