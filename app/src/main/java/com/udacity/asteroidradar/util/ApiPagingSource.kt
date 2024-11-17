@@ -9,7 +9,6 @@ class ApiPagingSource(
 ) : PagingSource<Int, AsteroidModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AsteroidModel> {
-
         return try {
             val page = params.key ?: 1
             val pageSize = params.loadSize

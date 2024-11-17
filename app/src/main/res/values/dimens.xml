@@ -8,9 +8,9 @@
     <dimen name="text_large">20sp</dimen>
     <dimen name="text_title">22sp</dimen>
 
-
     <dimen name="dim_default_margin_left_right">32dp</dimen>
     <dimen name="dim_default_margin">16dp</dimen>
     <dimen name="dim_small_margin">8dp</dimen>
     <dimen name="dim_4dp">4dp</dimen>
+
 </resources>

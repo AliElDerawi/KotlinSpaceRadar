@@ -25,23 +25,23 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     val asteroidListStateFlow: StateFlow<PagingData<AsteroidModel>>
         get() = _asteroidListStateFlow
 
-    val statusLiveData = asteroidRepository.statusLiveData
-
     private var _currentSelectedItemLiveData = MutableLiveData<Int>(0)
     val currentSelectedItemLiveData: MutableLiveData<Int>
         get() = _currentSelectedItemLiveData
 
-    private var _imageOfTheDayMutableStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
-    val imageOfTheDayMutableStateFlow: StateFlow<ImageOfTodayModel?>
-        get() = _imageOfTheDayMutableStateFlow
+    val statusStateFlow = asteroidRepository.statusMutableStateFlow
+
+    private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
+    val imageOfTheDayStateFlow: StateFlow<ImageOfTodayModel?>
+        get() = _imageOfTheDayStateFlow
 
     init {
         refreshList(AsteroidApiFilter.SHOW_TODAY)
         getImageOfToday()
     }
 
-     fun updateSelectedItem(currentPosition : Int) {
-         Timber.d("updateSelectedItem: $currentPosition")
+    fun updateSelectedItem(currentPosition: Int) {
+        Timber.d("updateSelectedItem: $currentPosition")
         _currentSelectedItemLiveData.value = currentPosition
     }
 
@@ -61,7 +61,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     private fun getImageOfToday() {
         viewModelScope.launch(Dispatchers.IO) {
             asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
-                _imageOfTheDayMutableStateFlow.value = imageOfToday
+                _imageOfTheDayStateFlow.value = imageOfToday
             }
         }
     }

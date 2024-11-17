@@ -46,7 +46,7 @@ class AsteroidStoreApp : MultiDexApplication() {
             singleOf(::MainViewModel)
             singleOf(::getDatabase)
             workerOf(::RefreshDataWorker)
-            singleOf(::AsteroidRepository)
+            single { AsteroidRepository(get(),Dispatchers.IO) }
         }
 
         startKoin {

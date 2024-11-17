@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dim_default_margin"
-        tools:background="@android:color/background_dark">
-
+        tools:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/codeName_textView"
@@ -24,29 +23,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dim_small_margin"
-            android:textAlignment="viewStart"
             app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:text="@{asteroid.codename}"
             tools:text="@string/app_name" />
 
-
         <TextView
             android:id="@+id/close_approach_date_textView"
-            style="@style/InfoStyle"
+            style="@style/SubInfoStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dim_4dp"
             android:layout_marginEnd="@dimen/dim_small_margin"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_grey"
             app:layout_constraintEnd_toStartOf="@+id/hazardous_status_imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/codeName_textView"
             app:text="@{asteroid.closeApproachDate}"
             tools:text="2024-04-27" />
-
 
         <ImageView
             android:id="@+id/hazardous_status_imageView"

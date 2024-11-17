@@ -27,4 +27,5 @@
             android:name="selectedAsteroid"
             app:argType="com.udacity.asteroidradar.api.models.AsteroidModel" />
     </fragment>
+
 </navigation>
