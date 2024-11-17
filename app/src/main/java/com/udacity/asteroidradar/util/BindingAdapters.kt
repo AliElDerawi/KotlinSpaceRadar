@@ -50,8 +50,8 @@ fun <T : Any> RecyclerView.bindRecyclerView(
             (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(lifecycleOwner.lifecycle, list)
         }
         if (currentScrolledPosition != 0) {
-//                smoothScrollToPosition(currentScrolledPosition)
-            (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(currentScrolledPosition,0)
+                smoothScrollToPosition(currentScrolledPosition)
+//            (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(currentScrolledPosition,0)
         }
     }
 }
