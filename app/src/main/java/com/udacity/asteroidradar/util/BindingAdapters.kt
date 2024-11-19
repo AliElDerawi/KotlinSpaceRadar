@@ -46,6 +46,7 @@ fun <T : Any> RecyclerView.bindRecyclerView(
             this.adapter = adapter as? BaseRecyclerViewAdapter<T>
             setHasFixedSize(true)
         }
+        // TODO-Comment-Issue: This is a workaround to scroll to the clicked position when user back to MainFragment, But it doesn't fix the issue
         lifecycleOwner.lifecycleScope.launch {
             (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(lifecycleOwner.lifecycle, list)
         }
