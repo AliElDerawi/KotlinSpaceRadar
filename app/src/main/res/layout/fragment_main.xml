@@ -59,7 +59,6 @@
                     android:padding="@dimen/dim_default_margin"
                     android:contentDescription="@{viewModel.imageOfTheDayStateFlow.title}"
                     android:text="@{viewModel.imageOfTheDayStateFlow.title}"
-                    android:textAlignment="viewStart"
                     tools:text="@string/app_name" />
 
             </FrameLayout>
