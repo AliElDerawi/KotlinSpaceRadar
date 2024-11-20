@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.features.main.view
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -11,6 +12,9 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.databinding.ActivityMainBinding
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.util.AppSharedMethods.applyWindowsPadding
+import com.udacity.asteroidradar.util.AppSharedMethods.getCompatColor
+import com.udacity.asteroidradar.util.AppSharedMethods.setStatusBarColor
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -23,8 +27,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        enableEdgeToEdge()
+        mBinding = DataBindingUtil.setContentView<ActivityMainBinding?>(this, R.layout.activity_main).apply {
+            root.applyWindowsPadding()
+            setStatusBarColor(getCompatColor(R.color.colorPrimary))
+        }
         setTitle(R.string.app_name)
         initListener()
         initViewModelObserver()
