@@ -69,36 +69,24 @@ object AppSharedMethods {
         }
     }
 
-    fun Activity.setStatusBarColor(color: Int) {
+    fun Activity.setStatusBarColorAndStyle(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // Set the listener to customize the status bar area
             window.decorView.apply {
                 setOnApplyWindowInsetsListener { v, insets ->
                     val statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars())
-                    val navigationBarInsets = insets.getInsets(WindowInsets.Type.navigationBars())
                     // Create a view for the status bar background
-                    val statusBarBackground = View(this@setStatusBarColor).apply {
+                    val statusBarBackground = View(this@setStatusBarColorAndStyle).apply {
                         setBackgroundColor(color)
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             statusBarInsets.top // Height matches the status bar inset
                         )
                     }
-                    // Create a view for the navigation bar background
-                    val navigationBarBackground = View(this@setStatusBarColor).apply {
-                        setBackgroundColor(color)
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            navigationBarInsets.bottom // Height matches the navigation bar inset
-                        )
-                    }
                     // Add the view to the decorView
                     (this as ViewGroup).apply {
                         if (statusBarBackground.parent == null) {
                             addView(statusBarBackground)
-                        }
-                        if (navigationBarBackground.parent == null) {
-                            addView(navigationBarBackground)
                         }
                     }
                     insets
@@ -109,27 +97,28 @@ object AppSharedMethods {
 
             if (color == Color.BLACK || ColorUtils.calculateLuminance(color) < 0.5) {
                 // If the color is dark, use light icons
-                window.insetsController?.setSystemBarsAppearance(
-                    0,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                )
+                window.insetsController?.apply {
+                    setSystemBarsAppearance(
+                        0,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    )
+                    setSystemBarsAppearance(
+                        0,
+                        WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+                    )
+                }
             } else {
                 // If the color is light, use dark icons
-                window.insetsController?.setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                )
-            }
-
-            if (ColorUtils.calculateLuminance(color) < 0.5) {
-                // Dark color for navigation bar -> Light icons
-                window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-            } else {
-                // Light color for navigation bar -> Dark icons
-                window.insetsController?.setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
-                )
+                window.insetsController?.apply {
+                    setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    )
+                    setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+                    )
+                }
             }
 
         } else {

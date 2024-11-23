@@ -14,7 +14,7 @@ import com.udacity.asteroidradar.databinding.ActivityMainBinding
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.applyWindowsPadding
 import com.udacity.asteroidradar.util.AppSharedMethods.getCompatColor
-import com.udacity.asteroidradar.util.AppSharedMethods.setStatusBarColor
+import com.udacity.asteroidradar.util.AppSharedMethods.setStatusBarColorAndStyle
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         mBinding = DataBindingUtil.setContentView<ActivityMainBinding?>(this, R.layout.activity_main).apply {
             root.applyWindowsPadding()
-            setStatusBarColor(getCompatColor(R.color.colorPrimary))
+            setStatusBarColorAndStyle(getCompatColor(R.color.colorPrimary))
         }
         setTitle(R.string.app_name)
         initListener()
