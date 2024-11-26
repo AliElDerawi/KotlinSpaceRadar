@@ -2,7 +2,7 @@
 
 **"A NASA-powered app to monitor asteroids and their Earth proximity, with offline features and clean architecture."**
 
-KotlinSpaceRadar is an app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API provided by the NASA JPL Asteroid team and stores data locally for offline access. This project is the second in the Udacity Android Kotlin Developer Nanodegree Program.
+KotlinSpaceRadar is an app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API provided by the NASA JPL Asteroid team and stores data locally for offline access. This project is part of the **Udacity Android Kotlin Developer Nanodegree Program**.
 
 ## Main Features of the Project
 
@@ -25,7 +25,7 @@ KotlinSpaceRadar is an app designed to help users track asteroids detected by NA
 
 ## Project Resources
 
-- [Starter Project Code](https://github.com/udacity/nd940-android-kotlin-c2-starter/tree/master/starter): Get the starter code for the project.
+- [Starter Project Code](https://github.com/udacity/nd940-android-kotlin-c2-starter/tree/master): Get the starter code for the project.
 - [Project Rubric](https://docs.google.com/document/d/1zuizdkZE564NyypAysOyI8sX7mICE64eMlmOPUV8W9w/edit?usp=sharing): View the project rubric.
 - [Android Kotlin Developer Nanodegree Program](https://www.udacity.com/course/android-kotlin-developer-nanodegree--nd940): Learn more about the full program and its related projects.
 
@@ -53,7 +53,7 @@ Alternatively, follow the [Secrets Gradle Plugin guide](https://developers.googl
 - **[Retrofit](https://github.com/square/retrofit)**: REST API management for fetching data from NASA's servers.
 - **[Moshi](https://github.com/square/moshi)**: JSON parsing for managing API responses.
 - **[Secrets Gradle Plugin](https://developers.google.com/maps/documentation/places/android-sdk/secrets-gradle-plugin)**: Secure management of sensitive data like API keys.
-- **[KSP](https://developer.android.com/build/migrate-to-ksp)**: Annotation processing for improved build performance.
+- **[KSP](https://developer.android.com/build/migrate-to-ksp)**: Annotation processing plugin for improved build performance.
 
 ## Snapshots from the App  
 
@@ -92,9 +92,9 @@ Alternatively, follow the [Secrets Gradle Plugin guide](https://developers.googl
 </div>  
 
 
-## How to Contribute
+## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes. Feel free to reach out if you'd like to add new features or expand on existing ones.
+Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes. Please feel free to reach out if you'd like to add new features or expand on existing ones.
 
 ### How to Contribute
 
@@ -105,9 +105,8 @@ Contributions are welcome! Please open an issue or submit a pull request for imp
 ## Contact
 
 Feel free to reach out for any collaboration opportunities or if you have any questions. I'd love to hear your thoughts and contributions!
+Check my **[GitHub profile](https://github.com/AliElDerawi)**.
 
 ## License
 
 This project is open-source and licensed under the Apache 2.0 License. The LICENSE file in this repository provides more details.
-
-نسخ 
