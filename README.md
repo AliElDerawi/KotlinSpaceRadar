@@ -1,4 +1,4 @@
-# KotlinSpaceRadar
+# KotlinSpaceRadar [![Build Status][ci-image]][ci]
 
 **"A NASA-powered app to monitor asteroids and their Earth proximity, with offline features and clean architecture."**
 
@@ -110,3 +110,6 @@ Check my **[GitHub profile](https://github.com/AliElDerawi)**.
 ## License
 
 This project is open-source and licensed under the Apache 2.0 License. The LICENSE file in this repository provides more details.
+
+[ci-image]: https://img.shields.io/github/actions/workflow/status/AliElDerawi/KotlinSpaceRadar/android-kotlin-ci.yml?label=Build%20Status&logo=github
+[ci]: https://github.com/AliElDerawi/KotlinSpaceRadar/actions?query=workflow%3ABuild
