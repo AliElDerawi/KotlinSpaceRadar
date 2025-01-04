@@ -24,6 +24,11 @@ android {
         setProperty("archivesBaseName", "Asteroid Radar" + "_v_" + defaultConfig.versionName)
 
     }
+
+    lintOptions {
+        disable("NotificationPermission")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
