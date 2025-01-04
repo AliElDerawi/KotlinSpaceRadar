@@ -1,15 +1,14 @@
 package com.udacity.asteroidradar.features.main.viewModel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.AsteroidApiFilter
+import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.data.BaseViewModel
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,9 +24,9 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     val asteroidListStateFlow: StateFlow<PagingData<AsteroidModel>>
         get() = _asteroidListStateFlow
 
-    private var _currentSelectedItemLiveData = MutableLiveData<Int>(0)
-    val currentSelectedItemLiveData: MutableLiveData<Int>
-        get() = _currentSelectedItemLiveData
+    private var _currentSelectedItemStateFlow = MutableStateFlow<Int>(0)
+    val currentSelectedItemStateFlow: StateFlow<Int>
+        get() = _currentSelectedItemStateFlow
 
     val statusStateFlow = asteroidRepository.statusMutableStateFlow
 
@@ -42,7 +41,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     fun updateSelectedItem(currentPosition: Int) {
         Timber.d("updateSelectedItem: $currentPosition")
-        _currentSelectedItemLiveData.value = currentPosition
+        _currentSelectedItemStateFlow.value = currentPosition
     }
 
     fun updateFilter(filter: AsteroidApiFilter) {
