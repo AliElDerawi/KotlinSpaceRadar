@@ -17,6 +17,7 @@ import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import com.udacity.asteroidradar.util.ApiPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -71,6 +72,7 @@ class AsteroidRepository(
                     Result.success(result)
                 }
             } catch (e: Exception) {
+                ensureActive()
                 statusMutableStateFlow.value = AsteroidApiStatus.ERROR
                 Timber.d("Exception: $e")
                 getAsteroidListFromDataBase(filter)
@@ -102,11 +104,10 @@ class AsteroidRepository(
             }
             try {
                 val flow = getImageOfTheDayFlow()
-                withContext(Dispatchers.IO) {
                     database.imageOfTodayDao.insertImageOfToday(flow.first())
-                }
                 Result.success(flow)
             } catch (e: Exception) {
+                ensureActive()
                 Timber.d("getImageOfToday:Exception: $e")
                 getImageOfTodayFromDataBase()
             }
