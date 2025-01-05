@@ -63,9 +63,7 @@ class AsteroidRepository(
                     val jsonObject = JSONObject(response)
                     val asteroids = parseAsteroidsJsonResult(jsonObject)
 
-                    withContext(Dispatchers.IO) {
-                        database.asteroidDao.insertAll(*asteroids.toTypedArray())
-                    }
+                    database.asteroidDao.insertAll(*asteroids.toTypedArray())
 
                     statusMutableStateFlow.value = AsteroidApiStatus.DONE
                     val result = Pager(pagingConfig) { ApiPagingSource(asteroids) }.flow
