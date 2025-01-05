@@ -98,11 +98,12 @@ class AsteroidRepository(
     suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel>> {
         return withContext(ioDispatcher) {
             if (!isNetworkConnected()) {
-                getImageOfTodayFromDataBase()
+                return@withContext getImageOfTodayFromDataBase()
             }
+
             try {
                 val flow = getImageOfTheDayFlow()
-                    database.imageOfTodayDao.insertImageOfToday(flow.first())
+                database.imageOfTodayDao.insertImageOfToday(flow.first())
                 Result.success(flow)
             } catch (e: Exception) {
                 ensureActive()
