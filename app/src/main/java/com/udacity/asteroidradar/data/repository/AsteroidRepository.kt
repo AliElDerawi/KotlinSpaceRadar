@@ -104,9 +104,7 @@ class AsteroidRepository(
             }
             try {
                 val flow = getImageOfTheDayFlow()
-                withContext(Dispatchers.IO) {
                     database.imageOfTodayDao.insertImageOfToday(flow.first())
-                }
                 Result.success(flow)
             } catch (e: Exception) {
                 ensureActive()
