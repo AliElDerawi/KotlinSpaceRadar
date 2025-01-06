@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             root.applyWindowsPadding()
             setStatusBarColorAndStyle(getCompatColor(R.color.colorPrimary))
         }
-        setTitle(R.string.app_name)
         initListener()
         initViewModelObserver()
     }
