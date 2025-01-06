@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.udacity.asteroidradar.features.main.viewModel.MainViewModel" />
@@ -11,6 +12,7 @@
         <variable
             name="mLifecycleOwner"
             type="androidx.lifecycle.LifecycleOwner" />
+
     </data>
 
     <androidx.core.widget.NestedScrollView

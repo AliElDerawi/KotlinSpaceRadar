@@ -31,7 +31,7 @@ interface AsteroidDao {
     ): Flow<List<AsteroidModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg asteroidList: AsteroidModel)
+    suspend fun insertAll(vararg asteroidList: AsteroidModel)
 
 }
 

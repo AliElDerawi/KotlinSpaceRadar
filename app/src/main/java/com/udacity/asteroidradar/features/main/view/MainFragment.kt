@@ -2,8 +2,12 @@ package com.udacity.asteroidradar.features.main.view
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
@@ -11,11 +15,11 @@ import androidx.lifecycle.Lifecycle
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.data.NavigationCommand
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
 import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
 import org.koin.android.ext.android.inject
@@ -68,14 +72,17 @@ class MainFragment : BaseFragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                mViewModel.updateSelectedItem(0)
-                mViewModel.updateFilter(
-                    when (menuItem.itemId) {
-                        R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
-                        R.id.show_today_menu -> AsteroidApiFilter.SHOW_TODAY
-                        else -> AsteroidApiFilter.SHOW_SAVED
-                    }
-                )
+                with(mViewModel){
+                    updateSelectedItem(0)
+                    updateFilter(
+                        when (menuItem.itemId) {
+                            R.id.show_week_menu -> AsteroidApiFilter.SHOW_WEEK
+                            R.id.show_today_menu -> AsteroidApiFilter.SHOW_TODAY
+                            else -> AsteroidApiFilter.SHOW_SAVED
+                        }
+                    )
+                }
+
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
