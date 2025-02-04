@@ -1,6 +1,7 @@
 [versions]
 activityComposeVersion = "1.10.0"
 composeBomVersion = "2025.01.01"
+composePluginVersion = "2.1.0"
 kotlinVersion = '2.1.0'
 koinVersion = '4.0.0'
 coreVersion = '1.15.0'
@@ -75,6 +76,7 @@ picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "pic
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleToolsVersion" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "composePluginVersion" }
 safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeArgsVersion" }
 gradle-plugin-secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "gradlePluginSecretVersion" }
 kotlin-android = { id = "kotlin-android" }

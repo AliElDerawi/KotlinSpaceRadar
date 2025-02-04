@@ -4,4 +4,5 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.safe.args) apply false
     alias(libs.plugins.gradle.plugin.secret) apply false
+    alias(libs.plugins.compose) apply false
 }
