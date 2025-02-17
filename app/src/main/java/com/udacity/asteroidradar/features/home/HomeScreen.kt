@@ -80,7 +80,9 @@ fun HomeScreen(
     ) { innerPadding ->
         when (asteroidUiState) {
             is AsteroidUiState.Loading -> {
-
+                LoadingScreen(modifier = modifier
+                    .fillMaxSize()
+                    .fillMaxHeight())
             }
 
             is AsteroidUiState.Success -> {
@@ -180,14 +182,31 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                     .fillMaxWidth()
             )
         }
+    }
+}
 
+@Composable
+private fun LoadingScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .background(color = md_theme_light_scrim)
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(R.drawable.loading_img).crossfade(true)
+                .build(),
+            contentDescription = stringResource(R.string.text_description_loading_image),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = md_theme_light_scrim)
+        )
     }
 }
 
 @Composable
 private fun AsteroidItem(
-    modifier: Modifier = Modifier,
-    asteroidModel: AsteroidModel
+    modifier: Modifier = Modifier, asteroidModel: AsteroidModel
 ) {
     Row(
         modifier = modifier
