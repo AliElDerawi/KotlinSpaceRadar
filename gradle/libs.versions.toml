@@ -1,16 +1,20 @@
 [versions]
 activityComposeVersion = "1.10.0"
-composeBomVersion = "2025.01.01"
+coilComposeVersion = "3.0.4"
+coilNetworkOkhttpVersion = "3.0.4"
+composeBomVersion = "2025.02.00"
 composePluginVersion = "2.1.0"
+koinAndroidxComposeVersion = "4.0.0"
 kotlinVersion = '2.1.0'
 koinVersion = '4.0.0'
 coreVersion = '1.15.0'
 appCompatVersion = '1.7.0'
 constraintLayoutVersion = '2.2.0'
 materialVersion = '1.12.0'
-navigationComposeVersion = "2.8.6"
-navigationVersion = '2.8.6'
-safeArgsVersion = '2.8.6'
+navigationComposeVersion = "2.8.7"
+navigationVersion = '2.8.7'
+pagingComposeVersion = "3.3.6"
+safeArgsVersion = '2.8.7'
 recyclerViewVersion = '1.4.0'
 recyclerViewSelectionVersion = '1.1.0'
 gradleToolsVersion = "8.7.2"
@@ -24,7 +28,7 @@ gradlePluginSecretVersion = '2.0.1'
 versionLifecycle = "2.8.7"
 workVersion = "2.10.0"
 roomVersion = "2.6.1"
-pagingVersion = "3.3.5"
+pagingVersion = "3.3.6"
 retrofitLogginVersion = "4.12.0"
 retrofitVersion = "2.9.0"
 moshiVersion = "1.15.1"
@@ -39,13 +43,17 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "versionLifecycle" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingComposeVersion" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeVersion" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttpVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitTestVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoVersion" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompatVersion" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxComposeVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinVersion" }

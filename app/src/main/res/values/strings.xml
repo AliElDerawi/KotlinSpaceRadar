@@ -1,6 +1,8 @@
 <resources>
 
     <string name="app_name">Asteroid Radar</string>
+    <string name="text_back_button">Back</string>
+    <string name="text_asteroid_detail">Asteroid Detail</string>
 
     <!-- Filter Asteroid string-->
     <string name="text_filter_week">View week asteroids</string>
@@ -26,5 +28,6 @@
     <string name="text_format_astronomical_unit">%f au</string>
     <string name="text_format_km_unit">%f km</string>
     <string name="text_format_km_s_unit">%f km/s</string>
+    <string name="no_data">No Data\n</string>
 
 </resources>
