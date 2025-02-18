@@ -132,4 +132,19 @@ class AsteroidRepository(
         }
     }
 
+    companion object {
+        fun getDummyModel(): AsteroidModel {
+            return AsteroidModel(
+                codename = "Asteroid Radar",
+                closeApproachDate = "2024-04-27",
+                isPotentiallyHazardous = false,
+                absoluteMagnitude = 11.2,
+                estimatedDiameter = 0.2,
+                relativeVelocity = 0.1,
+                distanceFromEarth = 0.3,
+                id = 1
+            )
+        }
+    }
+
 }

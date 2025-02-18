@@ -7,6 +7,6 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun dimenToSp(id: Int): TextUnit {
-    return dimensionResource(id = id).value.sp
+fun dimenToSp(value: Int): TextUnit {
+    return dimensionResource(id = value).value.sp
 }
