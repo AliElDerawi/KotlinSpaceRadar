@@ -44,6 +44,7 @@ import coil3.request.crossfade
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
@@ -80,7 +81,11 @@ fun HomeScreen(
     ) { innerPadding ->
         when (asteroidUiState) {
             is AsteroidUiState.Loading -> {
-
+                LoadingScreen(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .fillMaxHeight()
+                )
             }
 
             is AsteroidUiState.Success -> {
@@ -180,14 +185,29 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                     .fillMaxWidth()
             )
         }
+    }
+}
 
+@Composable
+private fun LoadingScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(color = md_theme_light_scrim)
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(R.drawable.loading_img).crossfade(true).build(),
+            contentDescription = stringResource(R.string.text_description_loading_image),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = md_theme_light_scrim)
+        )
     }
 }
 
 @Composable
 private fun AsteroidItem(
-    modifier: Modifier = Modifier,
-    asteroidModel: AsteroidModel
+    modifier: Modifier = Modifier, asteroidModel: AsteroidModel
 ) {
     Row(
         modifier = modifier
@@ -239,16 +259,8 @@ fun PreviewAsteroidItem() {
     AsteroidItem(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Black), asteroidModel = AsteroidModel(
-            codename = "Asteroid Radar",
-            closeApproachDate = "2024-04-27",
-            isPotentiallyHazardous = false,
-            absoluteMagnitude = 11.2,
-            estimatedDiameter = 0.2,
-            relativeVelocity = 0.1,
-            distanceFromEarth = 0.3,
-            id = 1
-        )
+            .background(Color.Black),
+        asteroidModel = AsteroidRepository.getDummyModel()
     )
 }
 
@@ -296,7 +308,7 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(dimensionResource(R.dimen.dim_default_margin))
     )
 }
 
