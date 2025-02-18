@@ -8,6 +8,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
@@ -44,10 +45,8 @@ class AsteroidStoreApp : MultiDexApplication() {
         delayedInit()
 
         val myModule = module {
-//            viewModel{ (savedStateHandle: SavedStateHandle) ->
-//                MainViewModel(savedStateHandle, get(), get<Application>())
-//            }
             viewModelOf(::MainViewModel)
+            viewModelOf(::DetailScreenViewModel)
             singleOf(::getDatabase)
             workerOf(::RefreshDataWorker)
             single { AsteroidRepository(get(),Dispatchers.IO) }
