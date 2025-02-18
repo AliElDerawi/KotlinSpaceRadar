@@ -24,10 +24,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.features.detail.AsteroidDetailDestination
-import com.udacity.asteroidradar.features.detail.AsteroidDetailScreen
+import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
+import com.udacity.asteroidradar.features.detail.view.AsteroidDetailScreen
 import com.udacity.asteroidradar.features.home.HomeDestination
 import com.udacity.asteroidradar.features.home.HomeScreen
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 /**
  * Provides Navigation graph for the application.
@@ -41,14 +44,18 @@ fun AsteroidNavHost(
         navController = navController, startDestination = HomeDestination.route, modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
-            HomeScreen(navigateToItemDetail = {
-                navController.navigate("${AsteroidDetailDestination.route}/${it}")
+            HomeScreen(navigateToItemDetail = { asteroid ->
+
+                val asteroidJson = Json.encodeToString<AsteroidModel>(asteroid)
+                Timber.d("Navigating to AsteroidDetailScreen with asteroid: $asteroidJson")
+                navController.navigate("${AsteroidDetailDestination.route}/${asteroidJson}")
+
             })
         }
         composable(
             route = AsteroidDetailDestination.routeWithArgs,
             arguments = listOf(navArgument(AsteroidDetailDestination.ASTEROID_MODEL_ARG) {
-                type = NavType.ParcelableType(AsteroidModel::class.java)
+                type = NavType.StringType
             })
         ) {
             AsteroidDetailScreen(navigateBack = { navController.popBackStack() })
