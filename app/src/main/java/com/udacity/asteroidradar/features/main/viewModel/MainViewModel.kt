@@ -13,7 +13,6 @@ import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
-import com.udacity.asteroidradar.features.detail.AsteroidDetailDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -37,8 +36,6 @@ class MainViewModel(
 
     var asteroidUiState: AsteroidUiState by mutableStateOf(AsteroidUiState.Loading)
         private set
-
-    val asteroid: AsteroidModel? = savedStateHandle[AsteroidDetailDestination.ASTEROID_MODEL_ARG]
 
     init {
         refreshList(AsteroidApiFilter.SHOW_TODAY)
