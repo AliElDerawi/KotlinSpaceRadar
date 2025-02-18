@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.safe.args)
     alias(libs.plugins.gradle.plugin.secret)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.seralization)
 }
 
 android {
@@ -149,5 +150,8 @@ dependencies {
     implementation libs.koin.workmanager
     // Navigation Graph
     implementation libs.koin.navigation
+
+    // Kotlin Serialization
+    implementation libs.kotlin.serialization
 
 }

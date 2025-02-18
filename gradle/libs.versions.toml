@@ -33,6 +33,7 @@ retrofitLogginVersion = "4.12.0"
 retrofitVersion = "2.9.0"
 moshiVersion = "1.15.1"
 picassoVersion = '2.8'
+kotlinSerializationVersion = "1.6.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -80,6 +81,7 @@ okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiVersion" }
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiVersion" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picassoVersion" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleToolsVersion" }
@@ -91,3 +93,4 @@ kotlin-android = { id = "kotlin-android" }
 kotlin-parcelize = { id = "kotlin-parcelize" }
 kotlin-kapt = { id = "kotlin-kapt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-seralization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
