@@ -80,6 +80,7 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         when (asteroidUiState) {
+
             is AsteroidUiState.Loading -> {
                 LoadingScreen(
                     modifier = modifier
@@ -237,16 +238,23 @@ private fun AsteroidItem(
             )
         }
 
-        // Hazardous status icon
-        val iconRes = if (asteroidModel.isPotentiallyHazardous) {
-            R.drawable.ic_status_potentially_hazardous // Replace with your hazardous icon
+        // Hazardous status icon and description
+        var hazardousDescription: String = ""
+        var iconRes: Int = 0
+
+        if (asteroidModel.isPotentiallyHazardous) {
+            iconRes = R.drawable.ic_status_potentially_hazardous // Replace with your hazardous icon
+            hazardousDescription =
+                stringResource(R.string.text_description_potentially_hazardous_asteroid_image)
         } else {
-            R.drawable.ic_status_normal // Replace with your normal icon
+            iconRes = R.drawable.ic_status_normal // Replace with your normal icon
+            hazardousDescription =
+                stringResource(R.string.text_description_not_hazardous_asteroid_image)
         }
 
         Image(
             painter = painterResource(id = iconRes),
-            contentDescription = "Hazardous status",
+            contentDescription = hazardousDescription,
             modifier = Modifier.size(24.dp),
             contentScale = ContentScale.Fit
         )
