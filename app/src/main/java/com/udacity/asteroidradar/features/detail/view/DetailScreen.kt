@@ -128,24 +128,36 @@ fun AsteroidDetail(
 
                 DetailItem(
                     title = stringResource(R.string.text_absolute_magnitude),
-                    value = "${asteroid.absoluteMagnitude} au",
+                    value = stringResource(
+                        R.string.text_format_astronomical_unit,
+                        asteroid.absoluteMagnitude
+                    ),
                     helpIcon = true,
                     onHelpClick = onHelpClick
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_estimated_diameter),
-                    value = "${asteroid.estimatedDiameter} km"
+                    value = stringResource(
+                        R.string.text_format_km_unit,
+                        asteroid.estimatedDiameter
+                    )
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_relative_velocity),
-                    value = "${asteroid.relativeVelocity} km/s"
+                    value = stringResource(
+                        R.string.text_format_km_s_unit,
+                        asteroid.relativeVelocity
+                    )
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_distance_from_earth),
-                    value = "${asteroid.distanceFromEarth} au"
+                    value = stringResource(
+                        R.string.text_format_astronomical_unit,
+                        asteroid.distanceFromEarth
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_default_margin)))
