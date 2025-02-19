@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +57,7 @@ fun AsteroidDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailScreenViewModel = koinViewModel()
 ) {
-    var showDialog by remember { mutableStateOf(false) } // ✅ Controls dialog visibility
+    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -115,11 +116,11 @@ fun AsteroidDetail(
                     .height(200.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp)) // ✅ Spacing between elements
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
 
             // Details
 
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))) {
                 DetailItem(
                     title = stringResource(R.string.text_close_approach_date),
                     value = asteroid.closeApproachDate
@@ -147,7 +148,7 @@ fun AsteroidDetail(
                     value = "${asteroid.distanceFromEarth} au"
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_default_margin)))
             }
         }
     }
@@ -164,7 +165,7 @@ fun DetailItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = dimensionResource(R.dimen.dim_6dp)),
         verticalAlignment = Alignment.CenterVertically // Aligns all children vertically centered
     ) {
         // Column for title and value texts
@@ -178,7 +179,7 @@ fun DetailItem(
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(4.dp)) // Spacing between title and value
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp))) // Spacing between title and value
 
             Text(
                 text = value,
@@ -192,10 +193,10 @@ fun DetailItem(
         if (helpIcon && onHelpClick != null) {
             Icon(
                 painter = painterResource(R.drawable.ic_help_circle),
-                contentDescription = "Help Icon",
+                contentDescription = stringResource(R.string.text_description_help_icon),
                 modifier = Modifier
                     .size(30.dp)
-                    .padding(4.dp)
+                    .padding(dimensionResource(R.dimen.dim_4dp))
                     .clickable { onHelpClick() }, // Click behavior
                 tint = Color.Gray
             )
