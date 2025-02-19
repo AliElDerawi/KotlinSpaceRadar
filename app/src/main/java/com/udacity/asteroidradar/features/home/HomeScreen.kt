@@ -75,7 +75,10 @@ fun HomeScreen(
             AsteroidAppTopBar(
                 title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = false,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                onFilterClick = { filter ->
+                    viewModel.updateFilter(filter)
+                },
             )
         },
     ) { innerPadding ->
