@@ -176,7 +176,7 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 2,
                 color = Color.White,
-                lineHeight = 48.sp,
+                lineHeight = 24.sp,
                 modifier = Modifier
                     .padding(
                         start = dimensionResource(R.dimen.dim_default_margin),
