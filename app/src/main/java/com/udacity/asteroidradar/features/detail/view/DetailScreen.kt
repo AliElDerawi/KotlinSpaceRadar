@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.AsteroidModel
+import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.navigation.NavigationDestination
@@ -213,23 +214,11 @@ fun DetailItem(
 
 @Preview
 @Composable
-fun PreviewAsteroidDetailScreen() {
-//    AsteroidDetailScreen(
-//        asteroid = AsteroidModel(
-//            isPotentiallyHazardous = false,
-//            closeApproachDate = "2020-02-01",
-//            absoluteMagnitude = 25.126,
-//            estimatedDiameter = 0.82,
-//            relativeVelocity = 11.9,
-//            distanceFromEarth = 0.0924,
-//            id = 1,
-//            codename = stringResource(R.string.app_name)
-//        ),
-//        onHelpClick = { /* Do something */ },
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color.Black)
-//    )
+fun PreviewAsteroidDetail() {
+    AsteroidDetail(
+        asteroid = AsteroidRepository.getDummyModel(),
+        onHelpClick = {}
+    )
 }
 
 @Composable
