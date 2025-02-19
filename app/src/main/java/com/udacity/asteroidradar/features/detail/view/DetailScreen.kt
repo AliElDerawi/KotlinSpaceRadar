@@ -59,15 +59,14 @@ fun AsteroidDetailScreen(
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            AsteroidAppTopBar(
-                title = stringResource(AsteroidDetailDestination.titleRes),
-                canNavigateBack = true,
-                navigateUp = navigateBack
-            )
-        }
-    ) { innerPadding ->
+    Scaffold(topBar = {
+        AsteroidAppTopBar(
+            title = viewModel.asteroidModel?.codename
+                ?: stringResource(R.string.text_asteroid_detail),
+            canNavigateBack = true,
+            navigateUp = navigateBack
+        )
+    }) { innerPadding ->
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -129,8 +128,7 @@ fun AsteroidDetail(
                 DetailItem(
                     title = stringResource(R.string.text_absolute_magnitude),
                     value = stringResource(
-                        R.string.text_format_astronomical_unit,
-                        asteroid.absoluteMagnitude
+                        R.string.text_format_astronomical_unit, asteroid.absoluteMagnitude
                     ),
                     helpIcon = true,
                     onHelpClick = onHelpClick
@@ -139,24 +137,20 @@ fun AsteroidDetail(
                 DetailItem(
                     title = stringResource(R.string.text_estimated_diameter),
                     value = stringResource(
-                        R.string.text_format_km_unit,
-                        asteroid.estimatedDiameter
+                        R.string.text_format_km_unit, asteroid.estimatedDiameter
                     )
                 )
 
                 DetailItem(
-                    title = stringResource(R.string.text_relative_velocity),
-                    value = stringResource(
-                        R.string.text_format_km_s_unit,
-                        asteroid.relativeVelocity
+                    title = stringResource(R.string.text_relative_velocity), value = stringResource(
+                        R.string.text_format_km_s_unit, asteroid.relativeVelocity
                     )
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_distance_from_earth),
                     value = stringResource(
-                        R.string.text_format_astronomical_unit,
-                        asteroid.distanceFromEarth
+                        R.string.text_format_astronomical_unit, asteroid.distanceFromEarth
                     )
                 )
 
@@ -239,13 +233,9 @@ fun PreviewAsteroidDetailScreen() {
 
 @Composable
 fun AstronomicalUnitExplanationDialog(onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        confirmButton = {
-            TextButton(onClick = { onDismiss() }) {
-                Text(text = stringResource(android.R.string.ok))
-            }
-        },
-        title = { Text(text = stringResource(R.string.text_astronomical_unit_explanation)) }
-    )
+    AlertDialog(onDismissRequest = { onDismiss() }, confirmButton = {
+        TextButton(onClick = { onDismiss() }) {
+            Text(text = stringResource(android.R.string.ok))
+        }
+    }, title = { Text(text = stringResource(R.string.text_astronomical_unit_explanation)) })
 }
