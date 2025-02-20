@@ -1,6 +1,8 @@
 <resources>
 
     <string name="app_name">Asteroid Radar</string>
+    <string name="text_back_button">Back</string>
+    <string name="text_asteroid_detail">Asteroid Detail</string>
 
     <!-- Filter Asteroid string-->
     <string name="text_filter_week">View week asteroids</string>
@@ -10,6 +12,7 @@
     <!-- Main Screen string-->
     <string name="text_empty_picture_of_today">This is NASA\'s picture of day, showing nothing yet</string>
     <string name="text_format_nasa_picture_of_day">NASA\'s picture of day: %s</string>
+    <string name="text_description_loading_image">Loading image</string>
 
     <!-- Detail Screen string-->
     <string name="text_close_approach_date">Close approach date</string>
@@ -21,10 +24,12 @@
     <string name="text_description_potentially_hazardous_asteroid_image">Potentially hazardous asteroid image</string>
     <string name="text_description_not_hazardous_asteroid_image">Not hazardous asteroid image</string>
     <string name="text_astronomical_unit_explanation">The astronomical unit (au) is a unit of length, roughly the distance from Earth to the Sun and equal to about 150 million kilometres (93 million miles)</string>
+    <string name="text_description_help_icon">Help Icon</string>
 
     <!-- Unit Format string-->
     <string name="text_format_astronomical_unit">%f au</string>
     <string name="text_format_km_unit">%f km</string>
     <string name="text_format_km_s_unit">%f km/s</string>
+    <string name="no_data">No Data\n</string>
 
 </resources>

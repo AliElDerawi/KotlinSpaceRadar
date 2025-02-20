@@ -7,8 +7,9 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.data.database.getDatabase
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -43,7 +45,8 @@ class AsteroidStoreApp : MultiDexApplication() {
         delayedInit()
 
         val myModule = module {
-            singleOf(::MainViewModel)
+            viewModelOf(::MainViewModel)
+            viewModelOf(::DetailScreenViewModel)
             singleOf(::getDatabase)
             workerOf(::RefreshDataWorker)
             single { AsteroidRepository(get(),Dispatchers.IO) }

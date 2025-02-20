@@ -1,48 +1,50 @@
 package com.udacity.asteroidradar.features.main.viewModel
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
-class MainViewModel(private val asteroidRepository: AsteroidRepository, application: Application) :
-    BaseViewModel(application) {
+sealed interface AsteroidUiState {
+    data class Success(
+        val asteroidModelList: Flow<PagingData<AsteroidModel>>? = null,
+        val imageOfToday: ImageOfTodayModel? = null
+    ) : AsteroidUiState
 
-    private var _asteroidListStateFlow =
-        MutableStateFlow<PagingData<AsteroidModel>>(PagingData.empty())
-    val asteroidListStateFlow: StateFlow<PagingData<AsteroidModel>>
-        get() = _asteroidListStateFlow
+    object Error : AsteroidUiState
+    data class Loading(
+        val asteroidModelList: Flow<PagingData<AsteroidModel>>? = null,
+        val imageOfToday: ImageOfTodayModel? = null
+    ) : AsteroidUiState
+}
 
-    private var _currentSelectedItemStateFlow = MutableStateFlow<Int>(0)
-    val currentSelectedItemStateFlow: StateFlow<Int>
-        get() = _currentSelectedItemStateFlow
+class MainViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val asteroidRepository: AsteroidRepository,
+    application: Application
+) : AndroidViewModel(application) {
 
-    val statusStateFlow = asteroidRepository.statusMutableStateFlow
-
-    private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
-    val imageOfTheDayStateFlow: StateFlow<ImageOfTodayModel?>
-        get() = _imageOfTheDayStateFlow
+    var asteroidUiState: AsteroidUiState by mutableStateOf(AsteroidUiState.Loading())
+        private set
 
     init {
         refreshList(AsteroidApiFilter.SHOW_TODAY)
         getImageOfToday()
     }
 
-    fun updateSelectedItem(currentPosition: Int) {
-        Timber.d("updateSelectedItem: $currentPosition")
-        _currentSelectedItemStateFlow.value = currentPosition
-    }
 
     fun updateFilter(filter: AsteroidApiFilter) {
         refreshList(filter)
@@ -50,19 +52,34 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     private fun refreshList(filter: AsteroidApiFilter) {
         viewModelScope.launch(Dispatchers.IO) {
-            asteroidRepository.refreshAsteroids(filter).getOrNull()?.cachedIn(viewModelScope)
-                ?.collectLatest { list ->
-                    _asteroidListStateFlow.value = list
-                }
+            asteroidUiState = when (val previousState = asteroidUiState) {
+                is AsteroidUiState.Success -> AsteroidUiState.Loading(
+                    asteroidModelList = previousState.asteroidModelList,
+                    imageOfToday = previousState.imageOfToday
+                )
+
+                is AsteroidUiState.Loading -> previousState
+                else -> AsteroidUiState.Loading()
+            }
+
+            val asteroidPagingFlow = asteroidRepository.refreshAsteroids(filter)
+                .getOrNull()?.cachedIn(viewModelScope) ?: flowOf(PagingData.empty())
+
+            asteroidUiState = AsteroidUiState.Success(
+                asteroidModelList = asteroidPagingFlow,
+                imageOfToday = (asteroidUiState as? AsteroidUiState.Loading)?.imageOfToday
+            )
         }
     }
 
     private fun getImageOfToday() {
         viewModelScope.launch(Dispatchers.IO) {
             asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
-                _imageOfTheDayStateFlow.value = imageOfToday
+                asteroidUiState =
+                    (asteroidUiState as? AsteroidUiState.Success)?.copy(imageOfToday = imageOfToday)
+                        ?: (asteroidUiState as? AsteroidUiState.Loading)?.copy(imageOfToday = imageOfToday)
+                                ?: AsteroidUiState.Success(imageOfToday = imageOfToday)
             }
         }
     }
-
 }

@@ -1,12 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose)
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.safe.args)
     alias(libs.plugins.gradle.plugin.secret)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.seralization)
 }
 
 android {
@@ -72,6 +74,17 @@ dependencies {
     // Core with Ktx
     implementation libs.androidx.core.ktx
 
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+
     // ViewModel and LiveData
     implementation libs.androidx.lifecycle.viewmodel.ktx
 
@@ -84,7 +97,12 @@ dependencies {
     // For control over item selection of both touch and mouse driven selection
     implementation libs.recyclerView.selection
 
+    // MultiDex
     implementation libs.multidex
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     // WorkManager
     implementation libs.andoidx.work
@@ -98,6 +116,7 @@ dependencies {
 
     // Paging 3
     implementation libs.paging.runtime
+    implementation(libs.androidx.paging.compose)
 
     // Retrofit with Moshi Converter
     implementation libs.retrofit
@@ -123,11 +142,16 @@ dependencies {
     // Koin
     implementation libs.koin.android
     implementation libs.koin.core
+    implementation libs.koin.androidx.compose
+
 
     implementation libs.koin.compat
     // Jetpack WorkManager
     implementation libs.koin.workmanager
     // Navigation Graph
     implementation libs.koin.navigation
+
+    // Kotlin Serialization
+    implementation libs.kotlin.serialization
 
 }
