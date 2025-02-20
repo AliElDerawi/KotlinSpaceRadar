@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -11,7 +12,6 @@ import androidx.paging.cachedIn
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +35,7 @@ class MainViewModel(
     savedStateHandle: SavedStateHandle,
     private val asteroidRepository: AsteroidRepository,
     application: Application
-) : BaseViewModel(application) {
+) : AndroidViewModel(application) {
 
     var asteroidUiState: AsteroidUiState by mutableStateOf(AsteroidUiState.Loading())
         private set
