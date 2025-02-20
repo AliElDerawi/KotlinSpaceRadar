@@ -25,7 +25,10 @@ sealed interface AsteroidUiState {
     ) : AsteroidUiState
 
     object Error : AsteroidUiState
-    object Loading : AsteroidUiState
+    data class Loading(
+        val asteroidModelList: Flow<PagingData<AsteroidModel>>? = null,
+        val imageOfToday: ImageOfTodayModel? = null
+    ) : AsteroidUiState
 }
 
 class MainViewModel(
@@ -34,7 +37,7 @@ class MainViewModel(
     application: Application
 ) : BaseViewModel(application) {
 
-    var asteroidUiState: AsteroidUiState by mutableStateOf(AsteroidUiState.Loading)
+    var asteroidUiState: AsteroidUiState by mutableStateOf(AsteroidUiState.Loading())
         private set
 
     init {
@@ -49,27 +52,34 @@ class MainViewModel(
 
     private fun refreshList(filter: AsteroidApiFilter) {
         viewModelScope.launch(Dispatchers.IO) {
-            val asteroidPagingFlow =
-                asteroidRepository.refreshAsteroids(filter).getOrNull()?.cachedIn(viewModelScope)
-                    ?: flowOf(PagingData.empty())
+            asteroidUiState = when (val previousState = asteroidUiState) {
+                is AsteroidUiState.Success -> AsteroidUiState.Loading(
+                    asteroidModelList = previousState.asteroidModelList,
+                    imageOfToday = previousState.imageOfToday
+                )
 
-            asteroidUiState = when (val currentState = asteroidUiState) {
-                is AsteroidUiState.Success -> currentState.copy(asteroidModelList = asteroidPagingFlow)
-                else -> AsteroidUiState.Success(asteroidModelList = asteroidPagingFlow)
+                is AsteroidUiState.Loading -> previousState
+                else -> AsteroidUiState.Loading()
             }
 
+            val asteroidPagingFlow = asteroidRepository.refreshAsteroids(filter)
+                .getOrNull()?.cachedIn(viewModelScope) ?: flowOf(PagingData.empty())
+
+            asteroidUiState = AsteroidUiState.Success(
+                asteroidModelList = asteroidPagingFlow,
+                imageOfToday = (asteroidUiState as? AsteroidUiState.Loading)?.imageOfToday
+            )
         }
     }
 
     private fun getImageOfToday() {
         viewModelScope.launch(Dispatchers.IO) {
             asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
-                asteroidUiState = when (val currentState = asteroidUiState) {
-                    is AsteroidUiState.Success -> currentState.copy(imageOfToday = imageOfToday)
-                    else -> AsteroidUiState.Success(imageOfToday = imageOfToday)
-                }
+                asteroidUiState =
+                    (asteroidUiState as? AsteroidUiState.Success)?.copy(imageOfToday = imageOfToday)
+                        ?: (asteroidUiState as? AsteroidUiState.Loading)?.copy(imageOfToday = imageOfToday)
+                                ?: AsteroidUiState.Success(imageOfToday = imageOfToday)
             }
         }
     }
-
 }

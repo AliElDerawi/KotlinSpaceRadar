@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.AsyncImage
@@ -45,12 +47,14 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.data.repository.AsteroidRepository.Companion.fakeAsteroids
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.navigation.NavigationDestination
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.util.dimenToSp
+import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -75,11 +79,15 @@ fun HomeScreen(
             AsteroidAppTopBar(
                 title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = false,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                onFilterClick = { filter ->
+                    viewModel.updateFilter(filter)
+                },
             )
         },
     ) { innerPadding ->
         when (asteroidUiState) {
+
             is AsteroidUiState.Loading -> {
                 LoadingScreen(
                     modifier = modifier
@@ -176,7 +184,7 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 2,
                 color = Color.White,
-                lineHeight = 48.sp,
+                lineHeight = 24.sp,
                 modifier = Modifier
                     .padding(
                         start = dimensionResource(R.dimen.dim_default_margin),
@@ -237,16 +245,23 @@ private fun AsteroidItem(
             )
         }
 
-        // Hazardous status icon
-        val iconRes = if (asteroidModel.isPotentiallyHazardous) {
-            R.drawable.ic_status_potentially_hazardous // Replace with your hazardous icon
+        // Hazardous status icon and description
+        var hazardousDescription: String = ""
+        var iconRes: Int = 0
+
+        if (asteroidModel.isPotentiallyHazardous) {
+            iconRes = R.drawable.ic_status_potentially_hazardous // Replace with your hazardous icon
+            hazardousDescription =
+                stringResource(R.string.text_description_potentially_hazardous_asteroid_image)
         } else {
-            R.drawable.ic_status_normal // Replace with your normal icon
+            iconRes = R.drawable.ic_status_normal // Replace with your normal icon
+            hazardousDescription =
+                stringResource(R.string.text_description_not_hazardous_asteroid_image)
         }
 
         Image(
             painter = painterResource(id = iconRes),
-            contentDescription = "Hazardous status",
+            contentDescription = hazardousDescription,
             modifier = Modifier.size(24.dp),
             contentScale = ContentScale.Fit
         )
@@ -270,28 +285,16 @@ private fun ImageOfTodayPreview() {
     ImageOfToday(imageOfTodayModel = ImageOfTodayModel())
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//private fun HomeScreenPreview() {
-//    if (GlobalContext.getOrNull() == null) {
-//        startKoin {
-//            modules(
-//                module {
-//                    singleOf(::MainViewModel)
-//                    single { getDatabase(get()) }
-//                    single { AsteroidRepository(get(), Dispatchers.IO) }
-//                }
-//            )
-//        }
-//    }
-//    val viewModel: MainViewModel = koinViewModel()
-//    HomeScreen(
-//        navigateToItemDetail = {}, modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color.Black),
-//        asteroidUiState = viewModel.asteroidUiState
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+private fun HomeBodyPreview() {
+    HomeBody(
+        imageOfTodayModel = ImageOfTodayModel(),
+        onItemClick = {},
+        modifier = Modifier.fillMaxSize(),
+        itemList = fakeLazyPagingItems(fakeAsteroids)
+    )
+}
 
 @Composable
 private fun HomeHeader(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfTodayModel) {
@@ -312,3 +315,9 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun <T : Any> fakeLazyPagingItems(data: List<T>): LazyPagingItems<T> {
+    val fakeFlow = remember { flowOf(PagingData.from(data)) }
+    val pagingData = fakeFlow.collectAsLazyPagingItems()
+    return pagingData
+}

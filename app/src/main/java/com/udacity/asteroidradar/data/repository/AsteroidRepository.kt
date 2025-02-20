@@ -145,6 +145,12 @@ class AsteroidRepository(
                 id = 1
             )
         }
+
+        val fakeAsteroids = listOf(
+            AsteroidRepository.getDummyModel(),
+            AsteroidRepository.getDummyModel(),
+            AsteroidRepository.getDummyModel()
+        )
     }
 
 }
