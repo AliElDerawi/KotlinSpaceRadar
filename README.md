@@ -1,19 +1,19 @@
 # KotlinSpaceRadar [![Build Status][ci-image]][ci]
 
-**"A NASA-powered app to monitor asteroids and their Earth proximity, with offline features and clean architecture."**
+**"A NASA-powered Compose app to monitor asteroids and their Earth proximity, with offline features and clean architecture."**
 
-KotlinSpaceRadar is an app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API provided by the NASA JPL Asteroid team and stores data locally for offline access. This project is part of the **Udacity Android Kotlin Developer Nanodegree Program**.
+KotlinSpaceRadar is a Compose app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API provided by the NASA JPL Asteroid team and stores data locally for offline access. This project is part of the **Udacity Android Kotlin Developer Nanodegree Program**.
 
 ## Main Features of the Project
 
+- **Modern UI**: Use Jetpack Compose for modern UI. Also uses a single-activity architecture with multiple fragments for simplified navigation and improved modularity (in the XML branch).
 - **MVVM and Repository Architecture**: Implements MVVM and Repository to enhance maintainability, modularity, and scalability, promoting cleaner code and separation of concerns.
 - **Offline Mode**: Provides offline access to data by using Room for local storage, ensuring the app is usable even without an internet connection.
 - **Paging Library (v3)**: Optimizes data viewing with seamless scrolling, ensuring smooth navigation through large lists of asteroids.
 - **Accessible UI**: Dynamically generated ContentDescriptions to enhance accessibility, making the app inclusive for all users.
 - **Orientation Support**: Adapts to portrait and landscape orientations without losing data or state, ensuring a smooth user experience.
-- **Modern UI**: Uses single-activity architecture with multiple fragments for simplified navigation and improved modularity.
-- **Reactive UI**: Incorporates DataBindingAdapter and Kotlin Flow for a reactive and responsive user experience.
 - **Dependency Injection**: Koin (v4) improves modularity and testability by effectively managing dependencies.
+- **Reactive UI**: Incorporates DataBindingAdapter and Kotlin Flow for a reactive and responsive user experience (in the XML branch).
 
 ## Showcased Skills
 
@@ -49,7 +49,7 @@ Alternatively, follow the [Secrets Gradle Plugin guide](https://developers.googl
 
 - **[Koin (v4)](https://github.com/InsertKoinIO/koin)**: Dependency injection framework, allowing modularity and making the project easier to test.
 - **[Timber](https://github.com/JakeWharton/timber)**: Logging utility to simplify debugging.
-- **[Picasso](https://github.com/square/picasso)**: Image loading and caching for efficient display of images.
+- **[Coil](https://github.com/coil-kt/coil)**: Image loading and caching for efficient display of images.
 - **[Retrofit](https://github.com/square/retrofit)**: REST API management for fetching data from NASA's servers.
 - **[Moshi](https://github.com/square/moshi)**: JSON parsing for managing API responses.
 - **[Secrets Gradle Plugin](https://developers.google.com/maps/documentation/places/android-sdk/secrets-gradle-plugin)**: Secure management of sensitive data like API keys.
