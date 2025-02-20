@@ -47,7 +47,7 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
-import com.udacity.asteroidradar.data.repository.AsteroidRepository.Companion.fakeAsteroids
+import com.udacity.asteroidradar.data.repository.AsteroidRepository.Companion.fakeAsteroidsList
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
@@ -181,14 +181,16 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
         ) {
             Text(
                 text = imageOfTodayModel.title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleLarge,
                 maxLines = 2,
                 color = Color.White,
-                lineHeight = 24.sp,
+                lineHeight = 26.sp,
                 modifier = Modifier
                     .padding(
                         start = dimensionResource(R.dimen.dim_default_margin),
-                        end = dimensionResource(R.dimen.dim_default_margin)
+                        end = dimensionResource(R.dimen.dim_default_margin),
+                        top = dimensionResource(R.dimen.dim_default_margin),
+                        bottom = dimensionResource(R.dimen.dim_default_margin)
                     )
                     .fillMaxWidth()
             )
@@ -292,7 +294,7 @@ private fun HomeBodyPreview() {
         imageOfTodayModel = ImageOfTodayModel(),
         onItemClick = {},
         modifier = Modifier.fillMaxSize(),
-        itemList = fakeLazyPagingItems(fakeAsteroids)
+        itemList = fakeLazyPagingItems(fakeAsteroidsList)
     )
 }
 
