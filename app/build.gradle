@@ -62,10 +62,6 @@ android {
 }
 
 dependencies {
-    // Design
-    implementation libs.androidx.appcompat
-    implementation libs.constraintLayout
-    implementation libs.material
 
     // Core with Ktx
     implementation libs.androidx.core.ktx
@@ -83,15 +79,6 @@ dependencies {
 
     // ViewModel and LiveData
     implementation libs.androidx.lifecycle.viewmodel.ktx
-
-    // Navigation
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
-
-    // RecyclerView
-    implementation libs.recyclerView
-    // For control over item selection of both touch and mouse driven selection
-    implementation libs.recyclerView.selection
 
     // MultiDex
     implementation libs.multidex
