@@ -96,7 +96,6 @@ fun AsteroidDetail(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
     ) {
         Column(
             modifier = modifier
@@ -216,6 +215,7 @@ fun DetailItem(
 @Composable
 fun PreviewAsteroidDetail() {
     AsteroidDetail(
+        modifier = Modifier.background(Color.Black),
         asteroid = AsteroidRepository.getDummyModel(),
         onHelpClick = {}
     )
