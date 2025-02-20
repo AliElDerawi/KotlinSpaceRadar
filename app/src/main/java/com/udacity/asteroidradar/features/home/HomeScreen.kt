@@ -284,16 +284,20 @@ fun PreviewAsteroidItem() {
 @Preview(showBackground = true)
 @Composable
 private fun ImageOfTodayPreview() {
-    ImageOfToday(imageOfTodayModel = ImageOfTodayModel())
+    ImageOfToday(
+        modifier = Modifier.background(Color.Black), imageOfTodayModel = ImageOfTodayModel()
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeBodyPreview() {
     HomeBody(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
         imageOfTodayModel = ImageOfTodayModel(),
         onItemClick = {},
-        modifier = Modifier.fillMaxSize(),
         itemList = fakeLazyPagingItems(fakeAsteroidsList)
     )
 }
