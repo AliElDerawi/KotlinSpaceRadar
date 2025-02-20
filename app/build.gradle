@@ -3,9 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.safe.args)
     alias(libs.plugins.gradle.plugin.secret)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.seralization)
@@ -38,7 +35,6 @@ android {
         }
     }
     buildFeatures {
-        dataBinding true
         buildConfig = true
     }
     compileOptions {
@@ -128,8 +124,8 @@ dependencies {
     implementation libs.moshi.kotlin
     ksp libs.moshi.codegen
 
-    // Picasso
-    implementation libs.picasso
+    // Kotlin Serialization
+    implementation libs.kotlin.serialization
 
     // Timber
     implementation libs.timber
@@ -143,15 +139,10 @@ dependencies {
     implementation libs.koin.android
     implementation libs.koin.core
     implementation libs.koin.androidx.compose
-
-
     implementation libs.koin.compat
     // Jetpack WorkManager
     implementation libs.koin.workmanager
     // Navigation Graph
     implementation libs.koin.navigation
-
-    // Kotlin Serialization
-    implementation libs.kotlin.serialization
 
 }
