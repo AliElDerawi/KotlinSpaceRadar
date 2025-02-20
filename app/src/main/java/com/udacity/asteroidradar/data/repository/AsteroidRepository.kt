@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidApiFilter
-import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
 import com.udacity.asteroidradar.api.isNetworkConnected
@@ -19,7 +18,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -31,15 +29,12 @@ class AsteroidRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
 
-    val statusMutableStateFlow = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
     val pagingConfig = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false)
 
     suspend fun refreshAsteroids(
         filter: AsteroidApiFilter
     ): Result<Flow<PagingData<AsteroidModel>>> {
         return withContext(ioDispatcher) {
-
-            statusMutableStateFlow.value = AsteroidApiStatus.LOADING
 
             if (!isNetworkConnected()) {
                 getAsteroidListFromDataBase(filter)
@@ -50,7 +45,6 @@ class AsteroidRepository(
                     val result = Pager(pagingConfig) {
                         database.asteroidDao.getAsteroidsList(getTodayDate(), getEndDate())
                     }.flow
-                    statusMutableStateFlow.value = AsteroidApiStatus.DONE
                     Result.success(result)
                 } else {
                     val (startDate, endDate) = when (filter) {
@@ -65,18 +59,17 @@ class AsteroidRepository(
 
                     database.asteroidDao.insertAll(*asteroids.toTypedArray())
 
-                    statusMutableStateFlow.value = AsteroidApiStatus.DONE
                     val result = Pager(pagingConfig) { ApiPagingSource(asteroids) }.flow
                     Result.success(result)
                 }
             } catch (e: Exception) {
                 ensureActive()
-                statusMutableStateFlow.value = AsteroidApiStatus.ERROR
                 Timber.d("Exception: $e")
                 getAsteroidListFromDataBase(filter)
             }
         }
     }
+
 
 
     private suspend fun getAsteroidListFromDataBase(filter: AsteroidApiFilter): Result<Flow<PagingData<AsteroidModel>>> {
@@ -90,7 +83,6 @@ class AsteroidRepository(
                 database.asteroidDao.getAsteroidsList(startDate, endDate)
             }.flow
 
-            statusMutableStateFlow.value = AsteroidApiStatus.DONE
             Result.success(result)
         }
     }
@@ -146,10 +138,10 @@ class AsteroidRepository(
             )
         }
 
-        val fakeAsteroids = listOf(
-            AsteroidRepository.getDummyModel(),
-            AsteroidRepository.getDummyModel(),
-            AsteroidRepository.getDummyModel()
+        val fakeAsteroidsList = listOf(
+            getDummyModel(),
+            getDummyModel(),
+            getDummyModel()
         )
     }
 
