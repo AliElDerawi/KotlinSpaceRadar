@@ -110,7 +110,7 @@ fun AsteroidDetail(
                     else R.drawable.asteroid_safe
                 ),
                 contentDescription = stringResource(R.string.app_name),
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
