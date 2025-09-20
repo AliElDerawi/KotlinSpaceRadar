@@ -8,17 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.databinding.FragmentDetailBinding
 import com.udacity.asteroidradar.data.BaseFragment
+import com.udacity.asteroidradar.databinding.FragmentDetailBinding
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
 import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
-import org.koin.android.ext.android.inject
 
 class DetailFragment : BaseFragment() {
 
-    override val mViewModel: MainViewModel by inject()
+    override val mViewModel: MainViewModel by activityViewModels()
     private lateinit var mActivity: FragmentActivity
     private lateinit var mBinding: FragmentDetailBinding
 

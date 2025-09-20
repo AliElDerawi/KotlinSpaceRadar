@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
@@ -22,12 +23,11 @@ import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
 import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
-import org.koin.android.ext.android.inject
 
 class MainFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentMainBinding
-    override val mViewModel: MainViewModel by inject()
+    override val mViewModel: MainViewModel by activityViewModels()
     private lateinit var mActivity: FragmentActivity
 
     override fun onAttach(context: Context) {

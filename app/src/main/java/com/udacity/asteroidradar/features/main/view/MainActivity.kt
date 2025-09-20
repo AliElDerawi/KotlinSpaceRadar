@@ -15,12 +15,12 @@ import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.applyWindowsPadding
 import com.udacity.asteroidradar.util.AppSharedMethods.getCompatColor
 import com.udacity.asteroidradar.util.AppSharedMethods.setStatusBarColorAndStyle
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private val mViewModel: MainViewModel by inject()
+    private val mViewModel: MainViewModel by viewModel()
     private lateinit var mNavController: NavController
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAppBarConfiguration: AppBarConfiguration
