@@ -24,7 +24,7 @@ roomVersion = "2.8.0"
 pagingVersion = "3.3.6"
 retrofitLogginVersion = "5.1.0"
 retrofitVersion = "3.0.0"
-moshiVersion = "1.15.1"
+moshiVersion = "1.15.2"
 kotlinSerializationVersion = "1.9.0"
 
 [libraries]
