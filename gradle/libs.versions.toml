@@ -1,7 +1,7 @@
 [versions]
 activityComposeVersion = "1.10.0"
-coilComposeVersion = "3.0.4"
-coilNetworkOkhttpVersion = "3.0.4"
+coilComposeVersion = "3.3.0"
+coilNetworkOkhttpVersion = "3.3.0"
 composeBomVersion = "2025.09.00"
 composePluginVersion = "2.2.20"
 koinAndroidxComposeVersion = "4.1.1"
