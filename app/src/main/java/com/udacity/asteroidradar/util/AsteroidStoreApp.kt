@@ -63,9 +63,7 @@ class AsteroidStoreApp : MultiDexApplication() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
-            .setRequiresCharging(true).apply {
-                setRequiresDeviceIdle(true)
-            }
+            .setRequiresCharging(true)
             .build()
 
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
