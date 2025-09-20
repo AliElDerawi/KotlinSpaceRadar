@@ -12,12 +12,12 @@ plugins {
 
 android {
     namespace 'com.udacity.asteroidradar'
-    compileSdk 35
+    compileSdkVersion 36
 
     defaultConfig {
         applicationId "com.udacity.asteroidradar"
         minSdkVersion 24
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
