@@ -51,16 +51,16 @@ import com.udacity.asteroidradar.data.repository.AsteroidRepository.Companion.fa
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
-import com.udacity.asteroidradar.navigation.NavigationDestination
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
 
-object HomeDestination : NavigationDestination {
-    override val route = "home"
-    override val titleRes = R.string.app_name
+@Serializable
+object HomeDestination {
+    val titleRes = R.string.app_name
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
