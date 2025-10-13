@@ -40,15 +40,17 @@ import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.navigation.NavigationDestination
 import com.udacity.asteroidradar.util.dimenToSp
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
-object AsteroidDetailDestination : NavigationDestination {
-    override val route = "detail"
-    override val titleRes = R.string.text_asteroid_detail
-    const val ASTEROID_MODEL_ARG = "asteroidModel"
-    val routeWithArgs = "$route/{$ASTEROID_MODEL_ARG}"
+@Serializable
+data class AsteroidDetailDestination(
+    val asteroidId: Long
+) {
+    companion object {
+        val titleRes = R.string.text_asteroid_detail
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +65,7 @@ fun AsteroidDetailScreen(
     Scaffold(topBar = {
         AsteroidAppTopBar(
             title = viewModel.asteroidModel?.codename
-                ?: stringResource(R.string.text_asteroid_detail),
+                ?: stringResource(AsteroidDetailDestination.titleRes),
             canNavigateBack = true,
             navigateUp = navigateBack,
             showMenu = false

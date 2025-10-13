@@ -124,6 +124,12 @@ class AsteroidRepository(
         }
     }
 
+    suspend fun getAsteroidById(asteroidId: Long): AsteroidModel? {
+        return withContext(ioDispatcher) {
+            database.asteroidDao.getAsteroidById(asteroidId)
+        }
+    }
+
     companion object {
         fun getDummyModel(): AsteroidModel {
             return AsteroidModel(

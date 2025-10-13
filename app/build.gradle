@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.gradle.plugin.secret)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.seralization)
+    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
