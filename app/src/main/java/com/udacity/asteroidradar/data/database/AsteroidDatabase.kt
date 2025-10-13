@@ -30,6 +30,9 @@ interface AsteroidDao {
     fun getAllAsteroid(
     ): Flow<List<AsteroidModel>>
 
+    @Query("select * from asteroid_data where id = :asteroidId")
+    suspend fun getAsteroidById(asteroidId: Long): AsteroidModel?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg asteroidList: AsteroidModel)
 
