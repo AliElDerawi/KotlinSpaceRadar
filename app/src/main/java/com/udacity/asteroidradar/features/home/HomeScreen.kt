@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -129,12 +131,15 @@ private fun HomeBody(
     LazyColumn(
         modifier = modifier.fillMaxSize(), contentPadding = contentPadding
     ) {
-        // Header item (Image of Today)
-        imageOfTodayModel?.let { imageModel ->
-            item {
-                HomeHeader(imageOfTodayModel = imageModel, modifier = modifier)
+        // Header item (Image of Today or Placeholder)
+        item {
+            if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
+                HomeHeader(imageOfTodayModel = imageOfTodayModel, modifier = modifier)
+            } else {
+                ImageOfTodayPlaceholder(modifier = modifier)
             }
         }
+
         // Show no data message if the list is empty and loading state is active
         itemList?.let { list ->
             if (list.loadState.refresh !is LoadState.Loading && list.itemCount == 0) {
@@ -193,6 +198,42 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                         bottom = dimensionResource(R.dimen.dim_default_margin)
                     )
                     .fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .background(color = md_theme_light_scrim),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))
+        ) {
+            // Placeholder icon/shape
+            Icon(
+                painter = painterResource(R.drawable.ic_broken_image),
+                contentDescription = stringResource(R.string.text_empty_picture_of_today),
+                tint = Color.White.copy(alpha = 0.6f),
+                modifier = Modifier.size(64.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Placeholder text
+            Text(
+                text = stringResource(R.string.text_empty_picture_of_today),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -286,6 +327,14 @@ fun PreviewAsteroidItem() {
 private fun ImageOfTodayPreview() {
     ImageOfToday(
         modifier = Modifier.background(Color.Black), imageOfTodayModel = ImageOfTodayModel()
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ImageOfTodayPlaceholderPreview() {
+    ImageOfTodayPlaceholder(
+        modifier = Modifier.background(Color.Black)
     )
 }
 
