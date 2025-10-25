@@ -74,11 +74,21 @@ class MainViewModel(
 
     private fun getImageOfToday() {
         viewModelScope.launch(Dispatchers.IO) {
-            asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
-                asteroidUiState =
-                    (asteroidUiState as? AsteroidUiState.Success)?.copy(imageOfToday = imageOfToday)
-                        ?: (asteroidUiState as? AsteroidUiState.Loading)?.copy(imageOfToday = imageOfToday)
-                                ?: AsteroidUiState.Success(imageOfToday = imageOfToday)
+            try {
+                asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
+                    asteroidUiState =
+                        (asteroidUiState as? AsteroidUiState.Success)?.copy(imageOfToday = imageOfToday)
+                            ?: (asteroidUiState as? AsteroidUiState.Loading)?.copy(imageOfToday = imageOfToday)
+                                    ?: AsteroidUiState.Success(imageOfToday = imageOfToday)
+                }
+            } catch (e: Exception) {
+                // If there's an error fetching the image, keep the current state with null image
+                // This prevents crashes and shows the placeholder instead
+                asteroidUiState = when (val currentState = asteroidUiState) {
+                    is AsteroidUiState.Success -> currentState.copy(imageOfToday = null)
+                    is AsteroidUiState.Loading -> currentState.copy(imageOfToday = null)
+                    else -> AsteroidUiState.Success(imageOfToday = null)
+                }
             }
         }
     }
