@@ -87,7 +87,7 @@ class AsteroidRepository(
         }
     }
 
-    suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel>> {
+    suspend fun getImageOfToday(): Result<Flow<ImageOfTodayModel?>> {
         return withContext(ioDispatcher) {
             if (!isNetworkConnected()) {
                 return@withContext getImageOfTodayFromDataBase()
@@ -95,7 +95,10 @@ class AsteroidRepository(
 
             try {
                 val flow = getImageOfTheDayFlow()
-                database.imageOfTodayDao.insertImageOfToday(flow.first())
+                val imageData = flow.first()
+                if (imageData != null) {
+                    database.imageOfTodayDao.insertImageOfToday(imageData)
+                }
                 Result.success(flow)
             } catch (e: Exception) {
                 ensureActive()
@@ -106,18 +109,23 @@ class AsteroidRepository(
     }
 
 
-    private suspend fun getImageOfTheDayFlow(): Flow<ImageOfTodayModel> {
+    private suspend fun getImageOfTheDayFlow(): Flow<ImageOfTodayModel?> {
         return withContext(ioDispatcher) {
             flow {
-                val response = AsteroidApi.retrofitService.getImageOfTheDay()
-                response.creationDate = getTodayDate()
-                Timber.d("getImageOfTheDayFlow:response: $response")
-                emit(response)
+                try {
+                    val response = AsteroidApi.retrofitService.getImageOfTheDay()
+                    response.creationDate = getTodayDate()
+                    Timber.d("getImageOfTheDayFlow:response: $response")
+                    emit(response)
+                } catch (e: Exception) {
+                    Timber.d("getImageOfTheDayFlow:Exception: $e")
+                    emit(null)
+                }
             }
         }
     }
 
-    private suspend fun getImageOfTodayFromDataBase(): Result<Flow<ImageOfTodayModel>> {
+    private suspend fun getImageOfTodayFromDataBase(): Result<Flow<ImageOfTodayModel?>> {
         return withContext(ioDispatcher) {
             val result = database.imageOfTodayDao.getImageOfToday(getTodayDate())
             Result.success(result)

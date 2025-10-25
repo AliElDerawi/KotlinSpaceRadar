@@ -40,8 +40,8 @@ interface AsteroidDao {
 
 @Dao
 interface ImageOfTodayDao {
-    @Query("select * from image_of_day_data where :currentDate = date or :currentDate = creationDate")
-    fun getImageOfToday(currentDate: String): Flow<ImageOfTodayModel>
+    @Query("select * from image_of_day_data where :currentDate = date or :currentDate = creationDate LIMIT 1")
+    fun getImageOfToday(currentDate: String): Flow<ImageOfTodayModel?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImageOfToday(imageOfTodayModel: ImageOfTodayModel)
