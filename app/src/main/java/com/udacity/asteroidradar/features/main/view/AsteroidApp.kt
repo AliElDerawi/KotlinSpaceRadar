@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.api.AsteroidApiFilter
+import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.navigation.AsteroidNavHost
 
 @Composable

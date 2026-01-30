@@ -6,20 +6,17 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.udacity.asteroidradar.data.database.getDatabase
-import com.udacity.asteroidradar.data.repository.AsteroidRepository
-import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.di.dataModule
+import com.udacity.asteroidradar.di.databaseModule
+import com.udacity.asteroidradar.di.domainModule
+import com.udacity.asteroidradar.di.presentationModule
+import com.udacity.asteroidradar.di.workerModule
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -44,17 +41,18 @@ class AsteroidStoreApp : MultiDexApplication() {
         Timber.plant(Timber.DebugTree())
         delayedInit()
 
-        val myModule = module {
-            viewModelOf(::MainViewModel)
-            viewModelOf(::DetailScreenViewModel)
-            singleOf(::getDatabase)
-            workerOf(::RefreshDataWorker)
-            single { AsteroidRepository(get(),Dispatchers.IO) }
-        }
-
+        // Initialize Koin with organized modules
         startKoin {
             androidContext(this@AsteroidStoreApp)
-            modules(listOf(myModule))
+            modules(
+                listOf(
+                    presentationModule,  // ViewModels
+                    domainModule,        // Use Cases
+                    dataModule,          // Repository & Data Sources
+                    databaseModule,      // Room Database & DAOs
+                    workerModule         // WorkManager Workers
+                )
+            )
         }
 
     }

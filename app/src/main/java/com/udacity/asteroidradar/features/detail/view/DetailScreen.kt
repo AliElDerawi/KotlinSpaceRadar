@@ -36,19 +36,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.navigation.NavigationDestination
 import com.udacity.asteroidradar.util.dimenToSp
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
-object AsteroidDetailDestination : NavigationDestination {
-    override val route = "detail"
-    override val titleRes = R.string.text_asteroid_detail
-    const val ASTEROID_MODEL_ARG = "asteroidModel"
-    val routeWithArgs = "$route/{$ASTEROID_MODEL_ARG}"
+@Serializable
+data class AsteroidDetailDestination(
+    val asteroidId: Long
+) {
+    companion object {
+        val titleRes = R.string.text_asteroid_detail
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +64,7 @@ fun AsteroidDetailScreen(
     Scaffold(topBar = {
         AsteroidAppTopBar(
             title = viewModel.asteroidModel?.codename
-                ?: stringResource(R.string.text_asteroid_detail),
+                ?: stringResource(AsteroidDetailDestination.titleRes),
             canNavigateBack = true,
             navigateUp = navigateBack,
             showMenu = false
@@ -76,7 +77,7 @@ fun AsteroidDetailScreen(
         ) {
             viewModel.asteroidModel?.let { asteroid ->
                 AsteroidDetail(
-                    asteroid = asteroid,
+                    asteroidModel = asteroid,
                     onHelpClick = { showDialog = true },
                     modifier = Modifier.fillMaxSize()
                 )
@@ -91,7 +92,7 @@ fun AsteroidDetailScreen(
 
 @Composable
 fun AsteroidDetail(
-    modifier: Modifier = Modifier, asteroid: AsteroidModel, onHelpClick: () -> Unit
+    modifier: Modifier = Modifier, asteroidModel: AsteroidModel, onHelpClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -106,7 +107,7 @@ fun AsteroidDetail(
             // Image
             Image(
                 painter = painterResource(
-                    if (asteroid.isPotentiallyHazardous) R.drawable.asteroid_hazardous
+                    if (asteroidModel.isPotentiallyHazardous) R.drawable.asteroid_hazardous
                     else R.drawable.asteroid_safe
                 ),
                 contentDescription = stringResource(R.string.app_name),
@@ -123,13 +124,13 @@ fun AsteroidDetail(
             Column(modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))) {
                 DetailItem(
                     title = stringResource(R.string.text_close_approach_date),
-                    value = asteroid.closeApproachDate
+                    value = asteroidModel.closeApproachDate
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_absolute_magnitude),
                     value = stringResource(
-                        R.string.text_format_astronomical_unit, asteroid.absoluteMagnitude
+                        R.string.text_format_astronomical_unit, asteroidModel.absoluteMagnitude
                     ),
                     helpIcon = true,
                     onHelpClick = onHelpClick
@@ -138,20 +139,20 @@ fun AsteroidDetail(
                 DetailItem(
                     title = stringResource(R.string.text_estimated_diameter),
                     value = stringResource(
-                        R.string.text_format_km_unit, asteroid.estimatedDiameter
+                        R.string.text_format_km_unit, asteroidModel.estimatedDiameter
                     )
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_relative_velocity), value = stringResource(
-                        R.string.text_format_km_s_unit, asteroid.relativeVelocity
+                        R.string.text_format_km_s_unit, asteroidModel.relativeVelocity
                     )
                 )
 
                 DetailItem(
                     title = stringResource(R.string.text_distance_from_earth),
                     value = stringResource(
-                        R.string.text_format_astronomical_unit, asteroid.distanceFromEarth
+                        R.string.text_format_astronomical_unit, asteroidModel.distanceFromEarth
                     )
                 )
 
@@ -211,12 +212,26 @@ fun DetailItem(
     }
 }
 
+// Preview helper function
+private fun getDummyAsteroid(): AsteroidModel {
+    return AsteroidModel(
+        codename = "Asteroid Radar",
+        closeApproachDate = "2024-04-27",
+        isPotentiallyHazardous = false,
+        absoluteMagnitude = 11.2,
+        estimatedDiameter = 0.2,
+        relativeVelocity = 0.1,
+        distanceFromEarth = 0.3,
+        id = 1
+    )
+}
+
 @Preview
 @Composable
 fun PreviewAsteroidDetail() {
     AsteroidDetail(
         modifier = Modifier.background(Color.Black),
-        asteroid = AsteroidRepository.getDummyModel(),
+        asteroidModel = getDummyAsteroid(),
         onHelpClick = {}
     )
 }

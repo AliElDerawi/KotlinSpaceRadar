@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,23 +46,21 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.data.repository.AsteroidRepository
-import com.udacity.asteroidradar.data.repository.AsteroidRepository.Companion.fakeAsteroidsList
+import com.udacity.asteroidradar.domain.model.AsteroidModel
+import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
-import com.udacity.asteroidradar.navigation.NavigationDestination
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
 
-object HomeDestination : NavigationDestination {
-    override val route = "home"
-    override val titleRes = R.string.app_name
+@Serializable
+object HomeDestination {
+    val titleRes = R.string.app_name
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +98,7 @@ fun HomeScreen(
 
             is AsteroidUiState.Success -> {
                 val asteroidPagingItems =
-                    asteroidUiState.asteroidModelList?.collectAsLazyPagingItems()
+                    asteroidUiState.asteroidModelModelList?.collectAsLazyPagingItems()
                 val imageOfTodayModel = asteroidUiState.imageOfToday
                 HomeBody(
                     itemList = asteroidPagingItems,
@@ -122,19 +122,22 @@ fun HomeScreen(
 private fun HomeBody(
     modifier: Modifier = Modifier,
     itemList: LazyPagingItems<AsteroidModel>? = null,
-    imageOfTodayModel: ImageOfTodayModel? = null,
+    imageOfTodayModel: ImageOfDayModel? = null,
     onItemClick: (AsteroidModel) -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(), contentPadding = contentPadding
     ) {
-        // Header item (Image of Today)
-        imageOfTodayModel?.let { imageModel ->
-            item {
-                HomeHeader(imageOfTodayModel = imageModel, modifier = modifier)
+        // Header item (Image of Today or Placeholder)
+        item {
+            if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
+                HomeHeader(imageOfTodayModel = imageOfTodayModel, modifier = modifier)
+            } else {
+                ImageOfTodayPlaceholder(modifier = modifier)
             }
         }
+
         // Show no data message if the list is empty and loading state is active
         itemList?.let { list ->
             if (list.loadState.refresh !is LoadState.Loading && list.itemCount == 0) {
@@ -155,7 +158,7 @@ private fun HomeBody(
 }
 
 @Composable
-private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfTodayModel) {
+private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -193,6 +196,42 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                         bottom = dimensionResource(R.dimen.dim_default_margin)
                     )
                     .fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .background(color = md_theme_light_scrim),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))
+        ) {
+            // Placeholder icon/shape
+            Icon(
+                painter = painterResource(R.drawable.ic_broken_image),
+                contentDescription = stringResource(R.string.text_empty_picture_of_today),
+                tint = Color.White.copy(alpha = 0.6f),
+                modifier = Modifier.size(64.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Placeholder text
+            Text(
+                text = stringResource(R.string.text_empty_picture_of_today),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -270,6 +309,35 @@ private fun AsteroidItem(
     }
 }
 
+// Preview helper functions
+private fun getDummyAsteroid(): AsteroidModel {
+    return AsteroidModel(
+        codename = "Asteroid Radar",
+        closeApproachDate = "2024-04-27",
+        isPotentiallyHazardous = false,
+        absoluteMagnitude = 11.2,
+        estimatedDiameter = 0.2,
+        relativeVelocity = 0.1,
+        distanceFromEarth = 0.3,
+        id = 1
+    )
+}
+
+private fun getDummyImageOfDay(): ImageOfDayModel {
+    return ImageOfDayModel(
+        title = "Sample Image",
+        url = "",
+        mediaType = "image",
+        date = "2024-04-27"
+    )
+}
+
+private val fakeAsteroidsList = listOf(
+    getDummyAsteroid(),
+    getDummyAsteroid().copy(id = 2, codename = "Asteroid 2"),
+    getDummyAsteroid().copy(id = 3, codename = "Asteroid 3")
+)
+
 @Preview
 @Composable
 fun PreviewAsteroidItem() {
@@ -277,7 +345,7 @@ fun PreviewAsteroidItem() {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Black),
-        asteroidModel = AsteroidRepository.getDummyModel()
+        asteroidModel = getDummyAsteroid()
     )
 }
 
@@ -285,7 +353,15 @@ fun PreviewAsteroidItem() {
 @Composable
 private fun ImageOfTodayPreview() {
     ImageOfToday(
-        modifier = Modifier.background(Color.Black), imageOfTodayModel = ImageOfTodayModel()
+        modifier = Modifier.background(Color.Black), imageOfTodayModel = getDummyImageOfDay()
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ImageOfTodayPlaceholderPreview() {
+    ImageOfTodayPlaceholder(
+        modifier = Modifier.background(Color.Black)
     )
 }
 
@@ -296,14 +372,14 @@ private fun HomeBodyPreview() {
         modifier = Modifier
             .background(Color.Black)
             .fillMaxSize(),
-        imageOfTodayModel = ImageOfTodayModel(),
+        imageOfTodayModel = getDummyImageOfDay(),
         onItemClick = {},
         itemList = fakeLazyPagingItems(fakeAsteroidsList)
     )
 }
 
 @Composable
-private fun HomeHeader(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfTodayModel) {
+private fun HomeHeader(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
     ImageOfToday(
         imageOfTodayModel = imageOfTodayModel, modifier = modifier.fillMaxWidth()
     )
