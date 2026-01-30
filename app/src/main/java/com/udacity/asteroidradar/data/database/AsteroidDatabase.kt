@@ -13,8 +13,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.data.source.local.entity.AsteroidEntity
+import com.udacity.asteroidradar.data.source.local.entity.ImageOfDayEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -24,30 +24,30 @@ interface AsteroidDao {
     @Query("select * from asteroid_data where closeApproachDate >= :startDate and closeApproachDate <= :endData order by closeApproachDate asc")
     fun getAsteroidsList(
         startDate: String = getTodayDate(), endData: String = getEndDate()
-    ): PagingSource<Int, AsteroidModel>
+    ): PagingSource<Int, AsteroidEntity>
 
     @Query("select * from asteroid_data")
     fun getAllAsteroid(
-    ): Flow<List<AsteroidModel>>
+    ): Flow<List<AsteroidEntity>>
 
     @Query("select * from asteroid_data where id = :asteroidId")
-    suspend fun getAsteroidById(asteroidId: Long): AsteroidModel?
+    suspend fun getAsteroidById(asteroidId: Long): AsteroidEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg asteroidList: AsteroidModel)
+    suspend fun insertAll(vararg asteroidList: AsteroidEntity)
 
 }
 
 @Dao
 interface ImageOfTodayDao {
     @Query("select * from image_of_day_data where :currentDate = date or :currentDate = creationDate LIMIT 1")
-    fun getImageOfToday(currentDate: String): Flow<ImageOfTodayModel?>
+    fun getImageOfToday(currentDate: String): Flow<ImageOfDayEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertImageOfToday(imageOfTodayModel: ImageOfTodayModel)
+    fun insertImageOfToday(imageOfDayEntity: ImageOfDayEntity)
 }
 
-@Database(entities = [AsteroidModel::class, ImageOfTodayModel::class], version = 3)
+@Database(entities = [AsteroidEntity::class, ImageOfDayEntity::class], version = 3)
 abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
     abstract val imageOfTodayDao: ImageOfTodayDao
