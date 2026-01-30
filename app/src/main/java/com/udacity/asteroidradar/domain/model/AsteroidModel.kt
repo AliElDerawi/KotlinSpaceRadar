@@ -1,13 +1,11 @@
-package com.udacity.asteroidradar.api.models
+package com.udacity.asteroidradar.domain.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
-
-@Entity(tableName = "asteroid_data")
-@Serializable
+/**
+ * Domain model for Asteroid - Pure Kotlin, no framework dependencies
+ * This model is used across the presentation layer (ViewModels and UI)
+ */
 data class AsteroidModel(
-    @PrimaryKey val id: Long,
+    val id: Long,
     val codename: String,
     val closeApproachDate: String,
     val absoluteMagnitude: Double,
@@ -16,3 +14,4 @@ data class AsteroidModel(
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean
 )
+
