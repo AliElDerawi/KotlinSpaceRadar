@@ -8,8 +8,7 @@ koinAndroidxComposeVersion = "4.1.1"
 kotlinVersion = '2.2.20'
 koinVersion = '4.1.1'
 coreVersion = '1.17.0'
-navigationComposeVersion = "2.9.5"
-navigationSafeArgsVersion = "2.9.5"
+navigationComposeVersion = "2.9.6"
 pagingComposeVersion = "3.3.6"
 gradleToolsVersion = "8.13.0"
 multidexVersion = '2.0.1'
@@ -76,4 +75,3 @@ gradle-plugin-secret = { id = "com.google.android.libraries.mapsplatform.secrets
 kotlin-android = { id = "kotlin-android" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-seralization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationSafeArgsVersion" }

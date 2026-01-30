@@ -3,7 +3,7 @@ package com.udacity.asteroidradar.api
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.BuildConfig
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.data.source.remote.dto.ImageOfDayDto
 import com.udacity.asteroidradar.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,8 +12,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-
-enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 
 private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -41,16 +39,10 @@ interface AsteroidApiService {
     ): String
 
     @GET("planetary/apod")
-    suspend fun getImageOfTheDay(): ImageOfTodayModel
+    suspend fun getImageOfTheDay(): ImageOfDayDto
 }
 
 object AsteroidApi {
     val retrofitService: AsteroidApiService by lazy { retrofit.create(AsteroidApiService::class.java) }
-}
-
-enum class AsteroidApiFilter(val value: String) {
-    SHOW_WEEK("week"), SHOW_TODAY("today"), SHOW_SAVED(
-        "saved"
-    )
 }
 

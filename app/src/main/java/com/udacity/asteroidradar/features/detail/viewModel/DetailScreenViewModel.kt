@@ -8,8 +8,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.domain.model.AsteroidModel
+import com.udacity.asteroidradar.domain.usecase.GetAsteroidByIdUseCase
 import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class DetailScreenViewModel(
     savedStateHandle: SavedStateHandle,
-    private val asteroidRepository: AsteroidRepository,
+    private val getAsteroidByIdUseCase: GetAsteroidByIdUseCase,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -33,7 +33,7 @@ class DetailScreenViewModel(
 
     private fun loadAsteroid() {
         viewModelScope.launch(Dispatchers.IO) {
-            asteroidModel = asteroidRepository.getAsteroidById(asteroidId)
+            asteroidModel = getAsteroidByIdUseCase(asteroidId).getOrNull()
         }
     }
 }

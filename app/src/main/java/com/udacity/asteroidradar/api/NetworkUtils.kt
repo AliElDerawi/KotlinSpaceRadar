@@ -3,19 +3,18 @@ package com.udacity.asteroidradar.api
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.util.AsteroidStoreApp
 import com.udacity.asteroidradar.util.Constants
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidModel> {
+fun parseAsteroidsJsonResult(jsonResult: JSONObject): List<AsteroidModel> {
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
 
-    val asteroidModelList = ArrayList<AsteroidModel>()
+    val asteroidModelList = mutableListOf<AsteroidModel>()
 
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
     for (formattedDate in nextSevenDaysFormattedDates) {
@@ -41,14 +40,14 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidModel> {
                     asteroidJson.getBoolean("is_potentially_hazardous_asteroid")
 
                 val asteroidModel = AsteroidModel(
-                    id,
-                    codename,
-                    formattedDate,
-                    absoluteMagnitude,
-                    estimatedDiameter,
-                    relativeVelocity,
-                    distanceFromEarth,
-                    isPotentiallyHazardous
+                    id = id,
+                    codename = codename,
+                    closeApproachDate = formattedDate,
+                    absoluteMagnitude = absoluteMagnitude,
+                    estimatedDiameter = estimatedDiameter,
+                    relativeVelocity = relativeVelocity,
+                    distanceFromEarth = distanceFromEarth,
+                    isPotentiallyHazardous = isPotentiallyHazardous
                 )
                 asteroidModelList.add(asteroidModel)
             }
