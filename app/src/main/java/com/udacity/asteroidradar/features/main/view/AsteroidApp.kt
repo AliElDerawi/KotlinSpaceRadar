@@ -1,9 +1,5 @@
 package com.udacity.asteroidradar.features.main.view
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.Icons.Filled
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -20,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -48,7 +45,7 @@ fun AsteroidAppTopBar(
     CenterAlignedTopAppBar(title = { Text(title) },
         modifier = modifier,
         scrollBehavior = scrollBehavior,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.onPrimary,
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -58,9 +55,8 @@ fun AsteroidAppTopBar(
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
-                        imageVector = Filled.ArrowBack, contentDescription = stringResource(
-                            R.string.text_back_button
-                        )
+                        painter = painterResource(R.drawable.ic_arrow_back),
+                        contentDescription = stringResource(R.string.text_back_button)
                     )
                 }
             }
@@ -68,7 +64,10 @@ fun AsteroidAppTopBar(
         actions = {
             if (showMenu) {
                 IconButton(onClick = { menuExpanded = true }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More Options")
+                    Icon(
+                        painter = painterResource(R.drawable.ic_more_vert),
+                        contentDescription = stringResource(R.string.text_menu_options)
+                    )
                 }
                 DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                     DropdownMenuItem(text = { Text(stringResource(R.string.text_filter_today)) },
