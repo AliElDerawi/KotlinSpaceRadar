@@ -2,9 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.gradle.plugin.secret)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.seralization)
@@ -21,8 +19,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "Asteroid Radar" + "_v_" + defaultConfig.versionName)
 
     }
 
@@ -58,6 +54,7 @@ android {
         ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
         ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
     }
+
 }
 
 kotlin {

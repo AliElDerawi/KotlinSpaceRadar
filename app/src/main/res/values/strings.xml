@@ -2,6 +2,7 @@
 
     <string name="app_name">Asteroid Radar</string>
     <string name="text_back_button">Back</string>
+    <string name="text_menu_options">More options</string>
     <string name="text_asteroid_detail">Asteroid Detail</string>
 
     <!-- Filter Asteroid string-->
