@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.detail.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,9 +56,9 @@ data class AsteroidDetailDestination(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AsteroidDetailScreen(
-    navigateBack: () -> Unit,
+    viewModel: DetailScreenViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
-    viewModel: DetailScreenViewModel = koinViewModel()
+    navigateBack: () -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -66,8 +67,8 @@ fun AsteroidDetailScreen(
             title = viewModel.asteroidModel?.codename
                 ?: stringResource(AsteroidDetailDestination.titleRes),
             canNavigateBack = true,
+            showMenu = false,
             navigateUp = navigateBack,
-            showMenu = false
         )
     }) { innerPadding ->
         Box(
@@ -78,8 +79,8 @@ fun AsteroidDetailScreen(
             viewModel.asteroidModel?.let { asteroid ->
                 AsteroidDetail(
                     asteroidModel = asteroid,
+                    modifier = Modifier.fillMaxSize(),
                     onHelpClick = { showDialog = true },
-                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
@@ -92,72 +93,71 @@ fun AsteroidDetailScreen(
 
 @Composable
 fun AsteroidDetail(
-    modifier: Modifier = Modifier, asteroidModel: AsteroidModel, onHelpClick: () -> Unit
+    asteroidModel: AsteroidModel,
+    modifier: Modifier = Modifier,
+    onHelpClick: () -> Unit
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = modifier
+        // Image
+        Image(
+            painter = painterResource(
+                if (asteroidModel.isPotentiallyHazardous) R.drawable.asteroid_hazardous
+                else R.drawable.asteroid_safe
+            ),
+            contentDescription = stringResource(R.string.app_name),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-        ) {
+                .height(200.dp)
+        )
 
-            // Image
-            Image(
-                painter = painterResource(
-                    if (asteroidModel.isPotentiallyHazardous) R.drawable.asteroid_hazardous
-                    else R.drawable.asteroid_safe
-                ),
-                contentDescription = stringResource(R.string.app_name),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
+
+        // Details
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dim_default_margin))
+        ) {
+            DetailItem(
+                title = stringResource(R.string.text_close_approach_date),
+                value = asteroidModel.closeApproachDate
             )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
+            DetailItem(
+                title = stringResource(R.string.text_absolute_magnitude),
+                value = stringResource(
+                    R.string.text_format_astronomical_unit, asteroidModel.absoluteMagnitude
+                ),
+                helpIcon = true,
+                onHelpClick = onHelpClick
+            )
 
-            // Details
-
-            Column(modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))) {
-                DetailItem(
-                    title = stringResource(R.string.text_close_approach_date),
-                    value = asteroidModel.closeApproachDate
+            DetailItem(
+                title = stringResource(R.string.text_estimated_diameter),
+                value = stringResource(
+                    R.string.text_format_km_unit, asteroidModel.estimatedDiameter
                 )
+            )
 
-                DetailItem(
-                    title = stringResource(R.string.text_absolute_magnitude),
-                    value = stringResource(
-                        R.string.text_format_astronomical_unit, asteroidModel.absoluteMagnitude
-                    ),
-                    helpIcon = true,
-                    onHelpClick = onHelpClick
+            DetailItem(
+                title = stringResource(R.string.text_relative_velocity),
+                value = stringResource(
+                    R.string.text_format_km_s_unit, asteroidModel.relativeVelocity
                 )
+            )
 
-                DetailItem(
-                    title = stringResource(R.string.text_estimated_diameter),
-                    value = stringResource(
-                        R.string.text_format_km_unit, asteroidModel.estimatedDiameter
-                    )
+            DetailItem(
+                title = stringResource(R.string.text_distance_from_earth),
+                value = stringResource(
+                    R.string.text_format_astronomical_unit, asteroidModel.distanceFromEarth
                 )
+            )
 
-                DetailItem(
-                    title = stringResource(R.string.text_relative_velocity), value = stringResource(
-                        R.string.text_format_km_s_unit, asteroidModel.relativeVelocity
-                    )
-                )
-
-                DetailItem(
-                    title = stringResource(R.string.text_distance_from_earth),
-                    value = stringResource(
-                        R.string.text_format_astronomical_unit, asteroidModel.distanceFromEarth
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_default_margin)))
-            }
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_default_margin)))
         }
     }
 }
@@ -166,20 +166,15 @@ fun AsteroidDetail(
 fun DetailItem(
     title: String,
     value: String,
+    modifier: Modifier = Modifier,
     helpIcon: Boolean = false,
-    onHelpClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onHelpClick: (() -> Unit)? = null
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = dimensionResource(R.dimen.dim_6dp)),
-        verticalAlignment = Alignment.CenterVertically // Aligns all children vertically centered
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // Column for title and value texts
-        Column(
-            modifier = Modifier.weight(1f) // Text takes up available horizontal space
-        ) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 fontSize = dimenToSp(R.dimen.text_normal),
@@ -187,7 +182,7 @@ fun DetailItem(
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp))) // Spacing between title and value
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
 
             Text(
                 text = value,
@@ -197,7 +192,6 @@ fun DetailItem(
             )
         }
 
-        // Helper icon
         if (helpIcon && onHelpClick != null) {
             Icon(
                 painter = painterResource(R.drawable.ic_help_circle),
@@ -205,7 +199,7 @@ fun DetailItem(
                 modifier = Modifier
                     .size(30.dp)
                     .padding(dimensionResource(R.dimen.dim_4dp))
-                    .clickable { onHelpClick() }, // Click behavior
+                    .clickable { onHelpClick() },
                 tint = Color.Gray
             )
         }
@@ -230,8 +224,8 @@ private fun getDummyAsteroid(): AsteroidModel {
 @Composable
 fun PreviewAsteroidDetail() {
     AsteroidDetail(
-        modifier = Modifier.background(Color.Black),
         asteroidModel = getDummyAsteroid(),
+        modifier = Modifier.background(Color.Black),
         onHelpClick = {}
     )
 }
