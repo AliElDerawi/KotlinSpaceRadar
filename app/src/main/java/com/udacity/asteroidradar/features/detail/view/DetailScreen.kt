@@ -56,8 +56,8 @@ data class AsteroidDetailDestination(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AsteroidDetailScreen(
-    viewModel: DetailScreenViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
+    viewModel: DetailScreenViewModel = koinViewModel(),
     navigateBack: () -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
