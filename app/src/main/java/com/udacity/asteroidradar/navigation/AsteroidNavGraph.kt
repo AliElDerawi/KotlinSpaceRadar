@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
 import com.udacity.asteroidradar.features.detail.view.AsteroidDetailScreen
 import com.udacity.asteroidradar.features.home.HomeDestination
-import com.udacity.asteroidradar.features.home.HomeScreen
+import com.udacity.asteroidradar.features.home.HomeRoute
 import timber.log.Timber
 
 /**
@@ -41,7 +41,7 @@ fun AsteroidNavHost(
         modifier = modifier
     ) {
         composable<HomeDestination> {
-            HomeScreen { asteroid ->
+            HomeRoute { asteroid ->
                 Timber.d("Navigating to AsteroidDetailScreen with asteroid ID: ${asteroid.id}")
                 navController.navigate(AsteroidDetailDestination(asteroidId = asteroid.id))
             }
