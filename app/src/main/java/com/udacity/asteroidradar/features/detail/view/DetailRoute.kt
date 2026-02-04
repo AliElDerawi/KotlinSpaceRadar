@@ -1,7 +1,9 @@
 package com.udacity.asteroidradar.features.detail.view
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -11,15 +13,13 @@ fun AsteroidDetailRoute(
     viewModel: DetailScreenViewModel = koinViewModel(),
     navigateBack: () -> Unit
 ) {
-    val asteroidModel = viewModel.asteroidModel
-    val isLoading = viewModel.isLoading
-    val isError = viewModel.isError
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
     AsteroidDetailScreen(
         modifier = modifier,
-        asteroidModel = asteroidModel,
-        isLoading = isLoading,
-        isError = isError,
+        asteroidModel = uiState.asteroidModel,
+        isLoading = uiState.isLoading,
+        isError = uiState.isError,
         onNavigateBack = navigateBack
     )
 }
