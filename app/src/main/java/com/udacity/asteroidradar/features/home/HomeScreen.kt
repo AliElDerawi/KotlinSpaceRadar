@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -46,16 +45,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
-import org.koin.androidx.compose.koinViewModel
 
 
 @Serializable
@@ -63,14 +60,18 @@ object HomeDestination {
     val titleRes = R.string.app_name
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = koinViewModel(),
-    navigateToItemDetail: (asteroidModel: AsteroidModel) -> Unit
+    isLoading: Boolean = false,
+    isError: Boolean = false,
+    asteroidPagingItems: LazyPagingItems<AsteroidModel>? = null,
+    imageOfToday: ImageOfDayModel? = null,
+    onFilterClick: (AsteroidApiFilter) -> Unit = {},
+    onItemClick: (AsteroidModel) -> Unit = {}
 ) {
-    val asteroidUiState = viewModel.asteroidUiState
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -80,34 +81,57 @@ fun HomeScreen(
                 title = stringResource(HomeDestination.titleRes),
                 scrollBehavior = scrollBehavior,
                 canNavigateBack = false,
-                onFilterClick = { filter ->
-                    viewModel.updateFilter(filter)
-                },
+                onFilterClick = onFilterClick,
             )
         },
     ) { innerPadding ->
-        when (asteroidUiState) {
-
-            is AsteroidUiState.Loading -> {
-                LoadingScreen(modifier = modifier.fillMaxSize())
+        when {
+            isLoading && asteroidPagingItems == null -> {
+                LoadingScreen(modifier = Modifier.fillMaxSize())
             }
-
-            is AsteroidUiState.Success -> {
-                val asteroidPagingItems =
-                    asteroidUiState.asteroidModelModelList?.collectAsLazyPagingItems()
-                val imageOfTodayModel = asteroidUiState.imageOfToday
+            isError -> {
+                ErrorScreen(modifier = Modifier.fillMaxSize())
+            }
+            else -> {
                 HomeBody(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     itemList = asteroidPagingItems,
-                    imageOfTodayModel = imageOfTodayModel,
+                    imageOfTodayModel = imageOfToday,
                     contentPadding = innerPadding,
-                    onItemClick = navigateToItemDetail
+                    onItemClick = onItemClick
                 )
             }
+        }
+    }
+}
 
-            is AsteroidUiState.Error -> {
-                // TODO: Handle error state with appropriate UI
-            }
+@Composable
+private fun ErrorScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(color = md_theme_light_scrim),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_broken_image),
+                contentDescription = stringResource(R.string.text_description_error),
+                tint = Color.White.copy(alpha = 0.6f),
+                modifier = Modifier.size(64.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = stringResource(R.string.text_description_error),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -356,6 +380,58 @@ private fun HomeBodyPreview() {
             .fillMaxSize(),
         itemList = fakeLazyPagingItems(fakeAsteroidsList),
         imageOfTodayModel = getDummyImageOfDay(),
+        onItemClick = {}
+    )
+}
+
+/**
+ * Preview demonstrating that HomeScreen can be previewed without ViewModel or Koin setup.
+ * This is one of the key benefits of the Route + Screen separation pattern.
+ */
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = false,
+        isError = false,
+        asteroidPagingItems = fakeLazyPagingItems(fakeAsteroidsList),
+        imageOfToday = getDummyImageOfDay().copy(url = "https://example.com/image.jpg"),
+        onFilterClick = {},
+        onItemClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenLoadingPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = true,
+        isError = false,
+        asteroidPagingItems = null,
+        imageOfToday = null,
+        onFilterClick = {},
+        onItemClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenErrorPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = false,
+        isError = true,
+        asteroidPagingItems = null,
+        imageOfToday = null,
+        onFilterClick = {},
         onItemClick = {}
     )
 }
