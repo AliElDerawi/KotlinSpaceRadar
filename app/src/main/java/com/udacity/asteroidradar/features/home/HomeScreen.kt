@@ -66,8 +66,8 @@ object HomeDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
+    modifier: Modifier = Modifier,
     navigateToItemDetail: (asteroidModel: AsteroidModel) -> Unit,
 ) {
     val asteroidUiState = viewModel.asteroidUiState
@@ -78,8 +78,8 @@ fun HomeScreen(
         topBar = {
             AsteroidAppTopBar(
                 title = stringResource(HomeDestination.titleRes),
-                canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
+                canNavigateBack = false,
                 onFilterClick = { filter ->
                     viewModel.updateFilter(filter)
                 },
@@ -120,11 +120,11 @@ fun HomeScreen(
 
 @Composable
 private fun HomeBody(
-    modifier: Modifier = Modifier,
     itemList: LazyPagingItems<AsteroidModel>? = null,
     imageOfTodayModel: ImageOfDayModel? = null,
-    onItemClick: (AsteroidModel) -> Unit,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onItemClick: (AsteroidModel) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(), contentPadding = contentPadding
@@ -148,7 +148,8 @@ private fun HomeBody(
                 // List items
                 items(list.itemCount) { index ->
                     list[index]?.let { asteroid ->
-                        AsteroidItem(asteroidModel = asteroid,
+                        AsteroidItem(
+                            asteroidModel = asteroid,
                             modifier = Modifier.clickable { onItemClick(asteroid) })
                     }
                 }
@@ -158,7 +159,7 @@ private fun HomeBody(
 }
 
 @Composable
-private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
+private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -256,7 +257,8 @@ private fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 private fun AsteroidItem(
-    modifier: Modifier = Modifier, asteroidModel: AsteroidModel
+    asteroidModel: AsteroidModel,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
@@ -342,10 +344,10 @@ private val fakeAsteroidsList = listOf(
 @Composable
 fun PreviewAsteroidItem() {
     AsteroidItem(
+        asteroidModel = getDummyAsteroid(),
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Black),
-        asteroidModel = getDummyAsteroid()
+            .background(Color.Black)
     )
 }
 
@@ -353,7 +355,7 @@ fun PreviewAsteroidItem() {
 @Composable
 private fun ImageOfTodayPreview() {
     ImageOfToday(
-        modifier = Modifier.background(Color.Black), imageOfTodayModel = getDummyImageOfDay()
+        imageOfTodayModel = getDummyImageOfDay(), modifier = Modifier.background(Color.Black)
     )
 }
 
@@ -369,17 +371,17 @@ private fun ImageOfTodayPlaceholderPreview() {
 @Composable
 private fun HomeBodyPreview() {
     HomeBody(
+        imageOfTodayModel = getDummyImageOfDay(),
+        itemList = fakeLazyPagingItems(fakeAsteroidsList),
         modifier = Modifier
             .background(Color.Black)
             .fillMaxSize(),
-        imageOfTodayModel = getDummyImageOfDay(),
         onItemClick = {},
-        itemList = fakeLazyPagingItems(fakeAsteroidsList)
     )
 }
 
 @Composable
-private fun HomeHeader(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
+private fun HomeHeader(imageOfTodayModel: ImageOfDayModel, modifier: Modifier = Modifier) {
     ImageOfToday(
         imageOfTodayModel = imageOfTodayModel, modifier = modifier.fillMaxWidth()
     )
@@ -391,7 +393,7 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
         text = stringResource(R.string.no_data),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.dim_default_margin))
     )
