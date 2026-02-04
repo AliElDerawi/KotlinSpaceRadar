@@ -27,13 +27,33 @@ class DetailScreenViewModel(
     var asteroidModel: AsteroidModel? by mutableStateOf(null)
         private set
 
+    var isLoading: Boolean by mutableStateOf(true)
+        private set
+
+    var isError: Boolean by mutableStateOf(false)
+        private set
+
     init {
         loadAsteroid()
     }
 
     private fun loadAsteroid() {
         viewModelScope.launch(Dispatchers.IO) {
-            asteroidModel = getAsteroidByIdUseCase(asteroidId).getOrNull()
+            isLoading = true
+            isError = false
+            
+            val result = getAsteroidByIdUseCase(asteroidId)
+            
+            result.fold(
+                onSuccess = { asteroid ->
+                    asteroidModel = asteroid
+                    isLoading = false
+                },
+                onFailure = {
+                    isError = true
+                    isLoading = false
+                }
+            )
         }
     }
 }
