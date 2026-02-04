@@ -1,9 +1,6 @@
 package com.udacity.asteroidradar.features.detail.viewModel
 
 import android.app.Application
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,8 +9,18 @@ import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.usecase.GetAsteroidByIdUseCase
 import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
+data class DetailUiState(
+    val asteroidModel: AsteroidModel? = null,
+    val isLoading: Boolean = true,
+    val isError: Boolean = false
+)
 
 class DetailScreenViewModel(
     savedStateHandle: SavedStateHandle,
@@ -24,14 +31,8 @@ class DetailScreenViewModel(
     private val asteroidDetailDestination = savedStateHandle.toRoute<AsteroidDetailDestination>()
     private val asteroidId: Long = asteroidDetailDestination.asteroidId
 
-    var asteroidModel: AsteroidModel? by mutableStateOf(null)
-        private set
-
-    var isLoading: Boolean by mutableStateOf(true)
-        private set
-
-    var isError: Boolean by mutableStateOf(false)
-        private set
+    private val _uiState = MutableStateFlow(DetailUiState())
+    val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
     init {
         loadAsteroid()
@@ -39,19 +40,27 @@ class DetailScreenViewModel(
 
     private fun loadAsteroid() {
         viewModelScope.launch(Dispatchers.IO) {
-            isLoading = true
-            isError = false
+            _uiState.update { it.copy(isLoading = true, isError = false) }
             
             val result = getAsteroidByIdUseCase(asteroidId)
             
             result.fold(
                 onSuccess = { asteroid ->
-                    asteroidModel = asteroid
-                    isLoading = false
+                    _uiState.update { 
+                        it.copy(
+                            asteroidModel = asteroid,
+                            isLoading = false,
+                            isError = false
+                        )
+                    }
                 },
                 onFailure = {
-                    isError = true
-                    isLoading = false
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            isError = true
+                        )
+                    }
                 }
             )
         }
