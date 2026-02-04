@@ -41,10 +41,10 @@ fun AsteroidNavHost(
         modifier = modifier
     ) {
         composable<HomeDestination> {
-            HomeScreen(navigateToItemDetail = { asteroid ->
+            HomeScreen { asteroid ->
                 Timber.d("Navigating to AsteroidDetailScreen with asteroid ID: ${asteroid.id}")
                 navController.navigate(AsteroidDetailDestination(asteroidId = asteroid.id))
-            })
+            }
         }
 
         composable<AsteroidDetailDestination> {
