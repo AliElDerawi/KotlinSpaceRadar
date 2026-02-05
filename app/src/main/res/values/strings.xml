@@ -14,6 +14,7 @@
     <string name="text_empty_picture_of_today">This is NASA\'s picture of day, showing nothing yet</string>
     <string name="text_format_nasa_picture_of_day">NASA\'s picture of day: %s</string>
     <string name="text_description_loading_image">Loading image</string>
+    <string name="text_description_error">Something went wrong. Please try again later.</string>
 
     <!-- Detail Screen string-->
     <string name="text_close_approach_date">Close approach date</string>

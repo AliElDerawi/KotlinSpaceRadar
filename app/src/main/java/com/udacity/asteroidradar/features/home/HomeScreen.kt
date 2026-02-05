@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -46,16 +45,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.features.main.viewModel.AsteroidUiState
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
-import org.koin.androidx.compose.koinViewModel
 
 
 @Serializable
@@ -63,14 +60,18 @@ object HomeDestination {
     val titleRes = R.string.app_name
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = koinViewModel(),
-    navigateToItemDetail: (asteroidModel: AsteroidModel) -> Unit,
+    isLoading: Boolean = false,
+    isError: Boolean = false,
+    asteroidPagingItems: LazyPagingItems<AsteroidModel>? = null,
+    imageOfToday: ImageOfDayModel? = null,
+    onFilterClick: (AsteroidApiFilter) -> Unit = {},
+    onItemClick: (AsteroidModel) -> Unit = {}
 ) {
-    val asteroidUiState = viewModel.asteroidUiState
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -78,42 +79,59 @@ fun HomeScreen(
         topBar = {
             AsteroidAppTopBar(
                 title = stringResource(HomeDestination.titleRes),
-                canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
-                onFilterClick = { filter ->
-                    viewModel.updateFilter(filter)
-                },
+                canNavigateBack = false,
+                onFilterClick = onFilterClick,
             )
         },
     ) { innerPadding ->
-        when (asteroidUiState) {
-
-            is AsteroidUiState.Loading -> {
-                LoadingScreen(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .fillMaxHeight()
-                )
+        when {
+            isLoading && asteroidPagingItems == null -> {
+                LoadingScreen(modifier = Modifier.fillMaxSize())
             }
-
-            is AsteroidUiState.Success -> {
-                val asteroidPagingItems =
-                    asteroidUiState.asteroidModelModelList?.collectAsLazyPagingItems()
-                val imageOfTodayModel = asteroidUiState.imageOfToday
+            isError -> {
+                ErrorScreen(modifier = Modifier.fillMaxSize())
+            }
+            else -> {
                 HomeBody(
+                    modifier = Modifier.fillMaxSize(),
                     itemList = asteroidPagingItems,
-                    imageOfTodayModel = imageOfTodayModel,
-                    onItemClick = navigateToItemDetail,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    contentPadding = innerPadding
+                    imageOfTodayModel = imageOfToday,
+                    contentPadding = innerPadding,
+                    onItemClick = onItemClick
                 )
             }
+        }
+    }
+}
 
-            is AsteroidUiState.Error -> {
+@Composable
+private fun ErrorScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(color = md_theme_light_scrim),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin))
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_broken_image),
+                contentDescription = stringResource(R.string.text_description_error),
+                tint = Color.White.copy(alpha = 0.6f),
+                modifier = Modifier.size(64.dp)
+            )
 
-            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = stringResource(R.string.text_description_error),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -123,8 +141,8 @@ private fun HomeBody(
     modifier: Modifier = Modifier,
     itemList: LazyPagingItems<AsteroidModel>? = null,
     imageOfTodayModel: ImageOfDayModel? = null,
-    onItemClick: (AsteroidModel) -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onItemClick: (AsteroidModel) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(), contentPadding = contentPadding
@@ -148,7 +166,8 @@ private fun HomeBody(
                 // List items
                 items(list.itemCount) { index ->
                     list[index]?.let { asteroid ->
-                        AsteroidItem(asteroidModel = asteroid,
+                        AsteroidItem(
+                            asteroidModel = asteroid,
                             modifier = Modifier.clickable { onItemClick(asteroid) })
                     }
                 }
@@ -158,7 +177,7 @@ private fun HomeBody(
 }
 
 @Composable
-private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
+private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -166,21 +185,21 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
             .background(color = md_theme_light_scrim)
     ) {
         AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current).data(imageOfTodayModel.url)
-                .crossfade(true).build(),
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(imageOfTodayModel.url)
+                .crossfade(true)
+                .build(),
             error = painterResource(R.drawable.ic_broken_image),
             placeholder = painterResource(R.drawable.loading_img),
             contentDescription = imageOfTodayModel.title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = md_theme_light_scrim)
+            modifier = Modifier.fillMaxWidth()
         )
 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .background(color = md_theme_light_scrim),
+                .background(color = md_theme_light_scrim)
         ) {
             Text(
                 text = imageOfTodayModel.title,
@@ -189,12 +208,7 @@ private fun ImageOfToday(modifier: Modifier = Modifier, imageOfTodayModel: Image
                 color = Color.White,
                 lineHeight = 26.sp,
                 modifier = Modifier
-                    .padding(
-                        start = dimensionResource(R.dimen.dim_default_margin),
-                        end = dimensionResource(R.dimen.dim_default_margin),
-                        top = dimensionResource(R.dimen.dim_default_margin),
-                        bottom = dimensionResource(R.dimen.dim_default_margin)
-                    )
+                    .padding(dimensionResource(R.dimen.dim_default_margin))
                     .fillMaxWidth()
             )
         }
@@ -256,19 +270,26 @@ private fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 private fun AsteroidItem(
-    modifier: Modifier = Modifier, asteroidModel: AsteroidModel
+    asteroidModel: AsteroidModel,
+    modifier: Modifier = Modifier
 ) {
+    val (iconRes, hazardousDescriptionRes) = if (asteroidModel.isPotentiallyHazardous) {
+        R.drawable.ic_status_potentially_hazardous to R.string.text_description_potentially_hazardous_asteroid_image
+    } else {
+        R.drawable.ic_status_normal to R.string.text_description_not_hazardous_asteroid_image
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.dim_default_margin)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Name and date
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = dimensionResource(R.dimen.dim_small_margin))
+                .padding(end = dimensionResource(R.dimen.dim_small_margin)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dim_4dp))
         ) {
             Text(
                 text = asteroidModel.codename,
@@ -277,7 +298,6 @@ private fun AsteroidItem(
                 color = Color.White,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
             Text(
                 text = asteroidModel.closeApproachDate,
                 fontSize = dimenToSp(R.dimen.text_small),
@@ -286,23 +306,9 @@ private fun AsteroidItem(
             )
         }
 
-        // Hazardous status icon and description
-        var hazardousDescription: String = ""
-        var iconRes: Int = 0
-
-        if (asteroidModel.isPotentiallyHazardous) {
-            iconRes = R.drawable.ic_status_potentially_hazardous // Replace with your hazardous icon
-            hazardousDescription =
-                stringResource(R.string.text_description_potentially_hazardous_asteroid_image)
-        } else {
-            iconRes = R.drawable.ic_status_normal // Replace with your normal icon
-            hazardousDescription =
-                stringResource(R.string.text_description_not_hazardous_asteroid_image)
-        }
-
         Image(
             painter = painterResource(id = iconRes),
-            contentDescription = hazardousDescription,
+            contentDescription = stringResource(hazardousDescriptionRes),
             modifier = Modifier.size(24.dp),
             contentScale = ContentScale.Fit
         )
@@ -342,10 +348,10 @@ private val fakeAsteroidsList = listOf(
 @Composable
 fun PreviewAsteroidItem() {
     AsteroidItem(
+        asteroidModel = getDummyAsteroid(),
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Black),
-        asteroidModel = getDummyAsteroid()
+            .background(Color.Black)
     )
 }
 
@@ -353,7 +359,7 @@ fun PreviewAsteroidItem() {
 @Composable
 private fun ImageOfTodayPreview() {
     ImageOfToday(
-        modifier = Modifier.background(Color.Black), imageOfTodayModel = getDummyImageOfDay()
+        imageOfTodayModel = getDummyImageOfDay(), modifier = Modifier.background(Color.Black)
     )
 }
 
@@ -372,14 +378,66 @@ private fun HomeBodyPreview() {
         modifier = Modifier
             .background(Color.Black)
             .fillMaxSize(),
+        itemList = fakeLazyPagingItems(fakeAsteroidsList),
         imageOfTodayModel = getDummyImageOfDay(),
-        onItemClick = {},
-        itemList = fakeLazyPagingItems(fakeAsteroidsList)
+        onItemClick = {}
+    )
+}
+
+/**
+ * Preview demonstrating that HomeScreen can be previewed without ViewModel or Koin setup.
+ * This is one of the key benefits of the Route + Screen separation pattern.
+ */
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = false,
+        isError = false,
+        asteroidPagingItems = fakeLazyPagingItems(fakeAsteroidsList),
+        imageOfToday = getDummyImageOfDay().copy(url = "https://example.com/image.jpg"),
+        onFilterClick = {},
+        onItemClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenLoadingPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = true,
+        isError = false,
+        asteroidPagingItems = null,
+        imageOfToday = null,
+        onFilterClick = {},
+        onItemClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenErrorPreview() {
+    HomeScreen(
+        modifier = Modifier
+            .background(Color.Black)
+            .fillMaxSize(),
+        isLoading = false,
+        isError = true,
+        asteroidPagingItems = null,
+        imageOfToday = null,
+        onFilterClick = {},
+        onItemClick = {}
     )
 }
 
 @Composable
-private fun HomeHeader(modifier: Modifier = Modifier, imageOfTodayModel: ImageOfDayModel) {
+private fun HomeHeader(imageOfTodayModel: ImageOfDayModel, modifier: Modifier = Modifier) {
     ImageOfToday(
         imageOfTodayModel = imageOfTodayModel, modifier = modifier.fillMaxWidth()
     )
@@ -391,7 +449,7 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
         text = stringResource(R.string.no_data),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.dim_default_margin))
     )
