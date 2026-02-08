@@ -19,18 +19,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed interface AsteroidUiState {
-    data class Success(
-        val asteroidModelModelList: Flow<PagingData<AsteroidModel>>? = null,
-        val imageOfToday: ImageOfDayModel? = null
-    ) : AsteroidUiState
-
-    object Error : AsteroidUiState
-    data class Loading(
-        val asteroidModelModelList: Flow<PagingData<AsteroidModel>>? = null,
-        val imageOfToday: ImageOfDayModel? = null
-    ) : AsteroidUiState
-}
+data class HomeUiState(
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
+    val asteroidPagingDataFlow: Flow<PagingData<AsteroidModel>>? = null,
+    val imageOfDayModel: ImageOfDayModel? = null
+)
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
@@ -39,8 +33,8 @@ class MainViewModel(
     private val asteroidRepository: AsteroidRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<AsteroidUiState>(AsteroidUiState.Loading())
-    val uiState: StateFlow<AsteroidUiState> = _uiState.asStateFlow()
+    private val _homeUiState = MutableStateFlow(HomeUiState())
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     init {
         refreshList(AsteroidApiFilter.SHOW_TODAY)
@@ -53,16 +47,7 @@ class MainViewModel(
 
     private fun refreshList(filter: AsteroidApiFilter) {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { currentState ->
-                when (currentState) {
-                    is AsteroidUiState.Success -> AsteroidUiState.Loading(
-                        asteroidModelModelList = currentState.asteroidModelModelList,
-                        imageOfToday = currentState.imageOfToday
-                    )
-                    is AsteroidUiState.Loading -> currentState
-                    else -> AsteroidUiState.Loading()
-                }
-            }
+            _homeUiState.update { it.copy(isLoading = true, isError = false) }
 
             // Refresh data from remote source
             asteroidRepository.refreshAsteroids(filter)
@@ -71,10 +56,10 @@ class MainViewModel(
             val asteroidPagingFlow = getAsteroidsUseCase(filter)
                 .cachedIn(viewModelScope)
 
-            _uiState.update { currentState ->
-                AsteroidUiState.Success(
-                    asteroidModelModelList = asteroidPagingFlow,
-                    imageOfToday = (currentState as? AsteroidUiState.Loading)?.imageOfToday
+            _homeUiState.update {
+                it.copy(
+                    isLoading = false,
+                    asteroidPagingDataFlow = asteroidPagingFlow
                 )
             }
         }
@@ -88,24 +73,12 @@ class MainViewModel(
 
                 // Get image using use case
                 getImageOfDayUseCase().collect { imageOfToday ->
-                    _uiState.update { currentState ->
-                        when (currentState) {
-                            is AsteroidUiState.Success -> currentState.copy(imageOfToday = imageOfToday)
-                            is AsteroidUiState.Loading -> currentState.copy(imageOfToday = imageOfToday)
-                            else -> AsteroidUiState.Success(imageOfToday = imageOfToday)
-                        }
-                    }
+                    _homeUiState.update { it.copy(imageOfDayModel = imageOfToday) }
                 }
             } catch (e: Exception) {
                 // If there's an error fetching the image, keep the current state with null image
                 // This prevents crashes and shows the placeholder instead
-                _uiState.update { currentState ->
-                    when (currentState) {
-                        is AsteroidUiState.Success -> currentState.copy(imageOfToday = null)
-                        is AsteroidUiState.Loading -> currentState.copy(imageOfToday = null)
-                        else -> AsteroidUiState.Success(imageOfToday = null)
-                    }
-                }
+                _homeUiState.update { it.copy(imageOfDayModel = null) }
             }
         }
     }
