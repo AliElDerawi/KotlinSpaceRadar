@@ -13,7 +13,7 @@ fun AsteroidDetailRoute(
     viewModel: DetailScreenViewModel = koinViewModel(),
     navigateBack: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
     
     AsteroidDetailScreen(
         modifier = modifier,
