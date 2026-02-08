@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -222,36 +224,45 @@ fun DetailItem(
     helpIcon: Boolean = false,
     onHelpClick: (() -> Unit)? = null
 ) {
-    Row(
+    ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.dim_default_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
 
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
 
-        if (helpIcon && onHelpClick != null) {
-            Icon(
-                painter = painterResource(R.drawable.ic_help_circle),
-                contentDescription = stringResource(R.string.text_description_help_icon),
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(dimensionResource(R.dimen.dim_4dp))
-                    .clickable { onHelpClick() },
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (helpIcon && onHelpClick != null) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_help_circle),
+                    contentDescription = stringResource(R.string.text_description_help_icon),
+                    modifier = Modifier
+                        .size(30.dp)
+                        .padding(dimensionResource(R.dimen.dim_4dp))
+                        .clickable { onHelpClick() },
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
