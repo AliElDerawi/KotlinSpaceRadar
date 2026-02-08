@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -53,7 +52,6 @@ import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
-import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
 
 
@@ -289,15 +287,14 @@ private fun AsteroidItem(
         ) {
             Text(
                 text = asteroidModel.codename,
-                fontSize = dimenToSp(R.dimen.text_normal),
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
                 text = asteroidModel.closeApproachDate,
-                fontSize = dimenToSp(R.dimen.text_small),
-                color = Color.Gray,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.fillMaxWidth()
             )
         }

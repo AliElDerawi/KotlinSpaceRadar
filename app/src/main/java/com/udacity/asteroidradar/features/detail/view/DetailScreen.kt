@@ -34,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -44,7 +43,6 @@ import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
-import com.udacity.asteroidradar.util.dimenToSp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -231,8 +229,7 @@ fun DetailItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                fontSize = dimenToSp(R.dimen.text_normal),
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
@@ -240,8 +237,7 @@ fun DetailItem(
 
             Text(
                 text = value,
-                fontSize = dimenToSp(R.dimen.text_small),
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
