@@ -49,10 +49,8 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _homeUiState.update { it.copy(isLoading = true, isError = false) }
 
-            // Refresh data from remote source
             asteroidRepository.refreshAsteroids(filter)
 
-            // Get asteroids using use case
             val asteroidPagingFlow = getAsteroidsUseCase(filter)
                 .cachedIn(viewModelScope)
 
@@ -68,16 +66,12 @@ class MainViewModel(
     private fun getImageOfToday() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Refresh image from remote source
                 asteroidRepository.refreshImageOfDay()
 
-                // Get image using use case
                 getImageOfDayUseCase().collect { imageOfToday ->
                     _homeUiState.update { it.copy(imageOfDayModel = imageOfToday) }
                 }
             } catch (e: Exception) {
-                // If there's an error fetching the image, keep the current state with null image
-                // This prevents crashes and shows the placeholder instead
                 _homeUiState.update { it.copy(imageOfDayModel = null) }
             }
         }
