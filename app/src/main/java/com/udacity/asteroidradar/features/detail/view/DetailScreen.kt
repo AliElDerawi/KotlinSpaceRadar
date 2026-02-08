@@ -352,9 +352,21 @@ private fun AsteroidDetailScreenHazardousPreviewLightDark() {
 
 @Composable
 fun AstronomicalUnitExplanationDialog(onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = { onDismiss() }, confirmButton = {
-        TextButton(onClick = { onDismiss() }) {
-            Text(text = stringResource(android.R.string.ok))
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        textContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        confirmButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(
+                    text = stringResource(android.R.string.ok),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        title = {
+            Text(text = stringResource(R.string.text_astronomical_unit_explanation))
         }
-    }, title = { Text(text = stringResource(R.string.text_astronomical_unit_explanation)) })
+    )
 }

@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.main.view
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -69,22 +70,41 @@ fun AsteroidAppTopBar(
                         contentDescription = stringResource(R.string.text_menu_options)
                     )
                 }
-                DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                    DropdownMenuItem(text = { Text(stringResource(R.string.text_filter_today)) },
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { menuExpanded = false },
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.text_filter_today)) },
                         onClick = {
                             menuExpanded = false
                             onFilterClick(AsteroidApiFilter.SHOW_TODAY)
-                        })
-                    DropdownMenuItem(text = { Text(stringResource(R.string.text_filter_week)) },
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.text_filter_week)) },
                         onClick = {
                             menuExpanded = false
                             onFilterClick(AsteroidApiFilter.SHOW_WEEK)
-                        })
-                    DropdownMenuItem(text = { Text(stringResource(R.string.text_filter_saved)) },
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.text_filter_saved)) },
                         onClick = {
                             menuExpanded = false
                             onFilterClick(AsteroidApiFilter.SHOW_SAVED)
-                        })
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
                 }
             }
         })
