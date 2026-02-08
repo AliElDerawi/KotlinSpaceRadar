@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
@@ -51,6 +52,7 @@ import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.HomeDestination
+import com.udacity.asteroidradar.theme.AsteroidRadarTheme
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
 
@@ -378,56 +380,60 @@ private fun HomeBodyPreview() {
     )
 }
 
-/**
- * Preview demonstrating that HomeScreen can be previewed without ViewModel or Koin setup.
- * This is one of the key benefits of the Route + Screen separation pattern.
- */
+@PreviewLightDark
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        isLoading = false,
-        isError = false,
-        asteroidPagingItems = fakeLazyPagingItems(fakeAsteroidsList),
-        imageOfToday = getDummyImageOfDay().copy(url = "https://example.com/image.jpg"),
-        onFilterClick = {},
-        onItemClick = {}
-    )
+    AsteroidRadarTheme {
+        HomeScreen(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize(),
+            isLoading = false,
+            isError = false,
+            asteroidPagingItems = fakeLazyPagingItems(fakeAsteroidsList),
+            imageOfToday = getDummyImageOfDay().copy(url = "https://example.com/image.jpg"),
+            onFilterClick = {},
+            onItemClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenLoadingPreview() {
-    HomeScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        isLoading = true,
-        isError = false,
-        asteroidPagingItems = null,
-        imageOfToday = null,
-        onFilterClick = {},
-        onItemClick = {}
-    )
+    AsteroidRadarTheme {
+        HomeScreen(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize(),
+            isLoading = true,
+            isError = false,
+            asteroidPagingItems = null,
+            imageOfToday = null,
+            onFilterClick = {},
+            onItemClick = {}
+        )
+    }
 }
 
+@PreviewLightDark
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenErrorPreview() {
-    HomeScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        isLoading = false,
-        isError = true,
-        asteroidPagingItems = null,
-        imageOfToday = null,
-        onFilterClick = {},
-        onItemClick = {}
-    )
+    AsteroidRadarTheme {
+        HomeScreen(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize(),
+            isLoading = false,
+            isError = true,
+            asteroidPagingItems = null,
+            imageOfToday = null,
+            onFilterClick = {},
+            onItemClick = {}
+        )
+    }
 }
 
 @Composable
