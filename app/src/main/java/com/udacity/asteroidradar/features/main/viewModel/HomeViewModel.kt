@@ -1,8 +1,7 @@
 package com.udacity.asteroidradar.features.main.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -38,8 +37,7 @@ class MainViewModel(
     private val getAsteroidsUseCase: GetAsteroidsUseCase,
     private val getImageOfDayUseCase: GetImageOfDayUseCase,
     private val asteroidRepository: AsteroidRepository,
-    application: Application
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AsteroidUiState>(AsteroidUiState.Loading())
     val uiState: StateFlow<AsteroidUiState> = _uiState.asStateFlow()
