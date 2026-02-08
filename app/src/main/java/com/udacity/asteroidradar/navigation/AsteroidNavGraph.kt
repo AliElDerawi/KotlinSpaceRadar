@@ -21,9 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
 import com.udacity.asteroidradar.features.detail.view.AsteroidDetailRoute
-import com.udacity.asteroidradar.features.home.HomeDestination
 import com.udacity.asteroidradar.features.home.HomeRoute
 import timber.log.Timber
 

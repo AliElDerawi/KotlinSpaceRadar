@@ -50,15 +50,9 @@ import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
+import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.util.dimenToSp
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.serialization.Serializable
-
-
-@Serializable
-object HomeDestination {
-    val titleRes = R.string.app_name
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)

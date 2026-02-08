@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.usecase.GetAsteroidByIdUseCase
-import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
+import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
