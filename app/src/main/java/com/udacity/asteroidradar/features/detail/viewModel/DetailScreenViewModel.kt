@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.usecase.GetAsteroidByIdUseCase
-import com.udacity.asteroidradar.features.detail.view.AsteroidDetailDestination
+import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,9 +30,8 @@ class DetailScreenViewModel(
 
     private val asteroidDetailDestination = savedStateHandle.toRoute<AsteroidDetailDestination>()
     private val asteroidId: Long = asteroidDetailDestination.asteroidId
-
-    private val _uiState = MutableStateFlow(DetailUiState())
-    val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
+    private val _detailUiState = MutableStateFlow(DetailUiState())
+    val detailUiState: StateFlow<DetailUiState> = _detailUiState.asStateFlow()
 
     init {
         loadAsteroid()
@@ -40,13 +39,13 @@ class DetailScreenViewModel(
 
     private fun loadAsteroid() {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.copy(isLoading = true, isError = false) }
+            _detailUiState.update { it.copy(isLoading = true, isError = false) }
             
             val result = getAsteroidByIdUseCase(asteroidId)
             
             result.fold(
                 onSuccess = { asteroid ->
-                    _uiState.update { 
+                    _detailUiState.update {
                         it.copy(
                             asteroidModel = asteroid,
                             isLoading = false,
@@ -55,7 +54,7 @@ class DetailScreenViewModel(
                     }
                 },
                 onFailure = {
-                    _uiState.update { 
+                    _detailUiState.update {
                         it.copy(
                             isLoading = false,
                             isError = true

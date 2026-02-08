@@ -43,17 +43,8 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
+import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
 import com.udacity.asteroidradar.util.dimenToSp
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class AsteroidDetailDestination(
-    val asteroidId: Long
-) {
-    companion object {
-        val titleRes = R.string.text_asteroid_detail
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
