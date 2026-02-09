@@ -384,18 +384,7 @@ private fun getDummyAsteroid(): AsteroidModel {
     )
 }
 
-@Preview
-@Composable
-fun PreviewAsteroidDetail() {
-    AsteroidRadarTheme {
-        AsteroidDetail(
-            asteroidModel = getDummyAsteroid(),
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
-            onHelpClick = {}
-        )
-    }
-}
-
+@PreviewLightDark
 @Preview(showBackground = true)
 @Composable
 private fun AsteroidDetailScreenPreview() {
