@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,21 +32,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
-import com.udacity.asteroidradar.util.dimenToSp
+import com.udacity.asteroidradar.theme.AsteroidRadarTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,16 +68,17 @@ fun AsteroidDetailScreen(
     }) { innerPadding ->
         Box(
             modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+                .fillMaxSize().padding(innerPadding)
         ) {
             when {
                 isLoading -> {
                     DetailLoadingScreen(modifier = Modifier.fillMaxSize())
                 }
+
                 isError -> {
                     DetailErrorScreen(modifier = Modifier.fillMaxSize())
                 }
+
                 asteroidModel != null -> {
                     AsteroidDetail(
                         asteroidModel = asteroidModel,
@@ -85,6 +86,7 @@ fun AsteroidDetailScreen(
                         onHelpClick = { showDialog = true },
                     )
                 }
+
                 else -> {
                     // Fallback for null asteroid without error state
                     DetailErrorScreen(modifier = Modifier.fillMaxSize())
@@ -101,11 +103,11 @@ fun AsteroidDetailScreen(
 @Composable
 private fun DetailLoadingScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim),
+        modifier = modifier.background(color = MaterialTheme.colorScheme.scrim),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(48.dp)
         )
     }
@@ -114,7 +116,7 @@ private fun DetailLoadingScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun DetailErrorScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim),
+        modifier = modifier.background(color = MaterialTheme.colorScheme.scrim),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -125,7 +127,7 @@ private fun DetailErrorScreen(modifier: Modifier = Modifier) {
             Icon(
                 painter = painterResource(R.drawable.ic_broken_image),
                 contentDescription = stringResource(R.string.text_description_error),
-                tint = Color.White.copy(alpha = 0.6f),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier.size(64.dp)
             )
 
@@ -134,7 +136,7 @@ private fun DetailErrorScreen(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.text_description_error),
                 style = MaterialTheme.typography.titleMedium,
-                color = Color.White.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -173,6 +175,7 @@ fun AsteroidDetail(
             modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dim_default_margin))
         ) {
+
             DetailItem(
                 title = stringResource(R.string.text_close_approach_date),
                 value = asteroidModel.closeApproachDate
@@ -221,38 +224,45 @@ fun DetailItem(
     helpIcon: Boolean = false,
     onHelpClick: (() -> Unit)? = null
 ) {
-    Row(
+    ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                fontSize = dimenToSp(R.dimen.text_normal),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.dim_default_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
 
-            Text(
-                text = value,
-                fontSize = dimenToSp(R.dimen.text_small),
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-        }
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
 
-        if (helpIcon && onHelpClick != null) {
-            Icon(
-                painter = painterResource(R.drawable.ic_help_circle),
-                contentDescription = stringResource(R.string.text_description_help_icon),
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(dimensionResource(R.dimen.dim_4dp))
-                    .clickable { onHelpClick() },
-                tint = Color.Gray
-            )
+            if (helpIcon && onHelpClick != null) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_help_circle),
+                    contentDescription = stringResource(R.string.text_description_help_icon),
+                    modifier = Modifier
+                        .size(30.dp)
+                        .padding(dimensionResource(R.dimen.dim_4dp))
+                        .clickable { onHelpClick() },
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -274,74 +284,89 @@ private fun getDummyAsteroid(): AsteroidModel {
 @Preview
 @Composable
 fun PreviewAsteroidDetail() {
-    AsteroidDetail(
-        asteroidModel = getDummyAsteroid(),
-        modifier = Modifier.background(Color.Black),
-        onHelpClick = {}
-    )
+    AsteroidRadarTheme {
+        AsteroidDetail(
+            asteroidModel = getDummyAsteroid(),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            onHelpClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AsteroidDetailScreenPreview() {
-    AsteroidDetailScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        asteroidModel = getDummyAsteroid(),
-        isLoading = false,
-        isError = false,
-        onNavigateBack = {}
-    )
+    AsteroidRadarTheme {
+        AsteroidDetailScreen(
+            modifier = Modifier.fillMaxSize(),
+            asteroidModel = getDummyAsteroid(),
+            isLoading = false,
+            isError = false,
+            onNavigateBack = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AsteroidDetailScreenLoadingPreview() {
-    AsteroidDetailScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        asteroidModel = null,
-        isLoading = true,
-        isError = false,
-        onNavigateBack = {}
-    )
+    AsteroidRadarTheme {
+        AsteroidDetailScreen(
+            modifier = Modifier.fillMaxSize(),
+            asteroidModel = null,
+            isLoading = true,
+            isError = false,
+            onNavigateBack = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AsteroidDetailScreenErrorPreview() {
-    AsteroidDetailScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        asteroidModel = null,
-        isLoading = false,
-        isError = true,
-        onNavigateBack = {}
-    )
+    AsteroidRadarTheme {
+        AsteroidDetailScreen(
+            modifier = Modifier.fillMaxSize(),
+            asteroidModel = null,
+            isLoading = false,
+            isError = true,
+            onNavigateBack = {}
+        )
+    }
 }
 
+@PreviewLightDark
 @Preview(showBackground = true)
 @Composable
-private fun AsteroidDetailScreenHazardousPreview() {
-    AsteroidDetailScreen(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        asteroidModel = getDummyAsteroid().copy(isPotentiallyHazardous = true),
-        isLoading = false,
-        isError = false,
-        onNavigateBack = {}
-    )
+private fun AsteroidDetailScreenHazardousPreviewLightDark() {
+    AsteroidRadarTheme {
+        AsteroidDetailScreen(
+            modifier = Modifier.fillMaxSize(),
+            asteroidModel = getDummyAsteroid().copy(isPotentiallyHazardous = true),
+            isLoading = false,
+            isError = false,
+            onNavigateBack = {}
+        )
+    }
 }
 
 @Composable
 fun AstronomicalUnitExplanationDialog(onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = { onDismiss() }, confirmButton = {
-        TextButton(onClick = { onDismiss() }) {
-            Text(text = stringResource(android.R.string.ok))
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        textContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        confirmButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(
+                    text = stringResource(android.R.string.ok),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        title = {
+            Text(text = stringResource(R.string.text_astronomical_unit_explanation))
         }
-    }, title = { Text(text = stringResource(R.string.text_astronomical_unit_explanation)) })
+    )
 }
