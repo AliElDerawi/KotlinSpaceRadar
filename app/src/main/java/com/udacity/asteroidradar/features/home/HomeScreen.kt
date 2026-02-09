@@ -1,5 +1,9 @@
 package com.udacity.asteroidradar.features.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,6 +58,16 @@ import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
 import kotlinx.coroutines.flow.flowOf
 
+/**
+ * Sealed interface representing the different UI states for the Home screen.
+ * Used with AnimatedContent for smooth state transitions.
+ */
+private sealed interface HomeScreenState {
+    data object Loading : HomeScreenState
+    data object Error : HomeScreenState
+    data object Success : HomeScreenState
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,21 +93,34 @@ fun HomeScreen(
             )
         },
     ) { innerPadding ->
-        when {
-            isLoading && asteroidPagingItems == null -> {
-                LoadingScreen(modifier = Modifier.fillMaxSize())
-            }
-            isError -> {
-                ErrorScreen(modifier = Modifier.fillMaxSize())
-            }
-            else -> {
-                HomeBody(
-                    modifier = Modifier.fillMaxSize(),
-                    itemList = asteroidPagingItems,
-                    imageOfTodayModel = imageOfToday,
-                    contentPadding = innerPadding,
-                    onItemClick = onItemClick
-                )
+        // Determine current screen state for AnimatedContent
+        val screenState: HomeScreenState = when {
+            isLoading && asteroidPagingItems == null -> HomeScreenState.Loading
+            isError -> HomeScreenState.Error
+            else -> HomeScreenState.Success
+        }
+
+        AnimatedContent(
+            targetState = screenState,
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            label = "HomeScreenStateTransition"
+        ) { state ->
+            when (state) {
+                HomeScreenState.Loading -> {
+                    LoadingScreen(modifier = Modifier.fillMaxSize())
+                }
+                HomeScreenState.Error -> {
+                    ErrorScreen(modifier = Modifier.fillMaxSize())
+                }
+                HomeScreenState.Success -> {
+                    HomeBody(
+                        modifier = Modifier.fillMaxSize(),
+                        itemList = asteroidPagingItems,
+                        imageOfTodayModel = imageOfToday,
+                        contentPadding = innerPadding,
+                        onItemClick = onItemClick
+                    )
+                }
             }
         }
     }

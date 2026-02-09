@@ -11,7 +11,6 @@ coreVersion = '1.17.0'
 navigationComposeVersion = "2.9.7"
 pagingComposeVersion = "3.4.0"
 gradleToolsVersion = "9.0.0"
-multidexVersion = '2.0.1'
 timberVersion = '5.0.1'
 junitVersion = '4.13.2'
 espressoVersion = '3.7.0'
@@ -51,7 +50,6 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinV
 koin-compat = { group = "io.insert-koin", name = "koin-android-compat", version.ref = "koinVersion" }
 koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koinVersion" }
 koin-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koinVersion" }
-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidexVersion" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
 andoidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
@@ -66,6 +64,7 @@ okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiVersion" }
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiVersion" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationVersion" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleToolsVersion" }
