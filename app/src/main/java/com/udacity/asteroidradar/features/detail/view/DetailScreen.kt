@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -99,9 +101,11 @@ fun AsteroidDetailScreen(
                     DetailScreenState.Loading -> {
                         DetailLoadingScreen(modifier = Modifier.fillMaxSize())
                     }
+
                     DetailScreenState.Error -> {
                         DetailErrorScreen(modifier = Modifier.fillMaxSize())
                     }
+
                     DetailScreenState.Success -> {
                         // asteroidModel is guaranteed non-null when state is Success
                         asteroidModel?.let { asteroid ->
@@ -192,12 +196,23 @@ fun AsteroidDetail(
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
 
+        // Hazardous Status Chip - centered below the image
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            HazardousStatusChip(
+                isPotentiallyHazardous = asteroidModel.isPotentiallyHazardous
+            )
+        }
+
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
+
         // Details
         Column(
             modifier = Modifier.padding(dimensionResource(R.dimen.dim_default_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dim_default_margin))
         ) {
-
             DetailItem(
                 title = stringResource(R.string.text_close_approach_date),
                 value = asteroidModel.closeApproachDate
@@ -289,6 +304,72 @@ fun DetailItem(
     }
 }
 
+/**
+ * A chip that displays the hazardous status of an asteroid with dynamic colors.
+ * Uses Material 3 AssistChip with:
+ * - errorContainer color for hazardous asteroids
+ * - secondaryContainer color for safe asteroids
+ *
+ * @param isPotentiallyHazardous Whether the asteroid is potentially hazardous
+ * @param onClick Optional callback when the chip is clicked (e.g., to show more info)
+ * @param modifier Modifier for the chip
+ */
+@Composable
+fun HazardousStatusChip(
+    isPotentiallyHazardous: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    val containerColor = if (isPotentiallyHazardous) {
+        MaterialTheme.colorScheme.errorContainer
+    } else {
+        MaterialTheme.colorScheme.secondaryContainer
+    }
+
+    val contentColor = if (isPotentiallyHazardous) {
+        MaterialTheme.colorScheme.onErrorContainer
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
+    }
+
+    val labelText = if (isPotentiallyHazardous) {
+        stringResource(R.string.text_potentially_hazardous)
+    } else {
+        stringResource(R.string.text_not_hazardous)
+    }
+
+    val iconRes = if (isPotentiallyHazardous) {
+        R.drawable.ic_status_potentially_hazardous
+    } else {
+        R.drawable.ic_status_normal
+    }
+
+    AssistChip(
+        onClick = onClick,
+        label = {
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.labelLarge
+            )
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = stringResource(R.string.text_hazardous_status_description),
+                modifier = Modifier.size(AssistChipDefaults.IconSize),
+                tint = contentColor
+            )
+        },
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = containerColor,
+            labelColor = contentColor,
+            leadingIconContentColor = contentColor
+        ),
+        border = null,
+        modifier = modifier
+    )
+}
+
 // Preview helper function
 private fun getDummyAsteroid(): AsteroidModel {
     return AsteroidModel(
@@ -368,6 +449,28 @@ private fun AsteroidDetailScreenHazardousPreviewLightDark() {
             isLoading = false,
             isError = false,
             onNavigateBack = {}
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun HazardousStatusChipHazardousPreview() {
+    AsteroidRadarTheme {
+        HazardousStatusChip(
+            isPotentiallyHazardous = true,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun HazardousStatusChipSafePreview() {
+    AsteroidRadarTheme {
+        HazardousStatusChip(
+            isPotentiallyHazardous = false,
+            modifier = Modifier.padding(8.dp)
         )
     }
 }
