@@ -1,5 +1,9 @@
 package com.udacity.asteroidradar.features.detail.view
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,6 +50,13 @@ import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
 
+
+private sealed interface DetailScreenState {
+    data object Loading : DetailScreenState
+    data object Error : DetailScreenState
+    data object Success : DetailScreenState
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AsteroidDetailScreen(
@@ -66,30 +77,41 @@ fun AsteroidDetailScreen(
             navigateUp = onNavigateBack,
         )
     }) { innerPadding ->
+        // Determine current screen state for AnimatedContent
+        val screenState: DetailScreenState = when {
+            isLoading -> DetailScreenState.Loading
+            isError -> DetailScreenState.Error
+            asteroidModel != null -> DetailScreenState.Success
+            else -> DetailScreenState.Error // Fallback for null asteroid without error state
+        }
+
         Box(
             modifier = modifier
-                .fillMaxSize().padding(innerPadding)
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            when {
-                isLoading -> {
-                    DetailLoadingScreen(modifier = Modifier.fillMaxSize())
-                }
-
-                isError -> {
-                    DetailErrorScreen(modifier = Modifier.fillMaxSize())
-                }
-
-                asteroidModel != null -> {
-                    AsteroidDetail(
-                        asteroidModel = asteroidModel,
-                        modifier = Modifier.fillMaxSize(),
-                        onHelpClick = { showDialog = true },
-                    )
-                }
-
-                else -> {
-                    // Fallback for null asteroid without error state
-                    DetailErrorScreen(modifier = Modifier.fillMaxSize())
+            AnimatedContent(
+                targetState = screenState,
+                transitionSpec = { fadeIn() togetherWith fadeOut() },
+                label = "DetailScreenStateTransition"
+            ) { state ->
+                when (state) {
+                    DetailScreenState.Loading -> {
+                        DetailLoadingScreen(modifier = Modifier.fillMaxSize())
+                    }
+                    DetailScreenState.Error -> {
+                        DetailErrorScreen(modifier = Modifier.fillMaxSize())
+                    }
+                    DetailScreenState.Success -> {
+                        // asteroidModel is guaranteed non-null when state is Success
+                        asteroidModel?.let { asteroid ->
+                            AsteroidDetail(
+                                asteroidModel = asteroid,
+                                modifier = Modifier.fillMaxSize(),
+                                onHelpClick = { showDialog = true },
+                            )
+                        }
+                    }
                 }
             }
         }
