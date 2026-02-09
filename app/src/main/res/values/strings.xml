@@ -27,6 +27,9 @@
     <string name="text_description_not_hazardous_asteroid_image">Not hazardous asteroid image</string>
     <string name="text_astronomical_unit_explanation">The astronomical unit (au) is a unit of length, roughly the distance from Earth to the Sun and equal to about 150 million kilometres (93 million miles)</string>
     <string name="text_description_help_icon">Help Icon</string>
+    <string name="text_potentially_hazardous">Potentially Hazardous</string>
+    <string name="text_not_hazardous">Not Hazardous</string>
+    <string name="text_hazardous_status_description">Hazard status indicator</string>
 
     <!-- Unit Format string-->
     <string name="text_format_astronomical_unit">%f au</string>
