@@ -327,7 +327,7 @@ fun HazardousStatusChip(
     }
 
     val contentColor = if (isPotentiallyHazardous) {
-        MaterialTheme.colorScheme.onSurface
+        MaterialTheme.colorScheme.onErrorContainer
     } else {
         MaterialTheme.colorScheme.onSecondaryContainer
     }
