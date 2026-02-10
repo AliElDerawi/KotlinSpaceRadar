@@ -1,65 +1,95 @@
-
 package com.udacity.asteroidradar.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF105BD8)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFC9C9C9)
-val md_theme_light_onPrimaryContainer = Color(0xFF5B5B5B)
-val md_theme_light_secondary = Color(0xFFDD361C)
-val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFFF9E0DE)
-val md_theme_light_onSecondaryContainer = Color(0xFF1E192B)
-val md_theme_light_tertiary = Color(0xFF7E5260)
-val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFFFD9E3)
-val md_theme_light_onTertiaryContainer = Color(0xFF31101D)
-val md_theme_light_error = Color(0xFFDD361C)
-val md_theme_light_errorContainer = Color(0xFFF9E0DE)
-val md_theme_light_onError = Color(0xFFFFFFFF)
-val md_theme_light_onErrorContainer = Color(0xFF99231B)
-val md_theme_light_background = Color(0xFF000000)
-val md_theme_light_onBackground = Color(0xFFFFFFFF)
-val md_theme_light_surface = Color(0xFFF3FEFF)
-val md_theme_light_onSurface = Color(0xFFFFFFFF)
-val md_theme_light_surfaceVariant = Color(0xFF323A45)  // NASA $color-gray-dark — dark card on black bg
-val md_theme_light_onSurfaceVariant = Color(0xFFAEB0B5) // NASA $color-gray-light — readable labels on dark card
-val md_theme_light_outline = Color(0xFF7A757F)
-val md_theme_light_inverseOnSurface = Color(0xFFC3FBFF)
-val md_theme_light_inverseSurface = Color(0xFF00373A)
-val md_theme_light_inversePrimary = Color(0xFFCFBCFF)
-val md_theme_light_surfaceTint = Color(0xFF6B3DD4)
-val md_theme_light_outlineVariant = Color(0xFFCAC4CF)
-val md_theme_light_scrim = Color(0x55010613)
+// =============================================================================
+// LIGHT MODE — NASA Palette Aligned
+// =============================================================================
 
-// Dark mode — Deep navy space theme (proper alternate to light mode's pure black)
-val md_theme_dark_primary = Color(0xFF4D8FE8)          // Lighter blue (M3: dark uses lighter tones)
-val md_theme_dark_onPrimary = Color(0xFF002B75)         // Dark blue text on primary
-val md_theme_dark_primaryContainer = Color(0xFF0A2E6B)  // Deep blue container
-val md_theme_dark_onPrimaryContainer = Color(0xFFD6E3FF)// Light blue text on container
-val md_theme_dark_secondary = Color(0xFFFF6B5A)         // Lighter coral (alt of light's #DD361C)
-val md_theme_dark_onSecondary = Color(0xFF5C1515)       // Dark text on secondary
-val md_theme_dark_secondaryContainer = Color(0xFF6B1E1A)// Dark red container
-val md_theme_dark_onSecondaryContainer = Color(0xFFFFDAD6)// Light text on container
-val md_theme_dark_tertiary = Color(0xFFEFB8C8)          // Light pink (M3 convention)
-val md_theme_dark_onTertiary = Color(0xFF492532)        // Dark text on tertiary
-val md_theme_dark_tertiaryContainer = Color(0xFF633B48) // Dark pink container
-val md_theme_dark_onTertiaryContainer = Color(0xFFFFD8E4)// Light pink text on container
-val md_theme_dark_error = Color(0xFFE59892)             // Lighter error (M3 convention)
-val md_theme_dark_errorContainer = Color(0xFF99231B)    // Dark error container
-val md_theme_dark_onError = Color(0xFF99231B)           // Dark text on error
-val md_theme_dark_onErrorContainer = Color(0xFFF9E0DE)  // Light text on error container
-val md_theme_dark_background = Color(0xFF0D1117)        // Deep navy (differentiates from light's black)
-val md_theme_dark_onBackground = Color(0xFFE6E1E5)      // Warm off-white
-val md_theme_dark_surface = Color(0xFF1C1B1F)           // Elevated dark surface
-val md_theme_dark_onSurface = Color(0xFFE6E1E5)         // Warm off-white text
-val md_theme_dark_surfaceVariant = Color(0xFF49454F)    // Medium dark (for cards/containers)
-val md_theme_dark_onSurfaceVariant = Color(0xFFCAC4D0)  // Muted light text
-val md_theme_dark_outline = Color(0xFF938F99)           // Visible outline on dark bg
-val md_theme_dark_inverseOnSurface = Color(0xFF1C1B1F)  // Dark text on inverse surface
-val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)    // Light inverse surface
-val md_theme_dark_inversePrimary = Color(0xFF105BD8)    // Original primary for inverse
-val md_theme_dark_surfaceTint = Color(0xFF4D8FE8)       // Matches dark primary
-val md_theme_dark_outlineVariant = Color(0xFF49454F)    // Darker variant for dark bg
-val md_theme_dark_scrim = Color(0x55010613)
+// TODO Comment: Using onBackground for text on dark surfaces (NASA space theme in light mode)
+
+// Primary: NASA Blue
+val md_theme_light_primary = Color(0xFF105BD8)           // NASA $color-primary
+val md_theme_light_onPrimary = Color(0xFFFFFFFF)         // NASA $color-white
+val md_theme_light_primaryContainer = Color(0xFFDCE4EF)  // NASA $color-gray-cool-light
+val md_theme_light_onPrimaryContainer = Color(0xFF0B3D91) // NASA $color-primary-darker
+
+// Secondary: NASA Cyan (for safe/info states)
+val md_theme_light_secondary = Color(0xFF02BFE7)         // NASA $color-primary-alt
+val md_theme_light_onSecondary = Color(0xFFFFFFFF)       // NASA $color-white
+val md_theme_light_secondaryContainer = Color(0xFFE1F3F8) // NASA $color-primary-alt-lightest
+val md_theme_light_onSecondaryContainer = Color(0xFF046B99) // NASA $color-primary-alt-darkest
+
+// Tertiary: NASA Gold (for highlights/accents)
+val md_theme_light_tertiary = Color(0xFFFF9D1E)          // NASA $color-gold
+val md_theme_light_onTertiary = Color(0xFFFFFFFF)        // NASA $color-white
+val md_theme_light_tertiaryContainer = Color(0xFFFFEBD1) // NASA $color-gold-lightest
+val md_theme_light_onTertiaryContainer = Color(0xFF5C4A00) // Derived dark gold
+
+// Error: NASA Red (for danger/hazardous states)
+val md_theme_light_error = Color(0xFFDD361C)             // NASA $color-secondary
+val md_theme_light_errorContainer = Color(0xFFF9E0DE)    // NASA $color-secondary-lightest
+val md_theme_light_onError = Color(0xFFFFFFFF)           // NASA $color-white
+val md_theme_light_onErrorContainer = Color(0xFF99231B)  // NASA $color-secondary-darkest
+
+// Background & Surface
+val md_theme_light_background = Color(0xFF000000)        // Black space theme
+val md_theme_light_onBackground = Color(0xFFFFFFFF)      // NASA $color-white
+val md_theme_light_surface = Color(0xFF212121)           // NASA $color-gray-lightest
+val md_theme_light_onSurface = Color(0xFFFFFFFF)         // NASA $color-base
+val md_theme_light_surfaceVariant = Color(0xFF323A45)    // NASA $color-gray-dark
+val md_theme_light_onSurfaceVariant = Color(0xFFAEB0B5)  // NASA $color-gray-light
+
+// Outline & Utility
+val md_theme_light_outline = Color(0xFF5B616B)           // NASA $color-gray
+val md_theme_light_inverseOnSurface = Color(0xFF061F4A)  // NASA $color-primary-darkest
+val md_theme_light_inverseSurface = Color(0xFFE4E2E0)    // NASA $color-gray-warm-light
+val md_theme_light_inversePrimary = Color(0xFF9BDAF1)    // NASA $color-primary-alt-light
+val md_theme_light_surfaceTint = Color(0xFF105BD8)       // NASA $color-primary
+val md_theme_light_outlineVariant = Color(0xFFD6D7D9)    // NASA $color-gray-lighter
+val md_theme_light_scrim = Color(0x55010613)             // Semi-transparent dark
+
+// =============================================================================
+// DARK MODE — NASA Palette Aligned (M3: lighter tones on dark backgrounds)
+// =============================================================================
+
+// Primary: Lighter Blue for dark mode
+val md_theme_dark_primary = Color(0xFF9BDAF1)            // NASA $color-primary-alt-light
+val md_theme_dark_onPrimary = Color(0xFF061F4A)          // NASA $color-primary-darkest
+val md_theme_dark_primaryContainer = Color(0xFF0B3D91)   // NASA $color-primary-darker
+val md_theme_dark_onPrimaryContainer = Color(0xFFDCE4EF) // NASA $color-gray-cool-light
+
+// Secondary: Light Cyan for dark mode
+val md_theme_dark_secondary = Color(0xFF9BDAF1)          // NASA $color-primary-alt-light
+val md_theme_dark_onSecondary = Color(0xFF046B99)        // NASA $color-primary-alt-darkest
+val md_theme_dark_secondaryContainer = Color(0xFF0A4D5C) // Derived dark cyan
+val md_theme_dark_onSecondaryContainer = Color(0xFF9BDAF1) // NASA $color-primary-alt-light
+
+// Tertiary: Light Gold for dark mode
+val md_theme_dark_tertiary = Color(0xFFFFC375)           // NASA $color-gold-lighter
+val md_theme_dark_onTertiary = Color(0xFF5C4A00)         // Derived dark gold
+val md_theme_dark_tertiaryContainer = Color(0xFF7A5C00)  // Derived dark gold container
+val md_theme_dark_onTertiaryContainer = Color(0xFFFFEBD1) // NASA $color-gold-lightest
+
+// Error: Light Red for dark mode
+val md_theme_dark_error = Color(0xFFE59892)              // NASA $color-secondary-light
+val md_theme_dark_errorContainer = Color(0xFF99231B)     // NASA $color-secondary-darkest
+val md_theme_dark_onError = Color(0xFF99231B)            // NASA $color-secondary-darkest
+val md_theme_dark_onErrorContainer = Color(0xFFF9E0DE)   // NASA $color-secondary-lightest
+
+// Background & Surface: Deep Navy Space Theme
+val md_theme_dark_background = Color(0xFF061F4A)         // NASA $color-primary-darkest
+val md_theme_dark_onBackground = Color(0xFFF1F1F1)       // NASA $color-gray-lightest
+val md_theme_dark_surface = Color(0xFF212121)            // NASA $color-base
+val md_theme_dark_onSurface = Color(0xFFF1F1F1)          // NASA $color-gray-lightest
+val md_theme_dark_surfaceVariant = Color(0xFF323A45)     // NASA $color-gray-dark
+val md_theme_dark_onSurfaceVariant = Color(0xFFAEB0B5)   // NASA $color-gray-light
+
+// Outline & Utility
+val md_theme_dark_outline = Color(0xFFAEB0B5)            // NASA $color-gray-light
+val md_theme_dark_inverseOnSurface = Color(0xFF212121)   // NASA $color-base
+val md_theme_dark_inverseSurface = Color(0xFFF1F1F1)     // NASA $color-gray-lightest
+val md_theme_dark_inversePrimary = Color(0xFF105BD8)     // NASA $color-primary
+val md_theme_dark_surfaceTint = Color(0xFF9BDAF1)        // NASA $color-primary-alt-light
+val md_theme_dark_outlineVariant = Color(0xFF494440)     // NASA $color-gray-warm-dark
+val md_theme_dark_scrim = Color(0x55010613)              // Semi-transparent dark

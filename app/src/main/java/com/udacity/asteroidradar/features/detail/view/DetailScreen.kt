@@ -277,7 +277,7 @@ fun DetailItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_4dp)))
@@ -285,7 +285,7 @@ fun DetailItem(
                 Text(
                     text = value,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -464,18 +464,27 @@ private fun HazardousStatusChipSafePreview() {
     }
 }
 
+@PreviewLightDark
+@Preview(showBackground = true)
+@Composable
+private fun AstronomicalUnitExplanationPreview() {
+    AsteroidRadarTheme {
+        AstronomicalUnitExplanationDialog(onDismiss = { })  // ✅ Use actual composable
+    }
+}
+
 @Composable
 fun AstronomicalUnitExplanationDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        textContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        titleContentColor = MaterialTheme.colorScheme.onBackground,
+        textContentColor = MaterialTheme.colorScheme.onBackground,
         confirmButton = {
             TextButton(onClick = { onDismiss() }) {
                 Text(
                     text = stringResource(android.R.string.ok),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         },
