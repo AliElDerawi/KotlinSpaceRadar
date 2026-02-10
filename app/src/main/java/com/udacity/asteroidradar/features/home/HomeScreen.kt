@@ -315,13 +315,13 @@ private fun AsteroidItem(
             Text(
                 text = asteroidModel.codename,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
                 text = asteroidModel.closeApproachDate,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -367,41 +367,49 @@ private val fakeAsteroidsList = listOf(
 @Preview
 @Composable
 fun PreviewAsteroidItem() {
-    AsteroidItem(
-        asteroidModel = getDummyAsteroid(),
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Black)
-    )
+    AsteroidRadarTheme {
+        AsteroidItem(
+            asteroidModel = getDummyAsteroid(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black)
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ImageOfTodayPreview() {
-    ImageOfToday(
-        imageOfTodayModel = getDummyImageOfDay(), modifier = Modifier.background(Color.Black)
-    )
+    AsteroidRadarTheme {
+        ImageOfToday(
+            imageOfTodayModel = getDummyImageOfDay(), modifier = Modifier.background(Color.Black)
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ImageOfTodayPlaceholderPreview() {
-    ImageOfTodayPlaceholder(
-        modifier = Modifier.background(Color.Black)
-    )
+    AsteroidRadarTheme {
+        ImageOfTodayPlaceholder(
+            modifier = Modifier.background(Color.Black)
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeBodyPreview() {
-    HomeBody(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize(),
-        itemList = fakeLazyPagingItems(fakeAsteroidsList),
-        imageOfTodayModel = getDummyImageOfDay(),
-        onItemClick = {}
-    )
+    AsteroidRadarTheme {
+        HomeBody(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize(),
+            itemList = fakeLazyPagingItems(fakeAsteroidsList),
+            imageOfTodayModel = getDummyImageOfDay(),
+            onItemClick = {}
+        )
+    }
 }
 
 @PreviewLightDark
