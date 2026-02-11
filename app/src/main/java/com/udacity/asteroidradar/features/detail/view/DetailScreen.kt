@@ -184,18 +184,20 @@ fun AsteroidDetail(
         // Image
         Image(
             painter = painterResource(
-                if (asteroidModel.isPotentiallyHazardous) R.drawable.asteroid_hazardous
-                else R.drawable.asteroid_safe
+                if (asteroidModel.isPotentiallyHazardous) R.drawable.ic_asteroid_hazardous
+                else R.drawable.ic_asteroid_safe
             ),
             contentDescription = stringResource(R.string.app_name),
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
+                .padding(start = dimensionResource(R.dimen.dim_default_margin),
+                    end = dimensionResource(R.dimen.dim_default_margin),
+                    top = dimensionResource(R.dimen.dim_default_margin),
+                    bottom = dimensionResource(R.dimen.dim_small_margin)
+                )
         )
-
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dim_small_margin)))
-
         // Hazardous Status Chip - centered below the image
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -349,14 +351,14 @@ fun HazardousStatusChip(
         label = {
             Text(
                 text = labelText,
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.titleMedium
             )
         },
         leadingIcon = {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = stringResource(R.string.text_hazardous_status_description),
-                modifier = Modifier.size(AssistChipDefaults.IconSize),
+                modifier = Modifier.size(24.dp),
                 tint = contentColor
             )
         },
