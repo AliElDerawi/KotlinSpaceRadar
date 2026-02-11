@@ -82,7 +82,7 @@ fun AsteroidAppTopBar(
                             onFilterClick(AsteroidApiFilter.SHOW_TODAY)
                         },
                         colors = MenuDefaults.itemColors(
-                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            textColor = MaterialTheme.colorScheme.onBackground
                         )
                     )
                     DropdownMenuItem(
@@ -92,7 +92,7 @@ fun AsteroidAppTopBar(
                             onFilterClick(AsteroidApiFilter.SHOW_WEEK)
                         },
                         colors = MenuDefaults.itemColors(
-                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            textColor = MaterialTheme.colorScheme.onBackground
                         )
                     )
                     DropdownMenuItem(
@@ -102,7 +102,7 @@ fun AsteroidAppTopBar(
                             onFilterClick(AsteroidApiFilter.SHOW_SAVED)
                         },
                         colors = MenuDefaults.itemColors(
-                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            textColor = MaterialTheme.colorScheme.onBackground
                         )
                     )
                 }
