@@ -211,7 +211,7 @@ private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier 
                 .crossfade(true)
                 .build(),
             error = painterResource(R.drawable.ic_broken_image),
-            placeholder = painterResource(R.drawable.loading_img),
+            placeholder = painterResource(R.drawable.ic_loading_img),
             contentDescription = imageOfTodayModel.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()
@@ -279,7 +279,7 @@ private fun LoadingScreen(modifier: Modifier = Modifier) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
-                .data(R.drawable.loading_img).crossfade(true).build(),
+                .data(R.drawable.ic_loading_img).crossfade(true).build(),
             contentDescription = stringResource(R.string.text_description_loading_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier
