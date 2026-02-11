@@ -2,11 +2,11 @@
 
 **"A NASA-powered Compose app to monitor asteroids and their Earth proximity, with offline features and clean architecture."**
 
-KotlinSpaceRadar is a Compose app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API provided by the NASA JPL Asteroid team and stores data locally for offline access. This project is part of the **Udacity Android Kotlin Developer Nanodegree Program**.
+KotlinSpaceRadar is a Compose app designed to help users track asteroids detected by NASA that come near Earth. It uses a free, open-source API from NASA JPL's Asteroid team and stores data locally for offline access.
 
 ## Main Features of the Project
 
-- **Modern UI**: Use Jetpack Compose for modern UI. Also uses a single-activity architecture with multiple fragments for simplified navigation and improved modularity (in the XML branch).
+- **Modern UI**: Use Jetpack Compose for modern UI. Also uses a single-activity architecture with multiple fragments to simplify navigation and improve modularity (in the XML branch).
 - **MVVM and Repository Architecture**: Implements MVVM and Repository to enhance maintainability, modularity, and scalability, promoting cleaner code and separation of concerns.
 - **Offline Mode**: Provides offline access to data by using Room for local storage, ensuring the app is usable even without an internet connection.
 - **Paging Library (v3)**: Optimizes data viewing with seamless scrolling, ensuring smooth navigation through large lists of asteroids.
@@ -29,7 +29,7 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 - [Project Rubric](https://docs.google.com/document/d/1zuizdkZE564NyypAysOyI8sX7mICE64eMlmOPUV8W9w/edit?usp=sharing): View the project rubric.
 - [Android Kotlin Developer Nanodegree Program](https://www.udacity.com/course/android-kotlin-developer-nanodegree--nd940): Learn more about the full program and its related projects.
 
-#### **Note**: Many improvements and features in this project are not included in the Project Rubric as it was initially a project for the Udacity Nanodegree Program.
+#### **Note**: Many improvements and features in this project are not included in the Project Rubric, as it was originally for the Udacity Nanodegree Program.
 
 ## Installation Guide
 
