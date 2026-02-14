@@ -1,9 +1,9 @@
 [versions]
-activityComposeVersion = "1.12.3"
+activityComposeVersion = "1.12.4"
 coilComposeVersion = "3.3.0"
 coilNetworkOkhttpVersion = "3.3.0"
-composeBomVersion = "2026.01.01"
-composePluginVersion = "2.3.0"
+composeBomVersion = "2026.02.00"
+composePluginVersion = "2.3.10"
 koinAndroidxComposeVersion = "4.1.1"
 kotlinVersion = '2.3.0'
 koinVersion = '4.1.1'
@@ -57,7 +57,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "roomVersion" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "pagingVersion" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "retrofitVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofitVersion" }
 retrofit-converter-scalar = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofitVersion" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "retrofitLogginVersion" }
