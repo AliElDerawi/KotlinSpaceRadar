@@ -1,9 +1,9 @@
 [versions]
-activityComposeVersion = "1.12.3"
+activityComposeVersion = "1.12.4"
 coilComposeVersion = "3.3.0"
 coilNetworkOkhttpVersion = "3.3.0"
-composeBomVersion = "2026.01.01"
-composePluginVersion = "2.3.0"
+composeBomVersion = "2026.02.00"
+composePluginVersion = "2.3.10"
 koinAndroidxComposeVersion = "4.1.1"
 kotlinVersion = '2.3.0'
 koinVersion = '4.1.1'
