@@ -45,6 +45,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -185,8 +187,11 @@ private fun HomeBody(
                     HomeNoDataMessage()
                 }
             } else {
-                // List items
-                items(list.itemCount) { index ->
+                // Providing a unique 'key' ensures scroll position stability when new pages load and avoids unnecessary recompositions.
+                // 'contentType' helps Compose recycle nodes of the same type, boosting overall scrolling performance.
+                items(count = itemList.itemCount,
+                    key = itemList.itemKey { asteroid -> asteroid.id },
+                    contentType = itemList.itemContentType { "AsteroidItem" }) { index ->
                     list[index]?.let { asteroid ->
                         AsteroidItem(
                             asteroidModel = asteroid,
