@@ -45,6 +45,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -56,6 +58,7 @@ import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
 /**
@@ -184,8 +187,11 @@ private fun HomeBody(
                     HomeNoDataMessage()
                 }
             } else {
-                // List items
-                items(list.itemCount) { index ->
+                // Providing a unique 'key' ensures scroll position stability when new pages load and avoids unnecessary recompositions.
+                // 'contentType' helps Compose recycle nodes of the same type, boosting overall scrolling performance.
+                items(count = itemList.itemCount,
+                    key = itemList.itemKey { asteroid -> asteroid.id },
+                    contentType = itemList.itemContentType { "AsteroidItem" }) { index ->
                     list[index]?.let { asteroid ->
                         AsteroidItem(
                             asteroidModel = asteroid,
@@ -488,8 +494,9 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun <T : Any> fakeLazyPagingItems(data: List<T>): LazyPagingItems<T> {
-    val fakeFlow = remember { flowOf(PagingData.from(data)) }
-    val pagingData = fakeFlow.collectAsLazyPagingItems()
-    return pagingData
+fun <T : Any> fakeLazyPagingItems(items: List<T>): LazyPagingItems<T> {
+    // We use MutableStateFlow to synchronously emit the PagingData in Compose Previews.
+    // This avoids the anti-pattern of passing standard Lists to UI components just for preview purposes.
+    val fakeFlow = remember { MutableStateFlow(PagingData.from(items)) }
+    return fakeFlow.collectAsLazyPagingItems()
 }
