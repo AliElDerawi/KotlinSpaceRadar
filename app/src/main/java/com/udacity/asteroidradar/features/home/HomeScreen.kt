@@ -56,6 +56,7 @@ import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
 /**
@@ -488,8 +489,8 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun <T : Any> fakeLazyPagingItems(data: List<T>): LazyPagingItems<T> {
-    val fakeFlow = remember { flowOf(PagingData.from(data)) }
-    val pagingData = fakeFlow.collectAsLazyPagingItems()
-    return pagingData
+fun <T : Any> fakeLazyPagingItems(items: List<T>): LazyPagingItems<T> {
+    // Comment : use MutableStateFlow instead of flow to show fake data in preview screen
+    val fakeFlow = remember { MutableStateFlow(PagingData.from(items)) }
+    return fakeFlow.collectAsLazyPagingItems()
 }
