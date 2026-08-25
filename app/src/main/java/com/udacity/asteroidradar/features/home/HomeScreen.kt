@@ -495,7 +495,8 @@ private fun HomeNoDataMessage(modifier: Modifier = Modifier) {
 
 @Composable
 fun <T : Any> fakeLazyPagingItems(items: List<T>): LazyPagingItems<T> {
-    // Comment : use MutableStateFlow instead of flow to show fake data in preview screen
+    // We use MutableStateFlow to synchronously emit the PagingData in Compose Previews.
+    // This avoids the anti-pattern of passing standard Lists to UI components just for preview purposes.
     val fakeFlow = remember { MutableStateFlow(PagingData.from(items)) }
     return fakeFlow.collectAsLazyPagingItems()
 }
