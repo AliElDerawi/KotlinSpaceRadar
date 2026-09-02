@@ -9,14 +9,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.databinding.ActivityMainBinding
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.applyWindowsPadding
 import com.udacity.asteroidradar.util.AppSharedMethods.getCompatColor
 import com.udacity.asteroidradar.util.AppSharedMethods.setStatusBarColorAndStyle
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,12 +26,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        mBinding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).apply {
-            root.applyWindowsPadding()
-            setStatusBarColorAndStyle(getCompatColor(R.color.colorPrimary))
-        }
+        mBinding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            .apply {
+                root.applyWindowsPadding()
+                setStatusBarColorAndStyle(getCompatColor(R.color.colorPrimary))
+            }
         initListener()
-        initViewModelObserver()
     }
 
     private fun initListener() {
@@ -43,18 +41,6 @@ class MainActivity : AppCompatActivity() {
         mAppBarConfiguration = AppBarConfiguration(mNavController.graph)
     }
 
-    private fun initViewModelObserver() {
-        mViewModel.navigationCommandSingleLiveEvent.observe(this) { command ->
-            Timber.d("initViewModelObserver:command: $command")
-            when (command) {
-                is NavigationCommand.To -> mNavController.navigate(command.directions)
-                is NavigationCommand.Back -> mNavController.popBackStack()
-                is NavigationCommand.BackTo -> mNavController.popBackStack(
-                    command.destinationId, false
-                )
-            }
-        }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration)

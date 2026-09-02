@@ -11,23 +11,22 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.data.BaseFragment
-import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.util.AppSharedMethods.setActionBarTitle
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MainFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentMainBinding
-    override val mViewModel: MainViewModel by activityViewModels()
+    override val mViewModel: MainViewModel by activityViewModel()
     private lateinit var mActivity: FragmentActivity
 
     override fun onAttach(context: Context) {
@@ -72,7 +71,7 @@ class MainFragment : BaseFragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                with(mViewModel){
+                with(mViewModel) {
                     updateSelectedItem(0)
                     updateFilter(
                         when (menuItem.itemId) {
@@ -93,15 +92,12 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initAsteroidRecyclerView() {
-        with(mViewModel){
+        with(mViewModel) {
             mBinding.asteroidRecycler.adapter =
                 AsteroidItemAdapter(AsteroidModel.getAsteroidModelCallback()) { item, position ->
                     updateSelectedItem(position)
-                    navigationCommandSingleLiveEvent.value = NavigationCommand.To(
-                        MainFragmentDirections.actionShowDetail(item)
-                    )
+                    navigateToDetailScreen(item)
                 }
         }
     }
-
 }

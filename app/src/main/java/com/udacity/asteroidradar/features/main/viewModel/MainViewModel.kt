@@ -8,7 +8,9 @@ import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseViewModel
+import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.features.main.view.MainFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,4 +67,14 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
         }
     }
 
+    fun navigateToDetailScreen(asteroidModel: AsteroidModel) {
+        viewModelScope.launch {
+            navigationCommandChannel.send(
+                NavigationCommand.To(
+                    MainFragmentDirections.actionShowDetail(asteroidModel)
+                )
+            )
+        }
+    }
 }
+
