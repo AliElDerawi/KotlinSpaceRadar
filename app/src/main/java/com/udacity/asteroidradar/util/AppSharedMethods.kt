@@ -14,7 +14,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
 object AppSharedMethods {
@@ -47,15 +46,15 @@ object AppSharedMethods {
         Snackbar.make(findViewById(android.R.id.content), getString(message), duration).show()
     }
 
-    fun Fragment.setTitle(title: String) {
-        if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).supportActionBar?.title = title
+    fun Activity.setActionBarTitle(title: String) {
+        if (this is AppCompatActivity) {
+            supportActionBar?.title = title
         }
     }
 
-    fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
-        if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
+    fun Activity.setDisplayHomeAsUpEnabled(bool: Boolean) {
+        if (this is AppCompatActivity) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(
                 bool
             )
         }

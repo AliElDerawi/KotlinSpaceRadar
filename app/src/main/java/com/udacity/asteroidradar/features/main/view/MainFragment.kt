@@ -21,8 +21,8 @@ import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.util.AppSharedMethods.setActionBarTitle
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
-import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
 
 class MainFragment : BaseFragment() {
 
@@ -45,8 +45,8 @@ class MainFragment : BaseFragment() {
             mLifecycleOwner = viewLifecycleOwner
             viewModel = mViewModel
         }
-        setTitle(mActivity.getString(R.string.app_name))
-        setDisplayHomeAsUpEnabled(false)
+        mActivity.setActionBarTitle(mActivity.getString(R.string.app_name))
+        mActivity.setDisplayHomeAsUpEnabled(false)
         return mBinding.root
     }
 

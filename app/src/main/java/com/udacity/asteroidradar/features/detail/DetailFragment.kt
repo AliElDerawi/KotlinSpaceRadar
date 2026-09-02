@@ -13,8 +13,8 @@ import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.databinding.FragmentDetailBinding
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.util.AppSharedMethods.setActionBarTitle
 import com.udacity.asteroidradar.util.AppSharedMethods.setDisplayHomeAsUpEnabled
-import com.udacity.asteroidradar.util.AppSharedMethods.setTitle
 
 class DetailFragment : BaseFragment() {
 
@@ -43,8 +43,8 @@ class DetailFragment : BaseFragment() {
                     asteroid = asteroidModel
                 }
             }
-        setTitle(mBinding.asteroid?.codename ?: mActivity.getString(R.string.app_name))
-        setDisplayHomeAsUpEnabled(true)
+        mActivity.setActionBarTitle(mBinding.asteroid?.codename ?: mActivity.getString(R.string.app_name))
+        mActivity.setDisplayHomeAsUpEnabled(true)
         return mBinding.root
     }
 
