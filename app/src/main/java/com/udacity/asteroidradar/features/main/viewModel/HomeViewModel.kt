@@ -9,8 +9,6 @@ import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.domain.repository.AsteroidRepository
-import com.udacity.asteroidradar.domain.usecase.GetAsteroidsUseCase
-import com.udacity.asteroidradar.domain.usecase.GetImageOfDayUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +26,6 @@ data class HomeUiState(
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getAsteroidsUseCase: GetAsteroidsUseCase,
-    private val getImageOfDayUseCase: GetImageOfDayUseCase,
     private val asteroidRepository: AsteroidRepository,
 ) : ViewModel() {
 
@@ -51,7 +47,7 @@ class MainViewModel(
 
             asteroidRepository.refreshAsteroids(filter)
 
-            val asteroidPagingFlow = getAsteroidsUseCase(filter)
+            val asteroidPagingFlow = asteroidRepository.getAsteroids(filter)
                 .cachedIn(viewModelScope)
 
             _homeUiState.update {
@@ -68,7 +64,7 @@ class MainViewModel(
             try {
                 asteroidRepository.refreshImageOfDay()
 
-                getImageOfDayUseCase().collect { imageOfToday ->
+                asteroidRepository.getImageOfDay().collect { imageOfToday ->
                     _homeUiState.update { it.copy(imageOfDayModel = imageOfToday) }
                 }
             } catch (e: Exception) {
