@@ -11,7 +11,6 @@ import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.features.main.view.MainFragmentDirections
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +29,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     val currentSelectedItemStateFlow: StateFlow<Int>
         get() = _currentSelectedItemStateFlow
 
-    val statusStateFlow = asteroidRepository.statusMutableStateFlow
+    val statusStateFlow = asteroidRepository.statusStateFlow
 
     private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
     val imageOfTheDayStateFlow: StateFlow<ImageOfTodayModel?>
@@ -48,22 +47,32 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     fun updateFilter(filter: AsteroidApiFilter) {
         refreshList(filter)
+        observeAsteroids(filter)
     }
 
-    private fun refreshList(filter: AsteroidApiFilter) {
-        viewModelScope.launch(Dispatchers.IO) {
-            asteroidRepository.refreshAsteroids(filter).getOrNull()?.cachedIn(viewModelScope)
-                ?.collectLatest { list ->
+    private fun observeAsteroids(filter: AsteroidApiFilter) {
+        viewModelScope.launch { // إزالة Dispatchers.IO
+            asteroidRepository.getAsteroidsFromDataBaseFlow(filter)
+                .cachedIn(viewModelScope)
+                .collectLatest { list ->
                     _asteroidListStateFlow.value = list
                 }
         }
     }
 
+
+    private fun refreshList(filter: AsteroidApiFilter) {
+        viewModelScope.launch {
+            asteroidRepository.refreshAsteroids(filter)
+        }
+    }
+
     private fun getImageOfToday() {
-        viewModelScope.launch(Dispatchers.IO) {
-            asteroidRepository.getImageOfToday().getOrNull()?.collect { imageOfToday ->
-                _imageOfTheDayStateFlow.value = imageOfToday
-            }
+        viewModelScope.launch {
+            asteroidRepository.getImageOfTodayFlow()
+                .collectLatest { imageOfToday ->
+                    _imageOfTheDayStateFlow.value = imageOfToday
+                }
         }
     }
 
