@@ -7,8 +7,11 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.data.database.getDatabase
-import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.data.repository.AsteroidRepositoryImpl
+import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
+import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSource
+import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSourceImpl
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +50,16 @@ class AsteroidStoreApp : MultiDexApplication() {
             viewModelOf(::MainViewModel)
             singleOf(::getDatabase)
             workerOf(::RefreshDataWorker)
-            single { AsteroidRepository(get(),Dispatchers.IO) }
+            single<AsteroidRemoteDataSource> {
+                AsteroidRemoteDataSourceImpl()
+            }
+            single<AsteroidRepository> {
+                AsteroidRepositoryImpl(
+                    remoteDataSource = get(),
+                    get(),
+                    ioDispatcher = Dispatchers.IO
+                )
+            }
         }
 
         startKoin {

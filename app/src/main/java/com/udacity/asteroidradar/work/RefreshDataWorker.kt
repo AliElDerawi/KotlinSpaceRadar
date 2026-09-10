@@ -9,7 +9,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 
 class RefreshDataWorker(
-    private val asteroidRepository: AsteroidRepository, appContext: Context, params: WorkerParameters
+    private val asteroidRepositoryImpl: AsteroidRepository, appContext: Context, params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
 
     companion object {
@@ -18,7 +18,7 @@ class RefreshDataWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            asteroidRepository.refreshAsteroids(AsteroidApiFilter.SHOW_WEEK)
+            asteroidRepositoryImpl.refreshAsteroids(AsteroidApiFilter.SHOW_WEEK)
             Result.success()
         } catch (e: HttpException) {
             Timber.d(e.toString())

@@ -27,69 +27,34 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import timber.log.Timber
 
-class AsteroidRepository(
-    private val database: AsteroidDatabase,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-) {
+interface AsteroidRepository{
 
-    private val _statusStateFlow = MutableStateFlow<AsteroidApiStatus>(AsteroidApiStatus.DONE)
-    val statusStateFlow: StateFlow<AsteroidApiStatus> = _statusStateFlow
-    val pagingConfig = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false)
+    val statusStateFlow: StateFlow<AsteroidApiStatus>
 
-    fun getAsteroidsFromDataBaseFlow(filter: AsteroidApiFilter): Flow<PagingData<AsteroidModel>> {
-        val (startDate, endDate) = when (filter) {
-            AsteroidApiFilter.SHOW_WEEK -> getTodayDate() to getEndDate()
-            AsteroidApiFilter.SHOW_TODAY -> getTodayDate() to getTodayDate()
-            AsteroidApiFilter.SHOW_SAVED -> getTodayDate() to getEndDate()
-        }
+    fun getAsteroids(filter: AsteroidApiFilter): Flow<PagingData<AsteroidModel>>
 
-        return Pager(pagingConfig) {
-            database.asteroidDao.getAsteroidsList(startDate, endDate)
-        }.flow
-    }
+    /**
+     * Get a specific asteroid by ID
+     * @param id The asteroid ID
+     * @return Result containing the Asteroid or error
+     */
+    suspend fun getAsteroidById(id: Long): Result<AsteroidModel>
 
-    suspend fun refreshAsteroids(filter: AsteroidApiFilter) {
-        if (filter == AsteroidApiFilter.SHOW_SAVED || !isNetworkConnected()) return
+    /**
+     * Get the image of the day
+     * @return Flow of ImageOfTodayModel or null if not available
+     */
+    fun getImageOfDay(): Flow<ImageOfTodayModel?>
 
-        withContext(ioDispatcher) {
-            _statusStateFlow.value = AsteroidApiStatus.LOADING
-            try {
-                val (startDate, endDate) = when (filter) {
-                    AsteroidApiFilter.SHOW_WEEK -> getTodayDate() to getEndDate()
-                    AsteroidApiFilter.SHOW_TODAY -> getTodayDate() to getTodayDate()
-                }
+    /**
+     * Refresh asteroids from remote source
+     * @param filter The filter to apply
+     */
+    suspend fun refreshAsteroids(filter: AsteroidApiFilter)
 
-                val response = AsteroidApi.retrofitService.getAsteroid(startDate, endDate)
-                val jsonObject = JSONObject(response)
-                val asteroids = parseAsteroidsJsonResult(jsonObject)
-
-                database.asteroidDao.insertAll(*asteroids.toTypedArray())
-                _statusStateFlow.value = AsteroidApiStatus.DONE
-
-            } catch (e: Exception) {
-                ensureActive()
-                _statusStateFlow.value = AsteroidApiStatus.ERROR
-                Timber.d("Exception: $e")
-            }
-        }
-    }
-
-
-    fun getImageOfTodayFlow(): Flow<ImageOfTodayModel?> {
-        return flow {
-            if (isNetworkConnected()) {
-                try {
-                    val response = AsteroidApi.retrofitService.getImageOfTheDay()
-                    response.creationDate = getTodayDate()
-                    database.imageOfTodayDao.insertImageOfToday(response)
-                } catch (e: Exception) {
-                    Timber.d("Network Exception: $e")
-                }
-            }
-            val localImage = database.imageOfTodayDao.getImageOfToday(getTodayDate()).first()
-            emit(localImage)
-
-        }.flowOn(ioDispatcher)
-    }
+    /**
+     * Refresh image of the day from remote source
+     */
+    suspend fun refreshImageOfDay()
 
 }
