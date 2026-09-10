@@ -15,6 +15,7 @@ import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.source.AsteroidLocalDataSource
 import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,7 @@ import timber.log.Timber
 
 class AsteroidRepositoryImpl(
     private val remoteDataSource: AsteroidRemoteDataSource,
-    private val database: AsteroidDatabase,
+    private val localDataSource: AsteroidLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AsteroidRepository{
 
@@ -46,7 +47,7 @@ class AsteroidRepositoryImpl(
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = {
-                database.asteroidDao.getAsteroidsList(startDate, endDate)
+                localDataSource.getAsteroidsPagingSource(startDate, endDate)
             }
         ).flow
     }
@@ -60,7 +61,7 @@ class AsteroidRepositoryImpl(
                 val (startDate, endDate) = getDateRange(filter)
 
                 val response = remoteDataSource.getAsteroids(startDate, endDate)
-                database.asteroidDao.insertAll(response)
+                localDataSource.insertAsteroids(response)
                 _statusStateFlow.value = AsteroidApiStatus.DONE
 
             } catch (e: Exception) {
@@ -74,7 +75,7 @@ class AsteroidRepositoryImpl(
     override suspend fun getAsteroidById(id: Long): Result<AsteroidModel> {
         return withContext(ioDispatcher) {
             try {
-                val entity = database.asteroidDao.getAsteroidById(id)
+                val entity = localDataSource.getAsteroidById(id)
                 if (entity != null) {
                     Result.success(entity)
                 } else {
@@ -91,7 +92,7 @@ class AsteroidRepositoryImpl(
 
 
    override fun getImageOfDay(): Flow<ImageOfTodayModel?> {
-        return database.imageOfTodayDao.getImageOfToday(getTodayDate())
+        return localDataSource.getImageOfDay(getTodayDate())
 
     }
 
@@ -108,7 +109,7 @@ class AsteroidRepositoryImpl(
 
             try {
                 val dto = remoteDataSource.getImageOfDay()
-                database.imageOfTodayDao.insertImageOfToday(dto)
+                localDataSource.insertImageOfDay(dto)
                 Timber.d("Successfully refreshed image of day")
                 _statusStateFlow.value = AsteroidApiStatus.DONE
             } catch (e: Exception) {

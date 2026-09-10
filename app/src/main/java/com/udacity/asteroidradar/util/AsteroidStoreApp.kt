@@ -6,9 +6,14 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.udacity.asteroidradar.data.database.AsteroidDao
+import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.database.ImageOfTodayDao
 import com.udacity.asteroidradar.data.database.getDatabase
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
 import com.udacity.asteroidradar.data.repository.AsteroidRepositoryImpl
+import com.udacity.asteroidradar.data.source.AsteroidLocalDataSource
+import com.udacity.asteroidradar.data.source.AsteroidLocalDataSourceImpl
 import com.udacity.asteroidradar.features.main.viewModel.MainViewModel
 import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSource
 import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSourceImpl
@@ -48,11 +53,24 @@ class AsteroidStoreApp : MultiDexApplication() {
 
         val myModule = module {
             viewModelOf(::MainViewModel)
+
             singleOf(::getDatabase)
+            single<AsteroidDao> {
+                get<AsteroidDatabase>().asteroidDao
+            }
+            single<ImageOfTodayDao> {
+                get<AsteroidDatabase>().imageOfTodayDao
+            }
+
             workerOf(::RefreshDataWorker)
+
             single<AsteroidRemoteDataSource> {
                 AsteroidRemoteDataSourceImpl()
             }
+            single<AsteroidLocalDataSource> {
+                AsteroidLocalDataSourceImpl(get(),get())
+            }
+
             single<AsteroidRepository> {
                 AsteroidRepositoryImpl(
                     remoteDataSource = get(),
@@ -60,6 +78,7 @@ class AsteroidStoreApp : MultiDexApplication() {
                     ioDispatcher = Dispatchers.IO
                 )
             }
+
         }
 
         startKoin {
