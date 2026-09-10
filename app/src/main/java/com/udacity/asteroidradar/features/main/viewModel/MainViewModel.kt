@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.udacity.asteroidradar.api.AsteroidApiFilter
+import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.models.AsteroidModel
 import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
+import com.udacity.asteroidradar.data.repository.AsteroidRepositoryImpl
 import com.udacity.asteroidradar.features.main.view.MainFragmentDirections
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,14 +31,15 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
     val currentSelectedItemStateFlow: StateFlow<Int>
         get() = _currentSelectedItemStateFlow
 
-    val statusStateFlow = asteroidRepository.statusStateFlow
+
+    val statusStateFlow: StateFlow<AsteroidApiStatus> = asteroidRepository.statusStateFlow
 
     private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
     val imageOfTheDayStateFlow: StateFlow<ImageOfTodayModel?>
         get() = _imageOfTheDayStateFlow
 
     init {
-        refreshList(AsteroidApiFilter.SHOW_TODAY)
+        updateFilter(AsteroidApiFilter.SHOW_TODAY)
         getImageOfToday()
     }
 
@@ -52,9 +55,10 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     private fun observeAsteroids(filter: AsteroidApiFilter) {
         viewModelScope.launch { // إزالة Dispatchers.IO
-            asteroidRepository.getAsteroidsFromDataBaseFlow(filter)
+            asteroidRepository.getAsteroids(filter)
                 .cachedIn(viewModelScope)
                 .collectLatest { list ->
+                    Timber.d("observeAsteroids: $list")
                     _asteroidListStateFlow.value = list
                 }
         }
@@ -69,8 +73,13 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     private fun getImageOfToday() {
         viewModelScope.launch {
-            asteroidRepository.getImageOfTodayFlow()
+            asteroidRepository.refreshImageOfDay()
+        }
+
+        viewModelScope.launch {
+            asteroidRepository.getImageOfDay()
                 .collectLatest { imageOfToday ->
+                    Timber.d("getImageOfToday: $imageOfToday")
                     _imageOfTheDayStateFlow.value = imageOfToday
                 }
         }
@@ -86,4 +95,5 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
         }
     }
 }
+
 
