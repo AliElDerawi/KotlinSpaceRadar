@@ -90,9 +90,20 @@ fun TextView.bindTextViewToDisplayVelocity(number: Double) {
     contentDescription = text
 }
 
-@BindingAdapter("imageOfToday", "progressBar","apiStatus")
-fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: ProgressBar,apiStatus: AsteroidApiStatus?) {
-    if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
+@BindingAdapter("imageOfToday", "progressBar", "apiStatus")
+fun ImageView.setImageOfToday(
+    imageOfTodayModel: ImageOfTodayModel?,
+    progress: ProgressBar,
+    apiStatus: AsteroidApiStatus?
+) {
+    if (apiStatus == AsteroidApiStatus.LOADING) {
+        progress.visibility = View.VISIBLE
+        setImageResource(R.drawable.placeholder_picture_of_day)
+    } else if (apiStatus == AsteroidApiStatus.ERROR) {
+        progress.visibility = View.GONE
+        contentDescription = context.getString(R.string.text_empty_picture_of_today)
+        setImageResource(R.drawable.ic_broken_image)
+    } else if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
         contentDescription = String.format(
             context.getString(R.string.text_format_nasa_picture_of_day),
             imageOfTodayModel.title
@@ -108,16 +119,6 @@ fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: P
                     progress.visibility = View.GONE
                 }
             })
-    } else {
-        if (apiStatus == AsteroidApiStatus.LOADING) {
-            progress.visibility = View.VISIBLE
-            setImageResource(R.drawable.placeholder_picture_of_day)
-        } else {
-            // التحميل انتهى ولا توجد صورة (فشل كامل): نعرض صورة الخطأ ونوقف الـ ProgressBar
-            progress.visibility = View.GONE
-            contentDescription = context.getString(R.string.text_empty_picture_of_today)
-            setImageResource(R.drawable.ic_broken_image)
-        }
     }
 }
 
