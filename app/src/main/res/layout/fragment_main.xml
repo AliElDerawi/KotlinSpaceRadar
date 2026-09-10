@@ -47,6 +47,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
+                    app:apiStatus="@{viewModel.statusStateFlow}"
                     app:imageOfToday="@{viewModel.imageOfTheDayStateFlow}"
                     app:progressBar="@{imageLoadingWheel}"
                     app:srcCompat="@drawable/placeholder_picture_of_day" />
@@ -58,8 +59,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
                     android:background="@color/colorHeaderBackground"
-                    android:padding="@dimen/dim_default_margin"
                     android:contentDescription="@{viewModel.imageOfTheDayStateFlow.title}"
+                    android:padding="@dimen/dim_default_margin"
                     android:text="@{viewModel.imageOfTheDayStateFlow.title}"
                     tools:text="@string/app_name" />
 
@@ -68,7 +69,6 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/asteroid_recycler"
                 android:layout_width="0dp"
-                app:lifecycleOwner="@{mLifecycleOwner}"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 app:currentScrolledPosition="@{viewModel.currentSelectedItemStateFlow}"
@@ -77,6 +77,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_image_of_today_frameLayout"
+                app:lifecycleOwner="@{mLifecycleOwner}"
                 app:listData="@{viewModel.asteroidListStateFlow}"
                 tools:listitem="@layout/item_asteroid" />
 

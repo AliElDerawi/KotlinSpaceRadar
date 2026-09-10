@@ -22,10 +22,12 @@ import timber.log.Timber
 fun ImageView.bindAsteroidStatusImage(isHazardous: Boolean) {
     if (isHazardous) {
         setImageResource(R.drawable.ic_status_potentially_hazardous)
-        contentDescription = context.getString(R.string.text_description_potentially_hazardous_asteroid_image)
+        contentDescription =
+            context.getString(R.string.text_description_potentially_hazardous_asteroid_image)
     } else {
         setImageResource(R.drawable.ic_status_normal)
-        contentDescription = context.getString(R.string.text_description_not_hazardous_asteroid_image)
+        contentDescription =
+            context.getString(R.string.text_description_not_hazardous_asteroid_image)
     }
 }
 
@@ -51,7 +53,7 @@ fun <T : Any> RecyclerView.bindRecyclerView(
             (adapter as? BaseRecyclerViewAdapter<T>)?.submitData(lifecycleOwner.lifecycle, list)
         }
         if (currentScrolledPosition != 0) {
-                smoothScrollToPosition(currentScrolledPosition)
+            smoothScrollToPosition(currentScrolledPosition)
 //            (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(currentScrolledPosition,0)
         }
     }
@@ -61,10 +63,12 @@ fun <T : Any> RecyclerView.bindRecyclerView(
 fun ImageView.bindDetailsStatusImage(isHazardous: Boolean) {
     if (isHazardous) {
         setImageResource(R.drawable.asteroid_hazardous)
-        contentDescription = context.getString(R.string.text_description_potentially_hazardous_asteroid_image)
+        contentDescription =
+            context.getString(R.string.text_description_potentially_hazardous_asteroid_image)
     } else {
         setImageResource(R.drawable.asteroid_safe)
-        contentDescription = context.getString(R.string.text_description_not_hazardous_asteroid_image)
+        contentDescription =
+            context.getString(R.string.text_description_not_hazardous_asteroid_image)
     }
 }
 
@@ -86,9 +90,9 @@ fun TextView.bindTextViewToDisplayVelocity(number: Double) {
     contentDescription = text
 }
 
-@BindingAdapter("imageOfToday", "progressBar")
-fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: ProgressBar) {
-    if (imageOfTodayModel != null && imageOfTodayModel.mediaType == Constants.MEDIA_TYPE_IMAGE) {
+@BindingAdapter("imageOfToday", "progressBar","apiStatus")
+fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: ProgressBar,apiStatus: AsteroidApiStatus?) {
+    if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
         contentDescription = String.format(
             context.getString(R.string.text_format_nasa_picture_of_day),
             imageOfTodayModel.title
@@ -105,10 +109,16 @@ fun ImageView.setImageOfToday(imageOfTodayModel: ImageOfTodayModel?, progress: P
                 }
             })
     } else {
-        contentDescription =
-            context.getString(R.string.text_empty_picture_of_today)
+        if (apiStatus == AsteroidApiStatus.LOADING) {
+            progress.visibility = View.VISIBLE
+            setImageResource(R.drawable.placeholder_picture_of_day)
+        } else {
+            // التحميل انتهى ولا توجد صورة (فشل كامل): نعرض صورة الخطأ ونوقف الـ ProgressBar
+            progress.visibility = View.GONE
+            contentDescription = context.getString(R.string.text_empty_picture_of_today)
+            setImageResource(R.drawable.ic_broken_image)
+        }
     }
-
 }
 
 @BindingAdapter("loadingStatus")
