@@ -7,9 +7,9 @@ import com.squareup.moshi.Json
  * This model is only used for API responses
  */
 data class ImageOfDayDto(
-    @field:Json(name = "media_type") val mediaType: String = "",
-    @field:Json(name = "title") val title: String = "",
-    @field:Json(name = "url") val url: String = "",
-    @field:Json(name = "date") val date: String = ""
+    @Json(name = "media_type") val mediaType: String = "",
+    @Json(name = "title") val title: String = "",
+    @Json(name = "url") val url: String = "",
+    @Json(name = "date") val date: String = ""
 )
 
