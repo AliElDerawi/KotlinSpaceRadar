@@ -1,16 +1,16 @@
 [versions]
-activityComposeVersion = "1.12.4"
+activityComposeVersion = "1.13.0"
 coilComposeVersion = "3.3.0"
 coilNetworkOkhttpVersion = "3.3.0"
-composeBomVersion = "2026.02.00"
+composeBomVersion = "2026.09.00"
 composePluginVersion = "2.3.10"
 koinAndroidxComposeVersion = "4.1.1"
 kotlinVersion = '2.4.10'
 koinVersion = '4.1.1'
 coreVersion = '1.17.0'
-navigationComposeVersion = "2.9.7"
+navigationComposeVersion = "2.10.1"
 pagingComposeVersion = "3.4.0"
-gradleToolsVersion = "9.0.0"
+gradleToolsVersion = "9.3.2"
 timberVersion = '5.0.1'
 junitVersion = '4.13.2'
 espressoVersion = '3.7.0'
