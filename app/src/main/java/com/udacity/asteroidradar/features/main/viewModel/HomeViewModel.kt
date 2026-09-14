@@ -9,7 +9,6 @@ import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.domain.repository.AsteroidRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +41,7 @@ class MainViewModel(
     }
 
     private fun refreshList(filter: AsteroidApiFilter) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             _homeUiState.update { it.copy(isLoading = true, isError = false) }
 
             asteroidRepository.refreshAsteroids(filter)
@@ -60,7 +59,7 @@ class MainViewModel(
     }
 
     private fun getImageOfToday() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             try {
                 asteroidRepository.refreshImageOfDay()
 
