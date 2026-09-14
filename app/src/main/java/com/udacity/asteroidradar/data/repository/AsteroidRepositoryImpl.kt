@@ -5,30 +5,25 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.AsteroidApiStatus
 import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
 import com.udacity.asteroidradar.api.isNetworkConnected
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.mapper.toDomain
+import com.udacity.asteroidradar.data.mapper.toEntity
 import com.udacity.asteroidradar.data.source.AsteroidLocalDataSource
 import com.udacity.asteroidradar.data.source.AsteroidRemoteDataSource
+import com.udacity.asteroidradar.domain.AsteroidModel
+import com.udacity.asteroidradar.domain.ImageOfDayModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import timber.log.Timber
 
 class AsteroidRepositoryImpl(
@@ -49,25 +44,27 @@ class AsteroidRepositoryImpl(
             pagingSourceFactory = {
                 localDataSource.getAsteroidsPagingSource(startDate, endDate)
             }
-        ).flow
+        ).flow.map { pagingData ->
+            pagingData.map { entity -> entity.toDomain() }
+        }
     }
 
-   override suspend fun refreshAsteroids(filter: AsteroidApiFilter) {
+    override suspend fun refreshAsteroids(filter: AsteroidApiFilter) {
         if (filter == AsteroidApiFilter.SHOW_SAVED || !isNetworkConnected()) return
 
         withContext(ioDispatcher) {
             _statusStateFlow.value = AsteroidApiStatus.LOADING
+
             try {
                 val (startDate, endDate) = getDateRange(filter)
-
-                val response = remoteDataSource.getAsteroids(startDate, endDate)
-                localDataSource.insertAsteroids(response)
+                val asteroids = remoteDataSource.getAsteroids(startDate, endDate)
+                val entities = asteroids.map { it.toEntity() }
+                localDataSource.insertAsteroids(entities)
                 _statusStateFlow.value = AsteroidApiStatus.DONE
-
             } catch (e: Exception) {
                 ensureActive()
                 _statusStateFlow.value = AsteroidApiStatus.ERROR
-                Timber.d("Exception: $e")
+                Timber.e(e, "Error refreshing asteroids")
             }
         }
     }
@@ -77,7 +74,7 @@ class AsteroidRepositoryImpl(
             try {
                 val entity = localDataSource.getAsteroidById(id)
                 if (entity != null) {
-                    Result.success(entity)
+                    Result.success(entity.toDomain())
                 } else {
                     ensureActive()
                     Result.failure(Exception("Asteroid not found"))
@@ -91,31 +88,32 @@ class AsteroidRepositoryImpl(
     }
 
 
-   override fun getImageOfDay(): Flow<ImageOfTodayModel?> {
+    override fun getImageOfDay(): Flow<ImageOfDayModel?> {
         return localDataSource.getImageOfDay(getTodayDate())
-
+            .map { it?.toDomain() }
     }
 
 
     override suspend fun refreshImageOfDay() {
+        if (!isNetworkConnected()) {
+            Timber.d("No network connection, skipping image refresh")
+            return
+        }
+
         withContext(ioDispatcher) {
-            if (!isNetworkConnected()) {
-                Timber.d("No network connection, skipping image refresh")
-                return@withContext
-            }
 
             _statusStateFlow.value = AsteroidApiStatus.LOADING
 
-
             try {
                 val dto = remoteDataSource.getImageOfDay()
-                localDataSource.insertImageOfDay(dto)
-                Timber.d("Successfully refreshed image of day")
+                val entity = dto.toEntity(getTodayDate())
+                localDataSource.insertImageOfDay(entity)
                 _statusStateFlow.value = AsteroidApiStatus.DONE
+                Timber.d("Successfully refreshed image of day")
             } catch (e: Exception) {
                 ensureActive()
-                Timber.e(e, "Error refreshing image of day")
                 _statusStateFlow.value = AsteroidApiStatus.ERROR
+                Timber.e(e, "Error refreshing image of day")
             }
         }
     }

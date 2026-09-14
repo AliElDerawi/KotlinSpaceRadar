@@ -1,31 +1,13 @@
 package com.udacity.asteroidradar.data.repository
 
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.api.getEndDate
-import com.udacity.asteroidradar.api.getTodayDate
-import com.udacity.asteroidradar.api.isNetworkConnected
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.data.database.AsteroidDatabase
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ensureActive
+import com.udacity.asteroidradar.domain.AsteroidModel
+import com.udacity.asteroidradar.domain.ImageOfDayModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import timber.log.Timber
 
 interface AsteroidRepository{
 
@@ -44,7 +26,7 @@ interface AsteroidRepository{
      * Get the image of the day
      * @return Flow of ImageOfTodayModel or null if not available
      */
-    fun getImageOfDay(): Flow<ImageOfTodayModel?>
+    fun getImageOfDay(): Flow<ImageOfDayModel?>
 
     /**
      * Refresh asteroids from remote source

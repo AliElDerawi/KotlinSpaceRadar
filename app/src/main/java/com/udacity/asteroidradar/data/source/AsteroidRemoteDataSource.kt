@@ -1,8 +1,8 @@
 package com.udacity.asteroidradar.data.source
 
 import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.domain.AsteroidModel
+import com.udacity.asteroidradar.api.models.ImageOfDayDto
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import org.json.JSONObject
 import timber.log.Timber
@@ -13,7 +13,7 @@ import timber.log.Timber
  */
 interface AsteroidRemoteDataSource {
     suspend fun getAsteroids(startDate: String, endDate: String): List<AsteroidModel>
-    suspend fun getImageOfDay(): ImageOfTodayModel
+    suspend fun getImageOfDay(): ImageOfDayDto
 }
 
 /**
@@ -34,7 +34,7 @@ class AsteroidRemoteDataSourceImpl : AsteroidRemoteDataSource {
         }
     }
     
-    override suspend fun getImageOfDay(): ImageOfTodayModel {
+    override suspend fun getImageOfDay(): ImageOfDayDto {
         return try {
             val imageOfToday = AsteroidApi.retrofitService.getImageOfTheDay()
             Timber.d("getImageOfDay: Fetched image of day from API")

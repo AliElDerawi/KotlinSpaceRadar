@@ -6,12 +6,12 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.udacity.asteroidradar.api.AsteroidApiFilter
 import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.domain.AsteroidModel
+import com.udacity.asteroidradar.api.models.ImageOfDayDto
 import com.udacity.asteroidradar.data.BaseViewModel
 import com.udacity.asteroidradar.data.NavigationCommand
 import com.udacity.asteroidradar.data.repository.AsteroidRepository
-import com.udacity.asteroidradar.data.repository.AsteroidRepositoryImpl
+import com.udacity.asteroidradar.domain.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.MainFragmentDirections
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,8 +34,8 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository, applicat
 
     val statusStateFlow: StateFlow<AsteroidApiStatus> = asteroidRepository.statusStateFlow
 
-    private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfTodayModel?>(null)
-    val imageOfTheDayStateFlow: StateFlow<ImageOfTodayModel?>
+    private var _imageOfTheDayStateFlow = MutableStateFlow<ImageOfDayModel?>(null)
+    val imageOfTheDayStateFlow: StateFlow<ImageOfDayModel?>
         get() = _imageOfTheDayStateFlow
 
     init {

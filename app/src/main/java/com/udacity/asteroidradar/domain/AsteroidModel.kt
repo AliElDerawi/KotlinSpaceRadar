@@ -1,12 +1,10 @@
-package com.udacity.asteroidradar.api.models
+package com.udacity.asteroidradar.domain
 
 import android.os.Parcelable
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.udacity.asteroidradar.data.GenericModelCallBack
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "asteroid_data")
 @Parcelize
 data class AsteroidModel(
     @PrimaryKey

@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiFilter
-import com.udacity.asteroidradar.api.models.AsteroidModel
+import com.udacity.asteroidradar.domain.AsteroidModel
 import com.udacity.asteroidradar.data.BaseFragment
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.features.main.adapter.AsteroidItemAdapter

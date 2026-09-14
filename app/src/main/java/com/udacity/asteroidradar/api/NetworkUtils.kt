@@ -5,8 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.udacity.asteroidradar.util.AsteroidStoreApp
 import com.udacity.asteroidradar.util.Constants
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.domain.AsteroidModel
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar

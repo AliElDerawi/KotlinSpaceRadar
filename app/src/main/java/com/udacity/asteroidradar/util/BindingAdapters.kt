@@ -8,13 +8,12 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApiStatus
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.BaseRecyclerViewAdapter
+import com.udacity.asteroidradar.domain.ImageOfDayModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -92,7 +91,7 @@ fun TextView.bindTextViewToDisplayVelocity(number: Double) {
 
 @BindingAdapter("imageOfToday", "progressBar", "apiStatus")
 fun ImageView.setImageOfToday(
-    imageOfTodayModel: ImageOfTodayModel?,
+    imageOfDayModel: ImageOfDayModel?,
     progress: ProgressBar,
     apiStatus: AsteroidApiStatus?
 ) {
@@ -103,13 +102,13 @@ fun ImageView.setImageOfToday(
         progress.visibility = View.GONE
         contentDescription = context.getString(R.string.text_empty_picture_of_today)
         setImageResource(R.drawable.ic_broken_image)
-    } else if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
+    } else if (imageOfDayModel != null && imageOfDayModel.url.isNotEmpty()) {
         contentDescription = String.format(
             context.getString(R.string.text_format_nasa_picture_of_day),
-            imageOfTodayModel.title
+            imageOfDayModel.title
         )
         progress.visibility = View.VISIBLE
-        Picasso.get().load(imageOfTodayModel.url)
+        Picasso.get().load(imageOfDayModel.url)
             .into(this, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {
                     progress.visibility = View.GONE

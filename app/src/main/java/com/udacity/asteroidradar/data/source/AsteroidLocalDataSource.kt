@@ -1,10 +1,10 @@
 package com.udacity.asteroidradar.data.source
 
 import androidx.paging.PagingSource
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
 import com.udacity.asteroidradar.data.database.AsteroidDao
 import com.udacity.asteroidradar.data.database.ImageOfTodayDao
+import com.udacity.asteroidradar.data.source.local.entity.AsteroidEntity
+import com.udacity.asteroidradar.data.source.local.entity.ImageOfDayEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,12 +15,12 @@ interface AsteroidLocalDataSource {
     fun getAsteroidsPagingSource(
         startDate: String,
         endDate: String
-    ): PagingSource<Int, AsteroidModel>
+    ): PagingSource<Int, AsteroidEntity>
 
-    suspend fun getAsteroidById(id: Long): AsteroidModel?
-    suspend fun insertAsteroids(asteroids: List<AsteroidModel>)
-    fun getImageOfDay(currentDate: String): Flow<ImageOfTodayModel?>
-    suspend fun insertImageOfDay(image: ImageOfTodayModel)
+    suspend fun getAsteroidById(id: Long): AsteroidEntity?
+    suspend fun insertAsteroids(asteroids: List<AsteroidEntity>)
+    fun getImageOfDay(currentDate: String): Flow<ImageOfDayEntity?>
+    suspend fun insertImageOfDay(image: ImageOfDayEntity)
 }
 
 /**
@@ -35,23 +35,23 @@ class AsteroidLocalDataSourceImpl(
     override fun getAsteroidsPagingSource(
         startDate: String,
         endDate: String
-    ): PagingSource<Int, AsteroidModel> {
+    ): PagingSource<Int, AsteroidEntity> {
         return asteroidDao.getAsteroidsList(startDate, endDate)
     }
 
-    override suspend fun getAsteroidById(id: Long): AsteroidModel? {
+    override suspend fun getAsteroidById(id: Long): AsteroidEntity? {
         return asteroidDao.getAsteroidById(id)
     }
 
-    override suspend fun insertAsteroids(asteroids: List<AsteroidModel>) {
+    override suspend fun insertAsteroids(asteroids: List<AsteroidEntity>) {
         asteroidDao.insertAll(asteroids)
     }
 
-    override fun getImageOfDay(currentDate: String): Flow<ImageOfTodayModel?> {
+    override fun getImageOfDay(currentDate: String): Flow<ImageOfDayEntity?> {
         return imageOfDayDao.getImageOfToday(currentDate)
     }
 
-    override suspend fun insertImageOfDay(image: ImageOfTodayModel) {
+    override suspend fun insertImageOfDay(image: ImageOfDayEntity) {
         imageOfDayDao.insertImageOfToday(image)
     }
 }

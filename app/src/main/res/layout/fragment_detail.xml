@@ -7,7 +7,7 @@
 
         <variable
             name="asteroid"
-            type="com.udacity.asteroidradar.api.models.AsteroidModel" />
+            type="com.udacity.asteroidradar.domain.AsteroidModel" />
 
         <variable
             name="detailFragment"

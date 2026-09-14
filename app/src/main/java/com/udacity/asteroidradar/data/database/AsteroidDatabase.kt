@@ -13,8 +13,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.udacity.asteroidradar.api.getEndDate
 import com.udacity.asteroidradar.api.getTodayDate
-import com.udacity.asteroidradar.api.models.AsteroidModel
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.domain.AsteroidModel
+import com.udacity.asteroidradar.api.models.ImageOfDayDto
+import com.udacity.asteroidradar.data.source.local.entity.AsteroidEntity
+import com.udacity.asteroidradar.data.source.local.entity.ImageOfDayEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -24,30 +26,30 @@ interface AsteroidDao {
     @Query("select * from asteroid_data where closeApproachDate >= :startDate and closeApproachDate <= :endData order by closeApproachDate asc")
     fun getAsteroidsList(
         startDate: String = getTodayDate(), endData: String = getEndDate()
-    ): PagingSource<Int, AsteroidModel>
+    ): PagingSource<Int, AsteroidEntity>
 
     @Query("select * from asteroid_data")
     fun getAllAsteroid(
-    ): Flow<List<AsteroidModel>>
+    ): Flow<List<AsteroidEntity>>
 
     @Query("select * from asteroid_data where id = :asteroidId")
-    suspend fun getAsteroidById(asteroidId: Long): AsteroidModel?
+    suspend fun getAsteroidById(asteroidId: Long): AsteroidEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(asteroids: List<AsteroidModel>)
+    suspend fun insertAll(asteroids: List<AsteroidEntity>)
 
 }
 
 @Dao
 interface ImageOfTodayDao {
     @Query("select * from image_of_day_data where :currentDate = date or :currentDate = creationDate")
-    fun getImageOfToday(currentDate: String): Flow<ImageOfTodayModel?>
+    fun getImageOfToday(currentDate: String): Flow<ImageOfDayEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertImageOfToday(imageOfTodayModel: ImageOfTodayModel)
+    fun insertImageOfToday(imageOfDayDto: ImageOfDayEntity)
 }
 
-@Database(entities = [AsteroidModel::class, ImageOfTodayModel::class], version = 3)
+@Database(entities = [AsteroidEntity::class, ImageOfDayEntity::class], version = 4)
 abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
     abstract val imageOfTodayDao: ImageOfTodayDao
@@ -60,7 +62,7 @@ fun getDatabase(context: Context): AsteroidDatabase {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext, AsteroidDatabase::class.java, "asteroids"
-            ).addMigrations(MIGRATION_2_3).build()
+            ).addMigrations(MIGRATION_3_4).build()
         }
     }
     return INSTANCE
@@ -68,6 +70,14 @@ fun getDatabase(context: Context): AsteroidDatabase {
 }
 
 val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "ALTER TABLE image_of_day_data " + " ADD COLUMN creationDate TEXT default '' NOT NULL"
+        )
+    }
+}
+
+val MIGRATION_3_4: Migration = object : Migration(3, 4) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
             "ALTER TABLE image_of_day_data " + " ADD COLUMN creationDate TEXT default '' NOT NULL"

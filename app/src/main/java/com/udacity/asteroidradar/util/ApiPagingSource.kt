@@ -2,7 +2,7 @@ package com.udacity.asteroidradar.util
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.udacity.asteroidradar.api.models.AsteroidModel
+import com.udacity.asteroidradar.domain.AsteroidModel
 
 class ApiPagingSource(
     private val apiData: List<AsteroidModel> // The full list of data returned from the API

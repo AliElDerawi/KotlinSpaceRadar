@@ -3,7 +3,7 @@ package com.udacity.asteroidradar.api
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.BuildConfig
-import com.udacity.asteroidradar.api.models.ImageOfTodayModel
+import com.udacity.asteroidradar.api.models.ImageOfDayDto
 import com.udacity.asteroidradar.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,7 +41,7 @@ interface AsteroidApiService {
     ): String
 
     @GET("planetary/apod")
-    suspend fun getImageOfTheDay(): ImageOfTodayModel
+    suspend fun getImageOfTheDay(): ImageOfDayDto
 }
 
 object AsteroidApi {
