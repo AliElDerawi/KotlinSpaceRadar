@@ -7,8 +7,9 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 ## Main Features of the Project
 
 - **Modern UI**: Use Jetpack Compose for modern UI. Also uses a single-activity architecture with multiple fragments to simplify navigation and improve modularity (in the XML branch).
-- **MVVM and Repository Architecture**: Implements MVVM and Repository to enhance maintainability, modularity, and scalability, promoting cleaner code and separation of concerns.
+- **Modern MVVM and Repository Architecture**: Implements Modern MVVM and Repository to enhance maintainability, modularity, and scalability, promoting cleaner code and separation of concerns.
 - **Offline Mode**: Provides offline access to data by using Room for local storage, ensuring the app is usable even without an internet connection.
+- **Adaptive & Dynamic Theming**: Full support for automatic Light/Dark modes and Android 12+ Dynamic Colors (Material You), providing a seamless and personalized visual experience.
 - **Paging Library (v3)**: Optimizes data viewing with seamless scrolling, ensuring smooth navigation through large lists of asteroids.
 - **Accessible UI**: Dynamically generated ContentDescriptions to enhance accessibility, making the app inclusive for all users.
 - **Orientation Support**: Adapts to portrait and landscape orientations without losing data or state, ensuring a smooth user experience.
@@ -19,7 +20,8 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 
 - **Clean Architecture**: Enforced separation of concerns through domain, data, and presentation layers.
 - **Offline-first Design**: Implemented offline access using Room, ensuring a consistent user experience even without network availability, supported by periodic background data updates using WorkManager to keep the data fresh.
-- **Scalable Codebase**: Followed MVVM and Repository patterns to make the project scalable and maintainable.
+- **Scalable Codebase**: Followed Modern MVVM and Repository patterns to make the project scalable and maintainable.
+- **UI & Styling**: 100% Jetpack Compose with Material Design 3. Leverages Semantic Color Schemes (e.g., dynamically styling asteroid hazard chips) and supports predictive back gestures.
 - **Reactive Programming**: Utilized Kotlin Flow to efficiently handle data streams, making the app responsive and resource-efficient.
 - **Accessibility**: Implemented accessibility features, including dynamic content descriptions and support for screen readers, to promote an inclusive experience for all users.
 
@@ -31,6 +33,20 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 
 #### **Note**: Many improvements and features in this project are not included in the Project Rubric, as it was originally for the Udacity Nanodegree Program.
 
+## Try the App
+
+- Scan the QR code below with your Android device to download and install the latest APK directly:
+
+
+<div align="center">
+   <img src="./images/apk_link.png" alt="Download APK"/>
+   <p><strong>Download APK.</p>
+</div>  
+
+Alternatively, click [here](https://github.com/AliElDerawi/KotlinSpaceRadar/releases/download/v1.0.0/KotlinSpaceRadar-v1.0.0.apk) to download it directly.
+
+- **you may need to enable "Install from unknown sources" in your settings**
+
 ## Installation Guide
 
 This project requires a NASA API Key. Follow these steps to run the app:
@@ -41,7 +57,7 @@ This project requires a NASA API Key. Follow these steps to run the app:
 4. **Add NASA API Key**: Add the NASA API key to the `local.properties` file:
 ```NASA_API_KEY="YOUR_API_KEY_HERE"```
 Alternatively, follow the [Secrets Gradle Plugin guide](https://developers.google.com/maps/documentation/places/android-sdk/secrets-gradle-plugin).
-5. **Build the Project**: Use **Gradle Plugin v8.7.2** to build the project.
+5. **Build the Project**: Use **Gradle Plugin v9.3.2** to build the project.
 
 **Note:** Ensure you have the latest version of Android Studio and the Gradle build tool installed. Please look at the [official guide](https://developer.android.com/studio/install) if needed.
 
