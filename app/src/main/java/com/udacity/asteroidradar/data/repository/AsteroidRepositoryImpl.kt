@@ -11,12 +11,13 @@ import com.udacity.asteroidradar.data.mapper.toDomain
 import com.udacity.asteroidradar.data.mapper.toEntity
 import com.udacity.asteroidradar.data.source.local.AsteroidLocalDataSource
 import com.udacity.asteroidradar.data.source.remote.AsteroidRemoteDataSource
-import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
+import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.domain.repository.AsteroidRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -59,9 +60,11 @@ class AsteroidRepositoryImpl(
                 if (entity != null) {
                     Result.success(entity.toDomain())
                 } else {
+                    ensureActive()
                     Result.failure(Exception("Asteroid not found"))
                 }
             } catch (e: Exception) {
+                ensureActive()
                 Timber.e(e, "Error getting asteroid by id")
                 Result.failure(e)
             }
@@ -87,6 +90,7 @@ class AsteroidRepositoryImpl(
                 localDataSource.insertAsteroids(entities)
                 Timber.d("Successfully refreshed ${entities.size} asteroids")
             } catch (e: Exception) {
+                ensureActive()
                 Timber.e(e, "Error refreshing asteroids")
             }
         }
@@ -105,6 +109,7 @@ class AsteroidRepositoryImpl(
                 localDataSource.insertImageOfDay(entity)
                 Timber.d("Successfully refreshed image of day")
             } catch (e: Exception) {
+                ensureActive()
                 Timber.e(e, "Error refreshing image of day")
             }
         }

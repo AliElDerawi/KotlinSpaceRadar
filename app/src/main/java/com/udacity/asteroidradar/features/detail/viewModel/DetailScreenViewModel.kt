@@ -1,14 +1,12 @@
 package com.udacity.asteroidradar.features.detail.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.udacity.asteroidradar.domain.model.AsteroidModel
-import com.udacity.asteroidradar.domain.usecase.GetAsteroidByIdUseCase
+import com.udacity.asteroidradar.domain.repository.AsteroidRepository
 import com.udacity.asteroidradar.navigation.AsteroidDetailDestination
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,9 +22,8 @@ data class DetailUiState(
 
 class DetailScreenViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getAsteroidByIdUseCase: GetAsteroidByIdUseCase,
-    application: Application
-) : AndroidViewModel(application) {
+    private val asteroidRepository: AsteroidRepository,
+) : ViewModel() {
 
     private val asteroidDetailDestination = savedStateHandle.toRoute<AsteroidDetailDestination>()
     private val asteroidId: Long = asteroidDetailDestination.asteroidId
@@ -38,10 +35,10 @@ class DetailScreenViewModel(
     }
 
     private fun loadAsteroid() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             _detailUiState.update { it.copy(isLoading = true, isError = false) }
             
-            val result = getAsteroidByIdUseCase(asteroidId)
+            val result = asteroidRepository.getAsteroidById(asteroidId)
             
             result.fold(
                 onSuccess = { asteroid ->

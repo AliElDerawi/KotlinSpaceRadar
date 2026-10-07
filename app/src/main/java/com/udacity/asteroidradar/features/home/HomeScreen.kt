@@ -55,11 +55,10 @@ import com.udacity.asteroidradar.domain.model.AsteroidApiFilter
 import com.udacity.asteroidradar.domain.model.AsteroidModel
 import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
-import com.udacity.asteroidradar.theme.md_theme_light_scrim
 import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
+import com.udacity.asteroidradar.theme.scrimLight
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 
 /**
  * Sealed interface representing the different UI states for the Home screen.
@@ -96,13 +95,16 @@ fun HomeScreen(
             )
         },
     ) { innerPadding ->
+
         // Determine current screen state for AnimatedContent
+        val isPagingLoading = asteroidPagingItems?.loadState?.refresh is LoadState.Loading
+        val isPagingError = asteroidPagingItems?.loadState?.refresh is LoadState.Error
+
         val screenState: HomeScreenState = when {
-            isLoading && asteroidPagingItems == null -> HomeScreenState.Loading
-            isError -> HomeScreenState.Error
+            isLoading || (isPagingLoading && asteroidPagingItems.itemCount == 0) -> HomeScreenState.Loading
+            isError || (isPagingError && asteroidPagingItems.itemCount == 0) -> HomeScreenState.Error
             else -> HomeScreenState.Success
         }
-
         AnimatedContent(
             targetState = screenState,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
@@ -132,7 +134,7 @@ fun HomeScreen(
 @Composable
 private fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim),
+        modifier = modifier.background(color = scrimLight),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -209,7 +211,7 @@ private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier 
         modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
-            .background(color = md_theme_light_scrim)
+            .background(color = scrimLight)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
@@ -226,7 +228,7 @@ private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .background(color = md_theme_light_scrim)
+                .background(color = scrimLight)
         ) {
             Text(
                 text = imageOfTodayModel.title,
@@ -248,7 +250,7 @@ private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
-            .background(color = md_theme_light_scrim),
+            .background(color = scrimLight),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -281,7 +283,7 @@ private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
 @Composable
 private fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim)
+        modifier = modifier.background(color = scrimLight)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
@@ -290,7 +292,7 @@ private fun LoadingScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = md_theme_light_scrim)
+                .background(color = scrimLight)
         )
     }
 }
