@@ -17,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -343,14 +343,21 @@ fun AsteroidRadarTheme(
         }
     }
 
+    // Edge-to-edge: the system bars are transparent (see enableEdgeToEdge() in the Activity),
+    // so we only pick the icon color based on what is actually drawn behind each bar:
+    //  - status bar sits over the primary-colored TopAppBar
+    //  - navigation bar sits over the background
+    // Luminance-based selection stays correct for every contrast scheme and dynamic color.
     val view = LocalView.current
     if (!view.isInEditMode) {
+        val darkStatusBarIcons = colorScheme.primary.luminance() > 0.5f
+        val darkNavigationBarIcons = colorScheme.background.luminance() > 0.5f
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat
-                .getInsetsController(window, view)
-                .isAppearanceLightStatusBars = darkTheme
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = darkStatusBarIcons
+                isAppearanceLightNavigationBars = darkNavigationBarIcons
+            }
         }
     }
 
