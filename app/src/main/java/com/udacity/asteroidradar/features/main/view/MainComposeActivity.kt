@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.features.main.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,9 @@ import com.udacity.asteroidradar.theme.AsteroidRadarTheme
 @OptIn(ExperimentalMaterial3Api::class)
 class MainComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Draw behind the system bars (mandatory when targeting SDK 35+).
+        // The primary-colored TopAppBar extends under the status bar automatically.
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             AsteroidRadarTheme() {

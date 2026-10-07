@@ -16,6 +16,11 @@
 
 package com.udacity.asteroidradar.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -36,7 +41,13 @@ fun AsteroidNavHost(
     NavHost(
         navController = navController,
         startDestination = HomeDestination,
-        modifier = modifier
+        modifier = modifier,
+        popExitTransition = {
+            scaleOut(targetScale = 0.9f) + fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            scaleIn(initialScale = 1.1f) + fadeIn(animationSpec = tween(300))
+        },
     ) {
         composable<HomeDestination> {
             HomeRoute { asteroid ->
