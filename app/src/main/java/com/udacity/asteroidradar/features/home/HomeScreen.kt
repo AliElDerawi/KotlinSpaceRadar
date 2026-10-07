@@ -57,7 +57,7 @@ import com.udacity.asteroidradar.domain.model.ImageOfDayModel
 import com.udacity.asteroidradar.features.main.view.AsteroidAppTopBar
 import com.udacity.asteroidradar.navigation.HomeDestination
 import com.udacity.asteroidradar.theme.AsteroidRadarTheme
-import com.udacity.asteroidradar.theme.md_theme_light_scrim
+import com.udacity.asteroidradar.theme.scrimLight
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
@@ -134,7 +134,7 @@ fun HomeScreen(
 @Composable
 private fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim),
+        modifier = modifier.background(color = scrimLight),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -211,7 +211,7 @@ private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier 
         modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
-            .background(color = md_theme_light_scrim)
+            .background(color = scrimLight)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
@@ -228,7 +228,7 @@ private fun ImageOfToday(imageOfTodayModel: ImageOfDayModel, modifier: Modifier 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .background(color = md_theme_light_scrim)
+                .background(color = scrimLight)
         ) {
             Text(
                 text = imageOfTodayModel.title,
@@ -250,7 +250,7 @@ private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
-            .background(color = md_theme_light_scrim),
+            .background(color = scrimLight),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -283,7 +283,7 @@ private fun ImageOfTodayPlaceholder(modifier: Modifier = Modifier) {
 @Composable
 private fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(color = md_theme_light_scrim)
+        modifier = modifier.background(color = scrimLight)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
@@ -292,7 +292,7 @@ private fun LoadingScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = md_theme_light_scrim)
+                .background(color = scrimLight)
         )
     }
 }
