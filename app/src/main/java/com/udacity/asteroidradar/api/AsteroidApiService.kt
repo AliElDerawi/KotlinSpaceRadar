@@ -1,19 +1,20 @@
 package com.udacity.asteroidradar.api
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.data.source.remote.dto.ImageOfDayDto
 import com.udacity.asteroidradar.util.Constants
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+
+private val networkJson = Json { ignoreUnknownKeys = true }
 val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
 val client = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor { it ->
@@ -24,7 +25,7 @@ val client = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor {
 
 private val retrofit = Retrofit.Builder().client(client.build()).baseUrl(Constants.BASE_URL)
     .addConverterFactory(ScalarsConverterFactory.create())
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
     .build()
 
 interface AsteroidApiService {
