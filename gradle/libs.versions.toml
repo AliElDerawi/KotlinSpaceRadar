@@ -58,13 +58,11 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVers
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "roomVersion" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "pagingVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
-retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofitVersion" }
 retrofit-converter-scalar = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofitVersion" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "retrofitLogginVersion" }
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshiVersion" }
-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshiVersion" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationVersion" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofitVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleToolsVersion" }

@@ -120,13 +120,9 @@ dependencies {
 
     // Retrofit with Moshi Converter
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.moshi)
     implementation(libs.retrofit.converter.scalar)
     implementation(libs.okhttp3.logging.interceptor)
-
-    // Moshi
-    implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.codegen)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
 
     // Kotlin Serialization
     implementation(libs.kotlin.serialization)
