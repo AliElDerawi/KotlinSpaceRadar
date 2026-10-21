@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.features.main.viewModel
+package com.udacity.asteroidradar.features.home.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
