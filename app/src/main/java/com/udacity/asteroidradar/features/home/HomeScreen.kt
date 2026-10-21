@@ -97,12 +97,13 @@ fun HomeScreen(
     ) { innerPadding ->
 
         // Determine current screen state for AnimatedContent
+        val hasItems = (asteroidPagingItems?.itemCount ?: 0) > 0
         val isPagingLoading = asteroidPagingItems?.loadState?.refresh is LoadState.Loading
         val isPagingError = asteroidPagingItems?.loadState?.refresh is LoadState.Error
 
         val screenState: HomeScreenState = when {
-            isLoading || (isPagingLoading && asteroidPagingItems.itemCount == 0) -> HomeScreenState.Loading
-            isError || (isPagingError && asteroidPagingItems.itemCount == 0) -> HomeScreenState.Error
+            (isLoading || isPagingLoading) && !hasItems -> HomeScreenState.Loading
+            (isError || isPagingError) && !hasItems -> HomeScreenState.Error
             else -> HomeScreenState.Success
         }
         AnimatedContent(
@@ -176,9 +177,9 @@ private fun HomeBody(
         // Header item (Image of Today or Placeholder)
         item {
             if (imageOfTodayModel != null && imageOfTodayModel.url.isNotEmpty()) {
-                HomeHeader(imageOfTodayModel = imageOfTodayModel, modifier = modifier)
+                HomeHeader(imageOfTodayModel = imageOfTodayModel)
             } else {
-                ImageOfTodayPlaceholder(modifier = modifier)
+                ImageOfTodayPlaceholder()
             }
         }
 
