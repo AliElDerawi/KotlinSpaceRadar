@@ -8,7 +8,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.udacity.asteroidradar.di.dataModule
 import com.udacity.asteroidradar.di.databaseModule
-import com.udacity.asteroidradar.di.domainModule
 import com.udacity.asteroidradar.di.presentationModule
 import com.udacity.asteroidradar.di.workerModule
 import com.udacity.asteroidradar.work.RefreshDataWorker
@@ -47,7 +46,6 @@ class AsteroidStoreApp : Application(){
             modules(
                 listOf(
                     presentationModule,  // ViewModels
-                    domainModule,        // Use Cases
                     dataModule,          // Repository & Data Sources
                     databaseModule,      // Room Database & DAOs
                     workerModule         // WorkManager Workers

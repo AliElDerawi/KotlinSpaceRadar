@@ -7,7 +7,7 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 ## Main Features of the Project
 
 - **Modern UI**: Use Jetpack Compose for modern UI. Also uses a single-activity architecture with multiple fragments for simplified navigation and improved modularity (in the XML branch).
-- **MVVM and Repository Architecture**: Implements MVVM and Repository to enhance maintainability, modularity, and scalability, promoting cleaner code and separation of concerns.
+- **MAD & MVVM Architecture**: Follows Google's Modern Android Development (MAD) architecture guidelines using MVVM, Unidirectional Data Flow (UDF), and an offline-first Repository pattern (with domain models/contracts and intentionally omitted pass-through UseCases to keep the 2-screen codebase lean and pragmatic).
 - **Offline Mode**: Provides offline access to data by using Room for local storage, ensuring the app is usable even without an internet connection.
 - **Paging Library (v3)**: Optimizes data viewing with seamless scrolling, ensuring smooth navigation through large lists of asteroids.
 - **Accessible UI**: Dynamically generated ContentDescriptions to enhance accessibility, making the app inclusive for all users.
@@ -17,7 +17,7 @@ KotlinSpaceRadar is a Compose app designed to help users track asteroids detecte
 
 ## Showcased Skills
 
-- **Clean Architecture**: Enforced separation of concerns through domain, data, and presentation layers.
+- **Pragmatic Clean Architecture (MAD)**: Enforces separation of concerns across `presentation`, `domain` (models & repository contracts), and `data` layers without unnecessary pass-through UseCase boilerplate.
 - **Offline-first Design**: Implemented offline access using Room, ensuring a consistent user experience even without network availability, supported by periodic background data updates using WorkManager to keep the data fresh.
 - **Scalable Codebase**: Followed MVVM and Repository patterns to make the project scalable and maintainable.
 - **Reactive Programming**: Utilized Kotlin Flow to efficiently handle data streams, making the app responsive and resource-efficient.
