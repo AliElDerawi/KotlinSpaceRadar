@@ -1,7 +1,7 @@
 package com.udacity.asteroidradar.di
 
 import com.udacity.asteroidradar.features.detail.viewModel.DetailScreenViewModel
-import com.udacity.asteroidradar.features.home.viewModel.MainViewModel
+import com.udacity.asteroidradar.features.home.viewModel.HomeViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -10,7 +10,7 @@ import org.koin.dsl.module
  * Contains ViewModels
  */
 val presentationModule = module {
-    viewModelOf(::MainViewModel)
+    viewModelOf(::HomeViewModel)
     viewModelOf(::DetailScreenViewModel)
 }
 
